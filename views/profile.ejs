@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= user.name %> | Profile | Father's Advice</title>
+    <link rel="stylesheet" href="/css/profile.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <header>
+        <div class="navbar">
+            <!-- Logo on the left side -->
+            <div class="logo-container">
+                <img src="/images/white logo_.png" alt="Father's Advice Logo" class="logo">
+            </div>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/logout">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Profile Header Section -->
+        <div class="profile-header">
+            <div class="profile-image">
+                <!-- User's Profile Image (circle) -->
+                <img src="/images/profile-pic.jpg" alt="Profile Picture">
+            </div>
+            <div class="profile-info">
+                <h2><%= user.name %></h2>
+                <p><strong>Role:</strong> <%= user.role %></p>
+                <p><strong>Email:</strong> <%= user.email %></p>
+                <p><strong>Mentors Connected:</strong> <%= user.mentorsConnected %></p>
+            </div>
+        </div>
+
+        <!-- Profile Stats Section -->
+        <div class="profile-stats">
+            <div class="stat-item">
+                <h3>Mentorship Hours</h3>
+                <p><%= user.mentorshipHours %> hours</p>
+            </div>
+            <div class="stat-item">
+                <h3>Success Stories</h3>
+                <p><%= user.successStories || 'No stories yet' %></p>
+            </div>
+            <div class="stat-item">
+                <h3>Active Mentors</h3>
+                <p><%= user.activeMentors %> mentors</p>
+            </div>
+        </div>
+
+        <!-- Profile Actions -->
+        <div class="profile-actions">
+            <button class="btn-edit">Edit Profile</button>
+            <button class="btn-change-password">Change Password</button>
+        </div>
+        <div class="btn-container">
+            <a href="/html/find_mentor.html" class="find-mentor-btn">Find a Mentor</a>
+        </div>
+        
+        <!-- Profile Details Section -->
+        <div class="profile-details">
+            <h3>Your Account</h3>
+            <p>Here you can view and edit your account details, including email, password, and more.</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Father's Advice. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

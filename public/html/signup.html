@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Father's Advice</title>
+    <link rel="stylesheet" href="/css/signup_css.css"> <!-- Link to the CSS for the signup page -->
+</head>
+<body>
+
+    <section id="login">
+        <div class="login-container">
+            <div class="logo-heading">
+                <img src="/images/Logo Only.png" class="logo" alt="Logo"> <!-- Your logo image -->
+                <h2 class="section-heading">Sign Up</h2>
+            </div>
+            <form action="/signup" method="POST">
+                <input type="text" name="name" required placeholder="Name">
+                <input type="email" name="email" required placeholder="Email">
+                <input type="password" name="password" required placeholder="Password">
+                <select name="role" required>
+                    <option value="mentee">Mentee</option>
+                    <option value="mentor">Mentor</option>
+                </select>
+                <input type="text" name="phone" required placeholder="Phone Number">
+                <input type="text" name="address" required placeholder="Address">
+                <input type="text" name="language" required placeholder="Preferred Language">
+                <input type="text" name="qualification" required placeholder="Qualification">
+                <button type="submit">Sign Up</button>
+            </form>
+            
+            <p class="signup-text">Already have an account? <a href="login.html">Login here</a></p> <!-- Link to the login page -->
+        </div>
+    </section>
+
+</body>
+</html>

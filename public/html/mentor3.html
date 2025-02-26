@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentor Profile</title>
+    <link rel="stylesheet" href="/css/mentor1.css">
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="logo-container">
+            <img src="/images/White logo_.png" alt="Fathers Advice Logo" class="logo">
+        </div>
+    </header>
+
+    <!-- Background Section -->
+    <div class="background-image"></div>
+
+    <!-- Main Content -->
+    <main class="profile-page">
+        <section class="profile-card">
+            <!-- Profile Image Section -->
+            <div class="profile-image">
+                <img src="/images/mentor4.jpg" alt="Mentor Photo">
+            </div>
+
+            <!-- Profile Details Section -->
+            <div class="profile-details">
+                <h2>Name: Emily Davis</h2>
+                <p><strong>Experience:</strong>  5 years</p>
+                <p><strong>Specialization:</strong> <span id="specialization">Loading...</span></p>
+                <p><strong>Location:</strong> Sydney, Australia</p>
+                <p><strong>Availability:</strong> Weekdays, Mornings</p>
+            </div>
+        </section>
+
+        <!-- Action Button -->
+        <div class="action-container">
+            <a href="#" class="btn-primary">Contact Mentor</a>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 Father's Advice</p>
+    </footer>
+
+    <script>
+        // Function to extract query parameters from the URL
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Get the field of interest from the URL and display it
+        const field = getQueryParam('field');
+        document.getElementById('specialization').textContent = field || 'Not Specified';
+    </script>
+</body>
+</html>

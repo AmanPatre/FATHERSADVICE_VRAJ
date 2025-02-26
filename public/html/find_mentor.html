@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Mentor</title>
+    <link rel="stylesheet" href="/css/find_mentor.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Loader Styling */
+        .loader-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Slightly darker overlay */
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spinner {
+            border: 8px solid #f3f3f3; /* Light gray */
+            border-top: 8px solid #3498db; /* Blue spinner color */
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <img src="/images/white logo_.png" alt="Logo" class="logo">
+            <h1>Find Your Mentor</h1>
+        </div>
+    </header>
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Let Us Connect You to the Right Mentor</h2>
+            <p>Fill in the details below, and we will match you with a mentor best suited to your needs.</p>
+        </div>
+    </section>
+    <main>
+        <div class="form-container">
+            <h2>Fill Your Details</h2>
+            <form method="POST" action="/find-mentor">
+                <label for="education">Education:</label>
+                <input type="text" id="education" name="education" placeholder="Enter your education">
+
+                <label for="field">Field of Interest:</label>
+                <select id="field" name="field">
+                    <option value="">Select your field</option>
+                    <option value="technology">Technology</option>
+                    <option value="finance">Finance</option>
+                    <option value="healthcare">Healthcare</option>
+                    <option value="design">Design</option>
+                    <option value="other">Other</option>
+                </select>
+
+                <label for="location">Location:</label>
+                <input type="text" id="location" name="location" placeholder="Enter your location">
+
+                <label for="details">Additional Details:</label>
+                <textarea id="details" name="details" rows="4" placeholder="Enter any additional details"></textarea>
+
+                <button id="submit-details" type="button">Submit Details</button>
+            </form>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-container">
+            <p>&copy; 2024 Father's Advice. All Rights Reserved.</p>
+            <div class="social-icons">
+                <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loader Overlay -->
+    <div class="loader-overlay" id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <script>
+        // Array of mentor page paths
+        const mentorPages = [
+            '/html/mentor1.html',
+            '/html/mentor2.html',
+            '/html/mentor3.html',
+            '/html/mentor4.html',
+            '/html/mentor5.html'
+        ];
+
+        // Function to redirect to a random mentor page with the selected field
+        function redirectToRandomMentorPage() {
+            const selectedField = document.querySelector('#field').value; // Get the selected field
+            if (!selectedField) {
+                alert('Please select your field of interest.');
+                return;
+            }
+
+            // Show the loading spinner
+            document.getElementById('loader').style.display = 'flex';
+
+            // Simulate a delay of 10 seconds before redirecting
+            setTimeout(() => {
+                // Select a random page from the array
+                const randomPage = mentorPages[Math.floor(Math.random() * mentorPages.length)];
+                // Redirect to the selected page with the field of interest as a query parameter
+                window.location.href = `${randomPage}?field=${encodeURIComponent(selectedField)}`;
+            }, 10000); // 10-second delay
+        }
+
+        // Add event listener to the Submit Details button
+        document.querySelector('#submit-details').addEventListener('click', (event) => {
+            event.preventDefault(); // Prevent default form submission
+            redirectToRandomMentorPage();
+        });
+    </script>
+
+<div class="loader-overlay">
+    <div class="spinner"></div>
+</div>
+
+</body>
+</html>

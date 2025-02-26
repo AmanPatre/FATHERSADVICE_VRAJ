@@ -1,0 +1,137 @@
+/* Global reset */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    overflow-x: hidden;
+}
+
+/* Header section */
+header {
+    background-color: #333;
+    padding: 20px;
+    text-align: center;
+}
+
+header .logo-container img {
+    width: 150px;
+    height: auto;
+}
+
+/* Background image */
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('/images/white background.jpg') no-repeat center center/cover;
+    filter: brightness(0.6);
+    z-index: -1;
+}
+
+/* Profile page container */
+.profile-page {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 0;
+}
+
+/* Profile card */
+.profile-card {
+    width: 100%;
+    max-width: 900px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    padding: 30px;
+    animation: fadeIn 1s ease-in-out;
+    overflow: hidden;
+}
+
+/* Profile image section */
+.profile-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.profile-image img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 5px solid #007bff;
+    object-fit: cover;
+}
+
+/* Profile details section */
+.profile-details {
+    flex: 2;
+    color: #333;
+}
+
+.profile-details h2 {
+    margin: 0 0 15px;
+    color: #007bff;
+    font-size: 30px;
+}
+
+.profile-details p {
+    margin: 10px 0;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.profile-details strong {
+    color: #444;
+}
+
+/* Action Button */
+.action-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 18px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Footer */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}

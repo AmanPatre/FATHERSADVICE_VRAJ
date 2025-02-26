@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Father's Advice</title>
+    <link rel="stylesheet" href="/css/login_css.css">
+</head>
+<body>
+
+<section id="login">
+    <div class="login-container">
+        <div class="logo-heading">
+            <img src="/images/Logo Only.png" class="logo" alt="Logo">
+            <h2 class="section-heading">Login</h2>
+        </div>
+        <form action="/login" method="POST" id="loginForm">
+            <div class="input-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required placeholder="Enter your email">
+            </div>
+            <div class="input-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required placeholder="Enter your password">
+            </div>
+            <button type="submit" class="submit-btn">Login</button>
+        </form>
+        <p class="signup-text">Don't have an account? <a href="signup.html">Sign up here</a></p>
+    </div>
+</section>
+
+
+<script>
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+  
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+  
+      const response = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        // Store token in localStorage
+        localStorage.setItem('token', data.token);
+  
+        // Redirect user based on role
+        if (data.role === 'mentor') {
+          window.location.href = '/mentor-dashboard';  // Redirect to mentor dashboard
+        } else {
+          window.location.href = '/mentee-dashboard';  // Redirect to mentee dashboard
+        }
+      } else {
+        alert(data.error);  // Show error if login fails
+      }
+    });
+  </script>
+  
+</body>
+
+
+</html>

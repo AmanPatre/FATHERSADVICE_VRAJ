@@ -1,0 +1,501 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(to right, #3498db, #e67e22); /* Gradient from blue to orange */
+    min-height: 100vh; /* Ensure the gradient covers the full viewport height */
+    margin: 0; /* Remove default margin */
+    font-family: Arial, sans-serif; /* Set a default font */
+}
+
+/* Header Styling */
+header {
+    background-color: #1a1a1a;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    height: 60px;
+    width: auto;
+}
+
+nav ul {
+    list-style-type: none;
+    display: flex;
+    gap: 30px;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px 15px;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #e67e22;
+    border-radius: 10px;
+}
+
+/* Hero Section with Background Image */
+/* Hero Section Styling */
+.hero {
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('Understand\ The\ Intent\ and\ Goals\ Of\ Buyers_\ Transform\ Marketing.jpg') no-repeat center center/cover;
+    height: 80vh; /* Adjust height of the hero section */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    position: relative;
+    padding: 20px;
+}
+
+.hero-content {
+    max-width: 800px;
+    padding: 20px;
+}
+
+.hero h1 {
+    font-size: 3.5rem; /* Larger font size for a bold impression */
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-transform: uppercase; /* Adds a professional touch */
+}
+
+.hero p {
+    font-size: 1.4rem;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    font-weight: 300; /* Lighter font weight for body text */
+}
+/* General styles ---------------------------*/
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Base styles for the button */
+.btn-get-started {
+    position: relative;
+    margin: auto;
+    width: 100%;
+    max-width: 260px;
+    height: 52px;
+    background: #fff; /* Initial color white */
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: 0.05em;
+    transition: background 0.2s linear;
+    overflow: hidden;
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;     /* Center vertically */
+    border-radius: 50px;     /* Rounded corners */
+}
+
+/* The before effect - circular background animation */
+.btn-get-started:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #e67e22;  /* Default effect color */
+    border-radius: 50% 50% 0 0;
+    transform: translateY(100%) scaleY(0.5);
+    transition: all 0.6s ease;
+}
+
+/* The after effect - initially white */
+.btn-get-started:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;  /* Initial white background */
+    border-radius: 0;
+    transform: translateY(0) scaleY(1);
+    transition: all 0.6s ease;
+}
+
+/* Content inside the button */
+.btn-get-started div {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center; /* Center text horizontally */
+    align-items: center;     /* Center text vertically */
+}
+
+/* The initial text ("Get Started") */
+.btn-get-started span {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    text-align: center;
+    transition: transform 0.5s ease, visibility 0.5s ease;
+}
+
+/* Styles for the initial "Get Started" text */
+.btn-get-started .initial-text {
+    color: #1E0F21; /* Dark color for visibility */
+    transform: translateY(0); /* Position text in the center */
+}
+
+/* Styles for the hover text ("Login/Signup") */
+.btn-get-started .hover-text {
+    color: #fff; /* White color for visibility */
+    transform: translateY(50px); /* Initially position it below (off-screen) */
+    visibility: hidden; /* Initially hidden */
+}
+
+/* Button hover state */
+.btn-get-started:hover {
+    background: #e67e22;  /* Change background to #e67e22 on hover */
+    transition: background 0.2s linear;
+}
+
+/* Animation on hover: moves the initial text out and shows the hover text */
+.btn-get-started:hover:after {
+    border-radius: 0 0 50% 50%;
+    transform: translateY(-100%) scaleY(0.5);
+    transition-delay: 0;
+}
+
+.btn-get-started:hover:before {
+    border-radius: 0;
+    transform: translateY(0) scaleY(1);
+    transition-delay: 0;
+}
+
+/* On hover, hide initial text and show hover text */
+.btn-get-started:hover .initial-text {
+    transform: translateY(-150%); /* Move initial text further up (increased value) */
+    visibility: hidden;  /* Hide the initial text */
+}
+
+.btn-get-started:hover .hover-text {
+    transform: translateY(0);   /* Move hover text into view */
+    visibility: visible;       /* Make the hover text visible */
+}
+
+
+
+
+
+/* ------------------------------------------- */
+
+
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.hero-content h1 {
+    font-size: 4em;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.hero-content p {
+    font-size: 1.5em;
+}
+
+/* Main Content Section */
+
+.main-content {
+    padding: 60px 20px;
+    background-color: #fff;
+}
+
+/* What We Do Section with Cards */
+
+#what-we-do .cards-container {
+    display: flex; /* Use flexbox for horizontal alignment */
+    flex-wrap: wrap; /* Allow wrapping to the next line if needed */
+    justify-content: center; /* Center the cards horizontally */
+    gap: 20px; /* Space between cards */
+    height: 440px;
+}
+
+#what-we-do .card {
+    background-color: white;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    text-align: center;
+    padding: 20px;
+    transition: transform 0.3s ease-in-out;
+    width: calc(33.33% - 20px); /* Adjust width for 3 cards per row */
+    box-sizing: border-box; /* Include padding in width */
+}
+
+#what-we-do .card img {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 1px;
+}
+
+#what-we-do .card h3 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+#what-we-do .card p {
+    font-size: 1rem;
+    color: #555;
+}
+
+/* Hover effect for cards */
+#what-we-do .card:hover {
+    transform: translateY(-20px);
+    box-shadow: 0 10px 20px #e67e22;
+}
+
+
+
+/* Button for "Find a Mentor" */
+/* Parent container for centering the button */
+.btn-container {
+    display: flex;
+    justify-content: center; /* Centers the button horizontally */
+    align-items: center;     /* Ensures vertical alignment (optional) */
+    margin-top: 20px;        /* Optional: Adds some spacing above the button */
+}
+
+/* Button styling */
+.btn-primary {
+    display: inline-block;
+    background-color: #e67e22;
+    color: white;
+    padding: 12px 30px;
+    font-size: 1.2em;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #c47e0f; /* Darker yellow when hovered */
+}
+
+/* ---------------------------------------------------------------------- */
+/* Features Section Styling */
+
+#features {
+    padding: 50px 20px;
+    background-color: #f4f4f4;
+    text-align: center;
+}
+
+.logo-heading {
+    margin-bottom: 30px;
+}
+
+.logo {
+    width: 200px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.section-heading {
+    font-size: 2rem;
+    color: #333;
+    margin-top: 10px;
+    text-transform: uppercase;
+}
+
+.container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.feature-item {
+    width: 30%;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(50px); /* Start off-screen */
+    opacity: 0; /* Make the item invisible initially */
+    transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+}
+
+/* Add animation when in view */
+.feature-item.in-view {
+    transform: translateY(0); /* Move to its original position */
+    opacity: 1; /* Make the item visible */
+}
+
+
+
+
+/* --------------------------------------------------------------- */
+
+
+/* Footer Styling */
+/* General Footer Styling */
+footer {
+    background-color: #e67e22;
+    color: #fff;
+    padding: 50px 20px;
+    text-align: center;
+}
+
+/* Footer Content Flexbox Layout */
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* About Section */
+.footer-about {
+    flex: 1;
+    min-width: 250px;
+}
+
+.footer-about img {
+    width: 120px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.footer-about p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #ffffff;
+}
+
+/* Quick Links Section */
+.footer-links {
+    flex: 1;
+    min-width: 200px;
+}
+
+.footer-links h4 {
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.footer-links ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.footer-links ul li {
+    margin: 10px 0;
+}
+
+.footer-links ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.footer-links ul li a:hover {
+    color: #090909;
+}
+
+/* Social Media Section */
+/* Social Media Section */
+.footer-social {
+    flex: 1;
+    min-width: 200px;
+    text-align: center; /* Center the text and icons */
+}
+
+.footer-social h4 {
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center; /* Center the icons horizontally */
+    gap: 20px; /* Add space between icons */
+    margin-top: 10px; /* Add space between the heading and the icons */
+}
+
+.social-icon {
+    font-size: 1.9rem;
+    color: #fff;
+    transition: color 0.1s ease;
+}
+
+.social-icon:hover {
+    color: #060606;
+}
+
+
+/* Footer Bottom */
+.footer-bottom {
+    margin-top: 40px;
+    font-size: 1rem;
+    color: #fdfbfb;
+}
+
+.footer-bottom p {
+    margin: 0;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-about {
+        text-align: center;
+    }
+
+    .footer-links ul {
+        text-align: center;
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+}

@@ -1,0 +1,174 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: #e67e22;
+    color: #333;
+}
+
+/* Header Section */
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background-color: #007BFF;
+    color: white;
+}
+
+.header-container .logo {
+    height: 50px;
+}
+
+.header-container h1 {
+    font-size: 1.8rem;
+}
+
+/* Hero Section */
+.hero {
+    background: url('/images/mentor-hero.jpg') no-repeat center center/cover;
+    color: white;
+    text-align: center;
+    padding: 4rem 1rem;
+}
+
+.hero-content h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+}
+
+/* Form Section */
+.form-container {
+    max-width: 700px;
+    margin: 2rem auto;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #007BFF;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-top: 1rem;
+    font-weight: bold;
+}
+
+input, select, textarea {
+    margin-top: 0.5rem;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+}
+
+button {
+    margin-top: 1.5rem;
+    padding: 0.8rem;
+    font-size: 1rem;
+    color: #fff;
+    background: #007BFF;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+/* Footer Section */
+.footer-container {
+    background: #333;
+    color: #f0ebeb;
+    text-align: center;
+    padding: 1.5rem 1rem;
+}
+
+.footer-container .social-icons {
+    margin-top: 1rem;
+}
+
+.footer-container .social-icon {
+    color: white;
+    margin: 0 0.5rem;
+    font-size: 1.5rem;
+}
+
+.footer-container .social-icon:hover {
+    color: #007BFF;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero {
+        padding: 2rem 1rem;
+    }
+
+    .form-container {
+        width: 90%;
+    }
+}
+
+/* Loader Overlay */
+.loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Darker semi-transparent background for better visibility */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* Ensure it is above other elements */
+    visibility: hidden; /* Initially hidden */
+    opacity: 0; /* Start with 0 opacity for smooth fade-in */
+    transition: opacity 0.3s ease, visibility 0.3s ease; /* Add transition for visibility change */
+}
+
+/* Make the loader visible */
+.loader-overlay.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Spinner Styling */
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.2); /* Light gray border */
+    border-top: 4px solid #007BFF; /* Use your primary color for the spinner */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fathers Advice</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="logo-container">
+            <img class="logo" src="/images/White logo_.png" alt="Fathers Advice Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/html/login.html">Find Mentor</a></li>
+                <li><a href="#what-we-do">What We Do</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="/html/about.html">About Us</a></li>
+                <li><a href="/html/login.html">Login/Signup</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Welcome to Father's Advice</h1>
+            <p>Your path to success starts here. Let us guide you.</p>
+            <a href="/html/login.html" class="btn-get-started">
+                <div>
+                    <span class="initial-text">Get Started</span>
+                    <span class="hover-text">Login/Signup</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content Section -->
+    <div class="main-content">
+        <section id="what-we-do">
+            <h2 style="text-align: center;">What We Do</h2>
+            <div class="content-wrapper">
+                <div class="cards-container">
+                    <div class="card">
+                        <img src="/images/mentoring.png" alt="Mentorship Icon">
+                        <h3>Personalized Mentorship</h3>
+                        <p>One-on-one sessions with mentors tailored to your career path.</p>
+                    </div>
+                    <div class="card">
+                        <img src="/images/career.png" alt="Career Guidance Icon">
+                        <h3>Career Guidance</h3>
+                        <p>Get insights on job opportunities, interview tips, and career planning.</p>
+                    </div>
+                    <div class="card">
+                        <img src="/images/arrows.png" alt="Growth Icon">
+                        <h3>Personal Growth</h3>
+                        <p>Learn and grow with guidance on self-improvement and motivation.</p>
+                    </div>
+                    <div class="btn-container">
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdtm9CGknfToKI-UQXPIlfS2A04BMCSn8C4u-cb3R4GQ17mJg/viewform?usp=sf_link" class="btn-primary">Find Mentor</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+
+
+
+    <!-- Features & Highlights Section -->
+
+<section id="features">
+    <div class="logo-heading">
+        <img src="/images/Logo Only.png" class="logo" alt="Logo">
+        <h2 class="section-heading">Features & Highlights</h2>
+    </div>
+    <div class="container">
+        <!-- Feature 1 -->
+        <div class="feature-item">
+            <h3>Global Mentors</h3>
+            <p>We connect mentors from all over the world based on your needs.</p>
+        </div>
+        <!-- Feature 2 -->
+        <div class="feature-item">
+            <h3>Flexible Timings</h3>
+            <p>Mentors can work according to their available times, ensuring flexibility for both parties.</p>
+        </div>
+        <!-- Feature 3 -->
+        <div class="feature-item">
+            <h3>End-to-End Guidance</h3>
+            <p>We stay with the mentee until their goal is achieved, no matter how long it takes.</p>
+        </div>
+        <!-- Feature 4: Flexible Model -->
+        <div class="feature-item">
+            <h3>Flexible Model</h3>
+            <p>We work on a flexible model where mentors choose their working hours, reducing stress for both sides.</p>
+        </div>
+        <!-- Feature 5: Mentee Support -->
+        <div class="feature-item">
+            <h3>Mentee Support</h3>
+            <p>We support mentees throughout their journey, ensuring continuous guidance until they reach their goals.</p>
+        </div>
+        <!-- Feature 6: No Rigid Timings -->
+        <div class="feature-item">
+            <h3>No Rigid Timings</h3>
+            <p>Mentors and mentees can select timings based on their convenience, allowing more flexibility in scheduling sessions.</p>
+        </div>
+    </div>
+</section>
+
+
+
+<!------------------- ---------------------------------------------------------- -->
+
+
+<script>
+    // Intersection Observer to trigger the animation when feature items come into view
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Add 'in-view' class when the feature item is in view
+                entry.target.classList.add('in-view');
+                observer.unobserve(entry.target); // Stop observing after the item is visible
+            }
+        });
+    }, {
+        threshold: 1// Trigger when 50% of the element is visible
+    });
+
+    // Observe each feature item
+    document.querySelectorAll('.feature-item').forEach(item => {
+        observer.observe(item); // Start observing each feature item
+    });
+</script>
+
+
+
+<footer>
+    <div class="footer-content">
+        <!-- About Section -->
+        <div class="footer-about">
+            <img src="images/White logo_.png" alt="Logo" class="footer-logo">
+            <p>Connecting mentors from around the world with people who need guidance. We provide end-to-end mentorship to help you achieve your goals.</p>
+        </div>
+
+        <!-- Quick Links Section -->
+        <div class="footer-links">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Mentorship</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+            </ul>
+        </div>
+
+        <!-- Social Media Section -->
+        <div class="footer-social">
+            <h4>GET IN TUCH</h4>
+            <div class="social-icons">
+                <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+        <p>&copy; 2024 Father's Advice. All Rights Reserved.</p>
+    </div>
+</footer>
+
+</body>
+</html>
