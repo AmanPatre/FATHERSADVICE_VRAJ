@@ -5,13 +5,13 @@ const session = require('express-session');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const User = require("./models/userMODEL.js");
-const config = require('./config.json');
+// const config = require('./config.json');
 const MentorRequest = require('./models/mentorRequest.js');
 
 const app = express();
 
 // Connect to MongoDB
-mongoose.connect(config.mongoURI)
+mongoose.connect(process.env.MONGO_URI)
     .then(() => {
         console.log('Connected to MongoDB');
     })
