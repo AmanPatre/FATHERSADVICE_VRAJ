@@ -33,21 +33,23 @@
                 <p><strong>Role:</strong> <%= user.role %></p>
                 <p><strong>Email:</strong> <%= user.email %></p>
                 <p><strong>Mentors Connected:</strong> <%= user.mentorsConnected %></p>
+                <form action="/mentor_profile" method="get">
+                    <button type="submit" class="btn-profile-fill" style="background-color: blue; color: white;">Complete Profile</button>
+                </form>  
             </div>
         </div>
-
         <!-- Profile Stats Section -->
         <div class="profile-stats">
             <div class="stat-item">
-                <h3>Mentorship Hours</h3>
+                <h3>Skills</h3>
                 <p><%= user.mentorshipHours %> hours</p>
             </div>
             <div class="stat-item">
-                <h3>Success Stories</h3>
+                <h3>Year of Experience</h3>
                 <p><%= user.successStories || 'No stories yet' %></p>
             </div>
             <div class="stat-item">
-                <h3>Active Mentors</h3>
+                <h3>Availability</h3>
                 <p><%= user.activeMentors %> mentors</p>
             </div>
         </div>
@@ -58,7 +60,7 @@
             <button class="btn-change-password">Change Password</button>
         </div>
         <div class="btn-container">
-            <a href="/html/find_mentor.html" class="find-mentor-btn">Find a Mentor</a>
+       <a href="/html/find_mentor.html" class="find-mentor-btn">Find a Mentee </a>
         </div>
         
         <!-- Profile Details Section -->

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentor Profile Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-500 flex justify-center items-center min-h-screen">
+    <div class="bg-green-300 p-8 rounded-lg shadow-lg w-full max-w-2xl">
+        <h2 class="text-2xl font-bold text-center text-gray-900 mb-6">Mentor Profile </h2>
+        <form action="/submit_profile" method="POST" enctype="multipart/form-data" class="space-y-4">
+            <!-- Personal Information -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="name" class="block text-gray-900">Full Name:</label>
+                    <input type="text" id="name" name="name" required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
+            </div>
+
+            <!-- Professional Information -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="field" class="block text-gray-900">Field of Interest:</label>
+                    <input type="text" id="field" name="field_of_interest" required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
+                <div>
+                    <label for="experience" class="block text-gray-900">Years of Experience:</label>
+                    <input type="number" id="experience" name="experience" min="0" required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
+            </div>
+
+            <!-- Educational Background -->
+            <div>
+                <label for="education" class="block text-gray-900">Educational Background:</label>
+                <textarea id="education" name="education" rows="3" required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="E.g., Bachelor's in Computer Science, Master's in Data Science"></textarea>
+            </div>
+
+            <!-- Certifications -->
+            <div>
+                <label for="certifications" class="block text-gray-900">Certifications:</label>
+                <textarea id="certifications" name="certifications" rows="3" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="E.g., AWS Certified Solutions Architect, Google Cloud Professional"></textarea>
+            </div>
+
+            <!-- Skills -->
+            <div>
+                <label for="skills" class="block text-gray-900">Skills:</label>
+                <input type="text" id="skills" name="skills" placeholder="E.g., JavaScript, Python, Machine Learning" required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
+
+            <!-- Previous Job -->
+            <div>
+                <label for="previous_job" class="block text-gray-900">Previous Job:</label>
+                <input type="text" id="previous_job" name="previous_job" required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
+
+            <!-- LinkedIn Profile -->
+            <div>
+                <label for="linkedin" class="block text-gray-900">LinkedIn Profile:</label>
+                <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/yourprofile" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
+
+            <!-- Availability -->
+            <div>
+                <label for="availability" class="block text-gray-900">Availability:</label>
+                <select id="availability" name="availability" required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <option value="full_time">Full-Time</option>
+                    <option value="part_time">Part-Time</option>
+                    <option value="freelance">Freelance</option>
+                </select>
+            </div>
+
+            <!-- Bio -->
+            <div>
+                <label for="bio" class="block text-gray-900">Brief Bio:</label>
+                <textarea id="bio" name="bio" rows="4" required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Tell us a little about yourself..."></textarea>
+            </div>
+
+            <!-- Resume Upload -->
+            <div>
+                <label for="resume" class="block text-gray-900">Upload Resume:</label>
+                <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx" required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

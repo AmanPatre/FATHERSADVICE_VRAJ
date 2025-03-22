@@ -186,6 +186,18 @@ app.post('/find-mentor', async (req, res) => {
 });
 
 
+// Mentor_profile after login 
+app.get('/mentor_profile', async (req, res) => {
+    res.render('mentor_profile');
+});
+
+
+app.post("/submit_profile",(req,res)=>{
+       const fullName = req.body
+       console.log(fullName);
+});
+
+
 
 
 
