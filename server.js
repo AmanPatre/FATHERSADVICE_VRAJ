@@ -5,11 +5,9 @@ const session = require('express-session');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const User = require("./models/userMODEL.js");
-// const config = require('./config.json');
 const MentorRequest = require('./models/mentorRequest.js');
-
 const app = express();
-
+const MentorProfile = require('./models/mentor_profile.js'); // Import the schema
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
@@ -192,18 +190,35 @@ app.get('/mentor_profile', async (req, res) => {
 });
 
 
-app.post("/submit_profile",(req,res)=>{
-       const fullName = req.body
-       console.log(fullName);
+app.post('/submit_profile', async (req, res) => {
+    try {
+        console.log(req.body); // Debugging: Check what data is received
+
+        const { fieldOfInterest, yearOfExperience, skills } = req.body;
+
+        // Check if all required fields are filled
+        if (!fieldOfInterest || !yearOfExperience || !skills || skills.length === 0) {
+            return res.status(400).json({ error: "All required fields must be filled" });
+        }
+
+        // Temporary Cloudinary URL
+        const tempCloudinaryUrl = "https://res.cloudinary.com/demo/image/upload/sample.pdf";
+
+        const mentor = new MentorProfile({
+            fieldOfInterest,
+            yearOfExperience,
+            skills,
+            availability: req.body.availability || "",
+            briefBio: req.body.briefBio || "",
+            uploadResume: tempCloudinaryUrl
+        });
+
+        await mentor.save();
+        res.redirect('/profile',{mentor});
+    } catch (error) {
+        res.status(500).json({ error: "Failed to create mentor profile", details: error.message });
+    }
 });
-
-
-
-
-
-
-
-
 
 // Start the server
 const PORT = process.env.PORT || 3000;

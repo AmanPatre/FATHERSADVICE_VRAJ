@@ -33,9 +33,14 @@
                 <p><strong>Role:</strong> <%= user.role %></p>
                 <p><strong>Email:</strong> <%= user.email %></p>
                 <p><strong>Mentors Connected:</strong> <%= user.mentorsConnected %></p>
-                <form action="/mentor_profile" method="get">
+                <form action="/mentor_profile" method="get" onsubmit="showReflection()">
                     <button type="submit" class="btn-profile-fill" style="background-color: blue; color: white;">Complete Profile</button>
                 </form>  
+                <script>
+                    function showReflection() {
+                        alert('Profile completion in progress...');
+                    }
+                </script>
             </div>
         </div>
         <!-- Profile Stats Section -->
