@@ -7,61 +7,87 @@
     <link rel="stylesheet" href="/css/login_css.css">
 </head>
 <body>
+    <section id="login" class="login-section">
+        <div class="login-container">
+            <div class="logo-heading">
+                <img src="/images/Logo Only.png" class="logo" alt="Father's Advice Logo">
+                <h2 class="section-heading">Login</h2>
+            </div>
 
-<section id="login">
-    <div class="login-container">
-        <div class="logo-heading">
-            <img src="/images/Logo Only.png" class="logo" alt="Logo">
-            <h2 class="section-heading">Login</h2>
+            <form action="/login" method="POST" id="loginForm" class="login-form">
+                <div class="input-group">
+                    <label for="email" class="input-label">Email:</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        required 
+                        placeholder="Enter your email" 
+                        class="input-field"
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label for="password" class="input-label">Password:</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        required 
+                        placeholder="Enter your password" 
+                        class="input-field"
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label for="role" class="input-label">Role:</label>
+                    <select id="role" name="role" required class="input-field">
+                        <option value="mentor">Mentor</option>
+                        <option value="mentee">Mentee</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-btn">Login</button>
+            </form>
+
+            <p class="signup-text">
+                Don't have an account? 
+                <a href="signup.html" class="signup-link">Sign up here</a>
+            </p>
         </div>
-        <form action="/login" method="POST" id="loginForm">
-            <div class="input-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required placeholder="Enter your email">
-            </div>
-            <div class="input-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required placeholder="Enter your password">
-            </div>
-            <button type="submit" class="submit-btn">Login</button>
-        </form>
-        <p class="signup-text">Don't have an account? <a href="signup.html">Sign up here</a></p>
-    </div>
-</section>
+    </section>
 
+    <script>
+       // In login.html <script> tag
+// In login.html
+// In login.html
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-<script>
-    document.getElementById('login-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-  
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-  
-      const response = await fetch('/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-  
-      const data = await response.json();
-  
-      if (response.ok) {
-        // Store token in localStorage
-        localStorage.setItem('token', data.token);
-  
-        // Redirect user based on role
-        if (data.role === 'mentor') {
-          window.location.href = '/mentor-dashboard';  // Redirect to mentor dashboard
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const role = document.getElementById('role').value;
+
+    try {
+        const response = await fetch('/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password, role })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // No need to store token in localStorage; it's in the cookie
+            window.location.href = `/${role}-dashboard`;
         } else {
-          window.location.href = '/mentee-dashboard';  // Redirect to mentee dashboard
+            alert(data.error || 'Login failed');
         }
-      } else {
-        alert(data.error);  // Show error if login fails
-      }
-    });
-  </script>
-  
+    } catch (error) {
+        console.error('Login error:', error);
+        alert('An error occurred');
+    }
+});
+    </script>
 </body>
-
-
 </html>

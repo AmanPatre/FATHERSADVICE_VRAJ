@@ -4,10 +4,15 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const User = require("./models/userMODEL.js");
-const MentorRequest = require('./models/mentorRequest.js');
+const User = require("./models/user.model.js");
+const Mentor = require('./models/mentor.model.js');
 const app = express();
-const MentorProfile = require('./models/mentor_profile.js'); // Import the schema
+const MentorProfile = require('./models/mentor.after.profile.model.js'); // Import the schema
+const { authenticateToken }= require('./middleware/authentication.middleware.js')
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser'); // Ensure this is imported
+
+
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
@@ -17,19 +22,12 @@ mongoose.connect(process.env.MONGO_URI)
         console.error('Error connecting to MongoDB:', err);
     });
 
-//Define User schema and model
-// const UserSchema = new mongoose.Schema({
-//     name: { type: String, required: true },
-//     email: { type: String, required: true, unique: true },
-//     password: { type: String, required: true },
-//     role: { type: String, required: true } // Mentee or Mentor
-// });
-// const User = mongoose.model('User', UserSchema); // it will go to the model
+
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
+app.use(cookieParser()); // Add this before any routes or middleware using req.cookies
 // Set the view engine to EJS
 app.set('view engine', 'ejs');
 
@@ -49,6 +47,10 @@ app.use('/html', express.static(path.join(__dirname, 'public', 'html')));
 app.use('/js', express.static(path.join(__dirname, 'public', 'js')));
 app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
 
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-here';
+
+
+
 // Serve the main index.html file
 app.get('/', (req, res) => {
     if (!req.session.userId) {
@@ -60,88 +62,147 @@ app.get('/', (req, res) => {
     }
 });
 
-// Signup route
+app.get('/html/login.html',(req,res)=>{
+    res.redirect('/html/login.html');
+});
 
 
+
+// Signup Route
 app.post('/signup', async (req, res) => {
-    console.log(req.body); // Ensure all data is logged correctly
-
-    const { name, email, password, role, phone, address, language, qualification } = req.body;
-    
     try {
+        // Extract form data
+        const { name, email, password, role, phone, address } = req.body;
+
+        // Input validation
+        if (!name || !email || !password || !role || !phone || !address) {
+            return res.status(400).send('All fields are required');
+        }
+
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).send('Invalid email format');
+        }
+
+        // Validate role
+        if (!['mentee', 'mentor'].includes(role)) {
+            return res.status(400).send('Invalid role selected');
+        }
+
+        // Check if user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(400).send('User already exists');
+            return res.status(400).send('Email already registered');
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ 
-            name, 
-            email, 
-            password: hashedPassword, 
-            role, 
-            phone, 
-            address, 
-            language, 
-            qualification 
-        });
+        // Hash password
+        const saltRounds = 12;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        // Save user to the database
-        await newUser.save()
-            .then(() => {
-                console.log('New user saved:', newUser); // Log successful save
-            })
-            .catch(err => {
-                console.error('Error saving user:', err); // Log any errors during save
-            });
+        // Create new user object
+        const userData = {
+            name,
+            email,
+            password: hashedPassword,
+            role,
+            phone,
+            address
+        };
 
+        // Save based on role
+        let savedUser;
+        if (role === 'mentor') {
+            const mentor = new Mentor(userData);
+            savedUser = await mentor.save();
+        } else {
+            const user = new User(userData);
+            savedUser = await user.save();
+        }
+
+        // Success response
+        console.log(`New ${role} created:`, savedUser);
         res.redirect('/html/login.html');
+
     } catch (error) {
-        console.error('Error during signup:', error);
+        console.error('Signup error:', error);
+        
+        // Handle specific errors
+        if (error.code === 11000) { // MongoDB duplicate key error
+            return res.status(400).send('Email already registered');
+        }
+        
         res.status(500).send('Internal server error');
     }
 });
 
 
-
-// Login route
+// Login Route
 app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
     try {
-        const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(400).send('User not found');
-        }
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            return res.status(400).send('Invalid password');
+        const { email, password, role } = req.body;
+        if (!email || !password || !role) {
+            return res.status(400).json({ error: 'All fields are required' });
         }
 
-        req.session.userId = user._id;
-        req.session.role = user.role; // Store the role in the session
-        res.redirect('/profile'); // Redirect to profile after successful login
-    } catch (error) {
-        console.error('Error during login:', error);
-        res.status(500).send('Internal server error');
-    }
-});
+        let user = role === 'mentor' ? await Mentor.findOne({ email }) : await User.findOne({ email });
+        if (!user || !await bcrypt.compare(password, user.password) || user.role !== role) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
 
-// Protect the profile page (only accessible if logged in)
-app.get('/profile', (req, res) => {
-    if (!req.session.userId) {
-        return res.status(401).send('You need to log in first');
-    }
-    
-    // Fetch user data and render the profile.ejs template
-    User.findById(req.session.userId)
-        .then(user => {
-            res.render('profile', { user }); // Render profile page with user data
-        })
-        .catch(error => {
-            console.error('Error fetching user data:', error);
-            res.status(500).send('Internal server error');
+        const token = jwt.sign({ userId: user._id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '1h' });
+
+        // Set token in an HTTP-only cookie
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production', // Secure in production
+            maxAge: 3600000 // 1 hour in milliseconds
         });
+
+        res.status(200).json({ message: 'Login successful', role });
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 });
+
+app.get('/mentee-dashboard', authenticateToken, (req, res) => {
+    if (req.user.role !== 'mentee') {
+        return res.status(403).json({ error: 'Unauthorized access' });
+    }
+    res.send('Welcome to Mentee Dashboard');
+});
+
+
+// Mentor Dashboard Route
+app.get('/mentor-dashboard', authenticateToken, async (req, res) => {
+    try {
+        if (req.user.role !== 'mentor') {
+            return res.status(403).json({ error: 'Unauthorized access' });
+        }
+
+        const mentor = await Mentor.findById(req.user.userId);
+        if (!mentor) {
+            return res.status(404).json({ error: 'Mentor not found' });
+        }
+
+        res.render('mentor_profile', {
+            user: {
+                name: mentor.name,
+                email: mentor.email,
+                role: mentor.role,
+                mentorsConnected: 0,
+                mentorshipHours: 0,
+                successStories: 'N/A',
+                activeMentors: 0
+            }
+        });
+    } catch (error) {
+        console.error('Mentor dashboard error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 
 // Logout route
 app.get('/logout', (req, res) => {
@@ -184,9 +245,10 @@ app.post('/find-mentor', async (req, res) => {
 });
 
 
+
 // Mentor_profile after login 
 app.get('/mentor_profile', async (req, res) => {
-    res.render('mentor_profile');
+    res.render('mentor_after_profile');
 });
 
 
@@ -214,11 +276,12 @@ app.post('/submit_profile', async (req, res) => {
         });
 
         await mentor.save();
-        res.redirect('/profile',{mentor});
+        res.redirect('/mentor_profile.ejs',{mentor});
     } catch (error) {
         res.status(500).json({ error: "Failed to create mentor profile", details: error.message });
     }
 });
+
 
 // Start the server
 const PORT = process.env.PORT || 3000;
