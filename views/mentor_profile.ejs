@@ -3,55 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mentor Profile Form</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title><%= user.name %> | Profile | Father's Advice</title>
+    <link rel="stylesheet" href="/css/profile.css">
 </head>
-<body class="bg-gray-500 flex justify-center items-center min-h-screen">
-    <div class="bg-green-300 p-8 rounded-lg shadow-lg w-full max-w-2xl">
-        <h2 class="text-2xl font-bold text-center text-gray-900 mb-6">Mentor Profile </h2>
-        <form action="/submit_profile" method="POST"  class="space-y-4">
-       
-            <!-- Professional Information -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label for="fieldOfInterest" class="block text-gray-900">Field of Interest:</label>
-                    <input type="text" id="fieldOfInterest" name="fieldOfInterest" required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-                </div>
-                <div>
-                    <label for="yearOfExperience" class="block text-gray-900">Years of Experience:</label>
-                    <input type="number" id="yearOfExperience" name="yearOfExperience" min="0" required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-                </div>
+<body>
+    <!-- Navbar -->
+    <header>
+        <div class="navbar">
+            <!-- Logo on the left side -->
+            <div class="logo-container">
+                <img src="/images/white logo_.png" alt="Father's Advice Logo" class="logo">
             </div>
-            <!-- Skills -->
-            <div>
-                <label for="skills" class="block text-gray-900">Skills:</label>
-                <input type="text" id="skills" name="skills" placeholder="E.g., JavaScript, Python, Machine Learning" required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-            </div>
- <!-- Availability -->
-            <div>
-                <label for="availability" class="block text-gray-900">Availability:</label>
-                <select id="availability" name="availability" required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    <option value="full_time">Full-Time</option>
-                    <option value="part_time">Part-Time</option>
-                    <option value="freelance">Freelance</option>
-                </select>
-            </div>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/logout">Logout</a>
+            </nav>
+        </div>
+    </header>
 
-            <!-- Bio -->
-            <div>
-                <label for="briefBio" class="block text-gray-900">Brief Bio:</label>
-                <textarea id="briefBio" name="briefBio" rows="4" required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Tell us a little about yourself..."></textarea>
+    <div class="container">
+        <!-- Profile Header Section -->
+        <div class="profile-header">
+            <div class="profile-image">
+                <!-- User's Profile Image (circle) -->
+                <img src="/images/profile-pic.jpg" alt="Profile Picture">
             </div>
-
-            <!-- Resume Upload -->
-            <div>
-                <label for="uploadResume" class="block text-gray-900">Upload Resume:</label>
-                <input type="file" id="uploadResume" name="uploadResume" accept=".pdf,.doc,.docx" required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+            <div class="profile-info">
+                <h2><%= user.name %></h2>
+                <p><strong>Role:</strong> <%= user.role %></p>
+                <p><strong>Email:</strong> <%= user.email %></p>
+                <p><strong>Mentors Connected:</strong> <%= user.mentorsConnected %></p>
+                <form action="/mentor_profile" method="get" onsubmit="showReflection()">
+                    <button type="submit" class="btn-profile-fill" style="background-color: blue; color: white;">Complete Profile</button>
+                </form>  
+                <script>
+                    function showReflection() {
+                        alert('Profile completion in progress...');
+                    }
+                </script>
             </div>
+        </div>
+        <!-- Profile Stats Section -->
+        <div class="profile-stats">
+            <div class="stat-item">
+                <h3>Skills</h3>
+                <p><%= user.mentorshipHours %> hours</p>
+            </div>
+            <div class="stat-item">
+                <h3>Year of Experience</h3>
+                <p><%= user.successStories || 'No stories yet' %></p>
+            </div>
+            <div class="stat-item">
+                <h3>Availability</h3>
+                <p><%= user.activeMentors %> mentors</p>
+            </div>
+        </div>
 
-            <!-- Submit Button -->
-            <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition">Submit</button>
-        </form>
+        <!-- Profile Actions -->
+        <div class="profile-actions">
+            <button class="btn-edit">Edit Profile</button>
+            <button class="btn-change-password">Change Password</button>
+        </div>
+        <div class="btn-container">
+       <a href="/html/find_mentor.html" class="find-mentor-btn">Find a Mentee </a>
+        </div>
+        
+        <!-- Profile Details Section -->
+        <div class="profile-details">
+            <h3>Your Account</h3>
+            <p>Here you can view and edit your account details, including email, password, and more.</p>
+        </div>
     </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Father's Advice. All Rights Reserved.</p>
+    </footer>
 </body>
-</html>
+</html> write this in good ways not enhance functionality of code
