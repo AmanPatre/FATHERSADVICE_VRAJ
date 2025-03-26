@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="/css/student_details.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <img src="/images/dashboard.png" alt="Logo" class="logo" />
+        <h1>Student Dashboard</h1>
+      </div>
+    </header>
+
+    <main>
+      <div class="dashboard-container">
+        <div class="welcome-section">
+          <div class="profile-image">
+            <img
+              src="/images/student.jpg"
+              alt="Profile Picture"
+              id="profile-picture"
+            />
+          </div>
+          <div class="welcome-info">
+            <h2>
+              Welcome back, <span id="student-name"><%= student.name %></span>!
+            </h2>
+            <p class="student-id">
+              Student ID: <span id="student-id"><%= student.id %></span>
+            </p>
+          </div>
+        </div>
+
+        <div class="quick-actions">
+          <button class="view-profile-btn" onclick="toggleProfileDetails()">
+            <i class="fas fa-user"></i> View Profile Details
+          </button>
+        </div>
+
+        <div class="profile-details" id="profile-details" style="display: none">
+          <h3>Personal Information</h3>
+          <div class="details-grid">
+            <div class="detail-item">
+              <label>Full Name</label>
+              <input
+                type="text"
+                id="name"
+                value="<%= student.name %>"
+                readonly
+              />
+            </div>
+            <div class="detail-item">
+              <label>Email</label>
+              <input
+                type="email"
+                id="email"
+                value="<%= student.email %>"
+                readonly
+              />
+            </div>
+            <div class="detail-item">
+              <label>Phone Number</label>
+              <input
+                type="tel"
+                id="phone"
+                value="<%= student.phone %>"
+                readonly
+              />
+            </div>
+            <div class="detail-item">
+              <label>Date of Birth</label>
+              <input
+                type="date"
+                id="dateOfBirth"
+                value="<%= student.dateOfBirth %>"
+                readonly
+              />
+            </div>
+          </div>
+
+          <h3>Academic Information</h3>
+          <div class="details-grid">
+            <div class="detail-item">
+              <label>Current Education</label>
+              <input
+                type="text"
+                id="education"
+                value="<%= student.education %>"
+                readonly
+              />
+            </div>
+            <div class="detail-item">
+              <label>Institution</label>
+              <input
+                type="text"
+                id="institution"
+                value="<%= student.institution %>"
+                readonly
+              />
+            </div>
+            <div class="detail-item">
+              <label>Field of Interest</label>
+              <input
+                type="text"
+                id="fieldOfInterest"
+                value="<%= student.fieldOfInterest %>"
+                readonly
+              />
+            </div>
+            <div class="detail-item">
+              <label>Expected Graduation</label>
+              <input
+                type="date"
+                id="expectedGraduation"
+                value="<%= student.expectedGraduation %>"
+                readonly
+              />
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button class="edit-btn" onclick="toggleEdit()">
+              Edit Profile
+            </button>
+            <button
+              class="save-btn"
+              style="display: none"
+              onclick="saveChanges()"
+            >
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-container">
+        <p>&copy; 2024 Father's Advice. All Rights Reserved.</p>
+        <div class="social-icons">
+          <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      function toggleProfileDetails() {
+        const profileDetails = document.getElementById("profile-details");
+        profileDetails.style.display =
+          profileDetails.style.display === "none" ? "block" : "none";
+      }
+
+      function toggleEdit() {
+        const inputs = document.querySelectorAll("input[readonly]");
+        const editBtn = document.querySelector(".edit-btn");
+        const saveBtn = document.querySelector(".save-btn");
+
+        inputs.forEach((input) => {
+          input.readOnly = !input.readOnly;
+        });
+
+        editBtn.style.display =
+          editBtn.style.display === "none" ? "block" : "none";
+        saveBtn.style.display =
+          saveBtn.style.display === "none" ? "block" : "none";
+      }
+
+      async function saveChanges() {
+        const formData = {
+          name: document.getElementById("name").value,
+          phone: document.getElementById("phone").value,
+          dateOfBirth: document.getElementById("dateOfBirth").value,
+          education: document.getElementById("education").value,
+          institution: document.getElementById("institution").value,
+          fieldOfInterest: document.getElementById("fieldOfInterest").value,
+          expectedGraduation:
+            document.getElementById("expectedGraduation").value,
+        };
+
+        try {
+          const response = await fetch("/update-student-profile", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            alert("Profile updated successfully!");
+            toggleEdit(); // Toggle back to view mode
+          } else {
+            alert("Failed to update profile. Please try again.");
+          }
+        } catch (error) {
+          console.error("Error updating profile:", error);
+          alert(
+            "An error occurred while updating your profile. Please try again."
+          );
+        }
+      }
+    </script>
+  </body>
+</html>
