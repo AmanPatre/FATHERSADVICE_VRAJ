@@ -32,32 +32,57 @@
                 <h2><%= user.name %></h2>
                 <p><strong>Role:</strong> <%= user.role %></p>
                 <p><strong>Email:</strong> <%= user.email %></p>
-                <p><strong>Mentors Connected:</strong> <%= user.mentorsConnected %></p>
-                <form action="/mentor_profile" method="get" onsubmit="showReflection()">
-                    <button type="submit" class="btn-profile-fill" style="background-color: blue; color: white;">Complete Profile</button>
-                </form>  
-                <script>
-                    function showReflection() {
-                        alert('Profile completion in progress...');
-                    }
-                </script>
+                <p><strong>Phone:</strong> <%= user.phone %></p>
+                <p><strong>Address:</strong> <%= user.address %></p>
+                <% if (!profile.fieldOfInterest) { %>
+                    <form action="/mentor_profile" method="get">
+                        <button type="submit" class="btn-profile-fill" style="background-color: blue; color: white;">Complete Profile</button>
+                    </form>
+                <% } %>
             </div>
         </div>
-        <!-- Profile Stats Section -->
-        <div class="profile-stats">
-            <div class="stat-item">
+
+        <% if (profile.fieldOfInterest) { %>
+            <!-- Profile Stats Section -->
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <h3>Field of Interest</h3>
+                    <p><%= profile.fieldOfInterest %></p>
+                </div>
+                <div class="stat-item">
+                    <h3>Year of Experience</h3>
+                    <p><%= profile.yearOfExperience %> years</p>
+                </div>
+                <div class="stat-item">
+                    <h3>Availability</h3>
+                    <p><%= profile.availability || 'Not specified' %></p>
+                </div>
+            </div>
+
+            <!-- Skills Section -->
+            <div class="skills-section">
                 <h3>Skills</h3>
-                <p><%= user.mentorshipHours %> hours</p>
+                <div class="skills-list">
+                    <% profile.skills.forEach(function(skill) { %>
+                        <span class="skill-tag"><%= skill %></span>
+                    <% }); %>
+                </div>
             </div>
-            <div class="stat-item">
-                <h3>Year of Experience</h3>
-                <p><%= user.successStories || 'No stories yet' %></p>
+
+            <!-- Bio Section -->
+            <div class="bio-section">
+                <h3>Brief Bio</h3>
+                <p><%= profile.briefBio || 'No bio available' %></p>
             </div>
-            <div class="stat-item">
-                <h3>Availability</h3>
-                <p><%= user.activeMentors %> mentors</p>
-            </div>
-        </div>
+
+            <!-- Resume Section -->
+            <% if (profile.uploadResume) { %>
+                <div class="resume-section">
+                    <h3>Resume</h3>
+                    <a href="<%= profile.uploadResume %>" target="_blank" class="btn-view-resume">View Resume</a>
+                </div>
+            <% } %>
+        <% } %>
 
         <!-- Profile Actions -->
         <div class="profile-actions">
@@ -65,13 +90,7 @@
             <button class="btn-change-password">Change Password</button>
         </div>
         <div class="btn-container">
-       <a href="/html/find_mentor.html" class="find-mentor-btn">Find a Mentee </a>
-        </div>
-        
-        <!-- Profile Details Section -->
-        <div class="profile-details">
-            <h3>Your Account</h3>
-            <p>Here you can view and edit your account details, including email, password, and more.</p>
+            <a href="/html/find_mentor.html" class="find-mentor-btn">Find a Mentee</a>
         </div>
     </div>
 
@@ -80,4 +99,4 @@
         <p>&copy; 2024 Father's Advice. All Rights Reserved.</p>
     </footer>
 </body>
-</html> write this in good ways not enhance functionality of code
+</html>

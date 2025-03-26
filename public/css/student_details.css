@@ -242,3 +242,34 @@ footer {
     text-align: center;
   }
 }
+
+.find-mentor-section {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.find-mentor-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  background-color: #3498db;
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.find-mentor-btn:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+.find-mentor-btn i {
+  font-size: 1.4rem;
+}

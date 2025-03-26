@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -11,8 +12,9 @@ const MentorProfile = require('./models/mentor.after.profile.model.js'); // Impo
 const { authenticateToken }= require('./middleware/authentication.middleware.js')
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser'); // Ensure this is imported
+const MenteeRequest = require('./models/mentee.request.model.js');
 
-
+console.log("MongoDB URI:", process.env.MONGO_URI); // Debugging
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
@@ -92,6 +94,7 @@ app.post('/signup', async (req, res) => {
 
         // Check if user already exists
         const existingUser = await User.findOne({ email });
+      
         if (existingUser) {
             return res.status(400).send('Email already registered');
         }
@@ -137,6 +140,7 @@ app.post('/signup', async (req, res) => {
 });
 
 
+
 // Login Route
 app.post('/login', async (req, res) => {
     try {
@@ -166,11 +170,35 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.get('/mentee-dashboard', authenticateToken, (req, res) => {
-    if (req.user.role !== 'mentee') {
-        return res.status(403).json({ error: 'Unauthorized access' });
+
+
+app.get('/mentee-dashboard', authenticateToken, async (req, res) => {
+    try {
+        if (req.user.role !== 'mentee') {
+            return res.status(403).json({ error: 'Unauthorized access' });
+        }
+
+        const mentee = await User.findById(req.user.userId);
+        if (!mentee) {
+            return res.status(404).json({ error: 'Mentee not found' });
+        }
+
+        res.render('mentee_profile.ejs', {
+            student: {
+                id: mentee._id,
+                name: mentee.name,
+                email: mentee.email,
+                role: mentee.role,
+                phone: mentee.phone || '',
+                education: mentee.education || 0,
+                institution: mentee.institution || 0,
+                fieldOfInterest: mentee.fieldOfInterest || 0
+            }
+        });
+    } catch (error) {
+        console.error('Mentee dashboard error:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
-    res.send('Welcome to Mentee Dashboard');
 });
 
 
@@ -186,15 +214,26 @@ app.get('/mentor-dashboard', authenticateToken, async (req, res) => {
             return res.status(404).json({ error: 'Mentor not found' });
         }
 
+        // Fetch the mentor's profile data
+        const mentorProfile = await MentorProfile.findOne({ mentorId: req.user.userId });
+        console.log('Found mentor profile:', mentorProfile); // Debugging
+
         res.render('mentor_profile', {
             user: {
+                id: mentor._id,
                 name: mentor.name,
                 email: mentor.email,
                 role: mentor.role,
-                mentorsConnected: 0,
-                mentorshipHours: 0,
-                successStories: 'N/A',
-                activeMentors: 0
+                phone: mentor.phone || '',
+                address: mentor.address || ''
+            },
+            profile: mentorProfile || {
+                fieldOfInterest: '',
+                yearOfExperience: 0,
+                skills: [],
+                availability: '',
+                briefBio: '',
+                uploadResume: ''
             }
         });
     } catch (error) {
@@ -215,32 +254,37 @@ app.get('/logout', (req, res) => {
 });
 
 
-// Add this to your server.js
-app.post('/find-mentor', async (req, res) => {
-    const { education, field, location, details } = req.body;
-
-    // Check if all required fields are filled
-    if (!education || !field || !location) {
-        return res.status(400).send('Please fill in all the fields');
-    }
-
+// Find Mentor Route
+app.post('/find-mentor', authenticateToken, async (req, res) => {
     try {
-        // Create a new document or process the data here
-        const newRequest = new MentorRequest({
+        const { education, field, location, details, preferred_schedule, duration } = req.body;
+
+        // Check if all required fields are filled
+        if (!education || !field || !location || !preferred_schedule || !duration) {
+            return res.status(400).json({ error: 'Please fill in all required fields' });
+        }
+
+        // Create new mentee request
+        const newRequest = new MenteeRequest({
+            menteeId: req.user.userId,
             education,
             field,
             location,
-            details
+            details,
+            preferredSchedule: preferred_schedule,
+            duration,
+            status: 'pending'
         });
 
-        // Save the data into a new collection (e.g., MentorRequests)
         await newRequest.save();
+        console.log('Mentee request saved:', newRequest);
 
-        // Redirect the user to a random mentor profile page (or show matching mentors)
-        res.redirect(`/mentor-profile/${newRequest._id}`);
+        // TODO: Implement mentor matching logic here
+        // For now, just redirect to a success page
+        res.redirect('/mentee-dashboard?request=success');
     } catch (error) {
-        console.error('Error saving mentor request:', error);
-        res.status(500).send('Internal Server Error');
+        console.error('Error saving mentee request:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
@@ -252,33 +296,56 @@ app.get('/mentor_profile', async (req, res) => {
 });
 
 
-app.post('/submit_profile', async (req, res) => {
+app.post('/submit_profile', authenticateToken, async (req, res) => {
+   
     try {
-        console.log(req.body); // Debugging: Check what data is received
+        console.log('Received form data:', req.body); // Debugging
 
-        const { fieldOfInterest, yearOfExperience, skills } = req.body;
+        const { fieldOfInterest, yearOfExperience, skills, availability, briefBio } = req.body;
 
         // Check if all required fields are filled
-        if (!fieldOfInterest || !yearOfExperience || !skills || skills.length === 0) {
+        if (!fieldOfInterest || !yearOfExperience || !skills) {
             return res.status(400).json({ error: "All required fields must be filled" });
         }
+
+        // Convert skills string to array if it's a string
+        const skillsArray = Array.isArray(skills) ? skills : skills.split(',').map(skill => skill.trim());
 
         // Temporary Cloudinary URL
         const tempCloudinaryUrl = "https://res.cloudinary.com/demo/image/upload/sample.pdf";
 
-        const mentor = new MentorProfile({
+        const mentorProfile = new MentorProfile({
+            mentorId: req.user.userId,
             fieldOfInterest,
             yearOfExperience,
-            skills,
-            availability: req.body.availability || "",
-            briefBio: req.body.briefBio || "",
+            skills: skillsArray,
+            availability: availability || "",
+            briefBio: briefBio || "",
             uploadResume: tempCloudinaryUrl
         });
 
-        await mentor.save();
-        res.redirect('/mentor_profile.ejs',{mentor});
+        console.log('Saving mentor profile:', mentorProfile); // Debugging
+        await mentorProfile.save();
+        console.log('Profile saved successfully'); // Debugging
+
+        res.redirect('/mentor-dashboard');
     } catch (error) {
+        console.error('Error saving mentor profile:', error); // Debugging
         res.status(500).json({ error: "Failed to create mentor profile", details: error.message });
+    }
+});
+
+
+// Mentee Request Page Route
+app.get('/mentee-request', authenticateToken, async (req, res) => {
+    try {
+        if (req.user.role !== 'mentee') {
+            return res.status(403).json({ error: 'Unauthorized access' });
+        }
+        res.render('mentee_request');
+    } catch (error) {
+        console.error('Mentee request page error:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 
