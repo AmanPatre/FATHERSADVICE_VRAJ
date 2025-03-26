@@ -257,33 +257,27 @@ app.get('/logout', (req, res) => {
 // Find Mentor Route
 app.post('/find-mentor', authenticateToken, async (req, res) => {
     try {
-        const { education, field, location, details, preferred_schedule, duration } = req.body;
+        const { doubt } = req.body;
 
-        // Check if all required fields are filled
-        if (!education || !field || !location || !preferred_schedule || !duration) {
-            return res.status(400).json({ error: 'Please fill in all required fields' });
+        // Check if doubt is filled
+        if (!doubt) {
+            return res.status(400).json({ error: 'Please enter your question' });
         }
 
         // Create new mentee request
         const newRequest = new MenteeRequest({
             menteeId: req.user.userId,
-            education,
-            field,
-            location,
-            details,
-            preferredSchedule: preferred_schedule,
-            duration,
+            doubt,
             status: 'pending'
         });
 
         await newRequest.save();
-        console.log('Mentee request saved:', newRequest);
+        console.log('Mentee doubt saved:', newRequest);
 
-        // TODO: Implement mentor matching logic here
-        // For now, just redirect to a success page
-        res.redirect('/mentee-dashboard?request=success');
+        // Redirect to dashboard with success message
+        res.redirect('/mentee-dashboard?doubt=submitted');
     } catch (error) {
-        console.error('Error saving mentee request:', error);
+        console.error('Error saving mentee doubt:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });

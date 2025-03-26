@@ -1,61 +1,77 @@
-/* General Styles */
+/* Global Styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    line-height: 1.6;
     background-color: #f5f5f5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Header Styles */
 .navbar {
-    background-color: #2c3e50;
+    background-color: #e67e22;
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.logo-container img {
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
     height: 40px;
+    width: auto;
 }
 
 nav a {
     color: white;
     text-decoration: none;
     margin-left: 2rem;
+    font-weight: 500;
     transition: color 0.3s ease;
 }
 
 nav a:hover {
-    color: #3498db;
+    color: #f1c40f;
 }
 
 /* Main Content Styles */
+main {
+    flex: 1;
+    padding: 2rem;
+}
+
 .container {
     max-width: 800px;
-    margin: 2rem auto;
-    padding: 2rem;
+    margin: 0 auto;
     background-color: white;
+    padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
     color: #2c3e50;
-    margin-bottom: 0.5rem;
     text-align: center;
+    margin-bottom: 0.5rem;
+    font-size: 2rem;
 }
 
 .subtitle {
     color: #7f8c8d;
     text-align: center;
     margin-bottom: 2rem;
+    font-size: 1.1rem;
 }
 
 /* Form Styles */
@@ -73,20 +89,27 @@ h1 {
 
 label {
     color: #2c3e50;
-    font-weight: bold;
+    font-weight: 500;
+    font-size: 1rem;
 }
 
-select, textarea {
-    padding: 0.8rem;
+textarea, select {
+    padding: 1rem;
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 1rem;
-    width: 100%;
+    transition: border-color 0.3s ease;
+}
+
+textarea:focus, select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
 }
 
 textarea {
     resize: vertical;
-    min-height: 100px;
+    min-height: 150px;
 }
 
 /* Button Styles */
@@ -97,51 +120,59 @@ textarea {
 }
 
 .submit-btn, .cancel-btn {
-    padding: 0.8rem 1.5rem;
+    padding: 1rem 2rem;
     border: none;
     border-radius: 5px;
     font-size: 1rem;
+    font-weight: 500;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .submit-btn {
     background-color: #3498db;
     color: white;
+    flex: 1;
 }
 
 .submit-btn:hover {
     background-color: #2980b9;
+    transform: translateY(-2px);
 }
 
 .cancel-btn {
     background-color: #e74c3c;
     color: white;
+    text-decoration: none;
+    flex: 1;
+    justify-content: center;
 }
 
 .cancel-btn:hover {
     background-color: #c0392b;
+    transform: translateY(-2px);
 }
 
 /* Footer Styles */
 footer {
     background-color: #2c3e50;
     color: white;
+    padding: 1.5rem;
     text-align: center;
-    padding: 1rem;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
+    margin-top: auto;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {
-        margin: 1rem;
         padding: 1rem;
     }
 
@@ -151,6 +182,5 @@ footer {
 
     .submit-btn, .cancel-btn {
         width: 100%;
-        justify-content: center;
     }
 } 

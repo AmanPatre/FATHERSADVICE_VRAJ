@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Find a Mentor | Father's Advice</title>
+    <title>Ask a Question | Father's Advice</title>
     <link rel="stylesheet" href="/css/mentee_request.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet" />
 </head>
@@ -22,74 +22,24 @@
 
     <main>
         <div class="container">
-            <h1>Find Your Perfect Mentor</h1>
-            <p class="subtitle">Fill out the form below to find a mentor that matches your needs</p>
+            <h1>Ask Your Question</h1>
+            <p class="subtitle">Share your doubt and get expert guidance from our mentors</p>
 
             <form action="/find-mentor" method="POST" class="mentor-request-form">
                 <div class="form-group">
-                    <label for="education">Current Education Level</label>
-                    <select id="education" name="education" required>
-                        <option value="">Select your education level</option>
-                        <option value="high_school">High School</option>
-                        <option value="bachelors">Bachelor's Degree</option>
-                        <option value="masters">Master's Degree</option>
-                        <option value="phd">PhD</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="field">Field of Interest</label>
-                    <select id="field" name="field" required>
-                        <option value="">Select your field of interest</option>
-                        <option value="technology">Technology</option>
-                        <option value="business">Business</option>
-                        <option value="science">Science</option>
-                        <option value="arts">Arts</option>
-                        <option value="engineering">Engineering</option>
-                        <option value="medicine">Medicine</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="location">Preferred Location</label>
-                    <select id="location" name="location" required>
-                        <option value="">Select preferred location</option>
-                        <option value="online">Online</option>
-                        <option value="local">Local</option>
-                        <option value="hybrid">Hybrid</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="details">Additional Details</label>
-                    <textarea id="details" name="details" rows="4" placeholder="Tell us more about your goals and what you're looking for in a mentor..."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="preferred_schedule">Preferred Schedule</label>
-                    <select id="preferred_schedule" name="preferred_schedule" required>
-                        <option value="">Select your preferred schedule</option>
-                        <option value="weekday_morning">Weekday Morning</option>
-                        <option value="weekday_evening">Weekday Evening</option>
-                        <option value="weekend">Weekend</option>
-                        <option value="flexible">Flexible</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="duration">Preferred Mentorship Duration</label>
-                    <select id="duration" name="duration" required>
-                        <option value="">Select duration</option>
-                        <option value="1_month">1 Month</option>
-                        <option value="3_months">3 Months</option>
-                        <option value="6_months">6 Months</option>
-                        <option value="1_year">1 Year</option>
-                    </select>
+                    <label for="doubt">Your Question</label>
+                    <textarea 
+                        id="doubt" 
+                        name="doubt" 
+                        rows="6" 
+                        placeholder="Type your question here... Be as specific as possible to get the best help."
+                        required
+                    ></textarea>
                 </div>
 
                 <div class="form-actions">
                     <button type="submit" class="submit-btn">
-                        <i class="fas fa-search"></i> Find Mentor
+                        <i class="fas fa-paper-plane"></i> Submit Question
                     </button>
                     <a href="/mentee-dashboard" class="cancel-btn">
                         <i class="fas fa-times"></i> Cancel

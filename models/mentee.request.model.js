@@ -6,42 +6,24 @@ const MenteeRequestSchema = new mongoose.Schema({
         ref: 'User', 
         required: true 
     },
-    education: { 
+    doubt: { 
         type: String, 
-        required: true,
-        enum: ['high_school', 'bachelors', 'masters', 'phd']
-    },
-    field: { 
-        type: String, 
-        required: true,
-        enum: ['technology', 'business', 'science', 'arts', 'engineering', 'medicine']
-    },
-    location: { 
-        type: String, 
-        required: true,
-        enum: ['online', 'local', 'hybrid']
-    },
-    details: { 
-        type: String 
-    },
-    preferredSchedule: { 
-        type: String, 
-        required: true,
-        enum: ['weekday_morning', 'weekday_evening', 'weekend', 'flexible']
-    },
-    duration: { 
-        type: String, 
-        required: true,
-        enum: ['1_month', '3_months', '6_months', '1_year']
+        required: true 
     },
     status: { 
         type: String, 
         default: 'pending',
-        enum: ['pending', 'matched', 'completed', 'cancelled']
+        enum: ['pending', 'answered', 'closed']
     },
-    matchedMentorId: { 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Mentor' 
+    answer: {
+        type: String
+    },
+    answeredBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Mentor'
+    },
+    answeredAt: {
+        type: Date
     }
 }, { timestamps: true });
 
