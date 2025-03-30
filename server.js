@@ -11,8 +11,20 @@ const app = express();
 const MentorProfile = require('./models/mentor.after.profile.model.js'); // Import the schema
 const { authenticateToken }= require('./middleware/authentication.middleware.js')
 const jwt = require('jsonwebtoken');
-const cookieParser = require('cookie-parser'); // Ensure this is imported
+const cookieParser = require('cookie-parser');
 const MenteeRequest = require('./models/mentee.request.model.js');
+const { spawn } = require("child_process");
+const axios = require('axios'); // Make sure axios is installed
+
+// Ensure process.env is available
+if (typeof process === 'undefined') {
+    global.process = require('process');
+}
+
+// Ensure __dirname is available
+if (typeof __dirname === 'undefined') {
+    global.__dirname = path.dirname(require.main.filename);
+}
 
 console.log("MongoDB URI:", process.env.MONGO_URI); // Debugging
 // Connect to MongoDB
@@ -23,8 +35,45 @@ mongoose.connect(process.env.MONGO_URI)
     .catch(err => {
         console.error('Error connecting to MongoDB:', err);
     });
+    
+// Script to run the python files
+const runPythonScript = (scriptName) => {
+    console.log(`Starting ${scriptName}...`);
+    const process = spawn("python", [scriptName]);
 
+    process.stdout.on("data", (data) => {
+        console.log(`Output from ${scriptName}: ${data.toString()}`);
+    });
 
+    process.stderr.on("data", (data) => {
+        console.error(`Error from ${scriptName}: ${data.toString()}`);
+    });
+
+    process.on("close", (code) => {
+        console.log(`${scriptName} exited with code ${code}`);
+    });
+};
+
+// Start both Python scripts
+runPythonScript("algo.py");
+console.log("Algorithm script started");
+runPythonScript("api.py");
+console.log("API script started");
+
+// Wait for Python servers to start before continuing
+setTimeout(() => {
+    // Test API connectivity
+    axios.get('http://localhost:5001/test')
+        .then(response => {
+            console.log('API service is running:', response.data);
+        })
+        .catch(error => {
+            console.error('Error connecting to API service:', error.message);
+        });
+        
+    // No test endpoint in algo.py, but we'll log that we're assuming it's running
+    console.log('Assuming algorithm service is running on port 5000');
+}, 3000);
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -51,8 +100,6 @@ app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-here';
 
-
-
 // Serve the main index.html file
 app.get('/', (req, res) => {
     if (!req.session.userId) {
@@ -67,8 +114,6 @@ app.get('/', (req, res) => {
 app.get('/html/login.html',(req,res)=>{
     res.redirect('/html/login.html');
 });
-
-
 
 // Signup Route
 app.post('/signup', async (req, res) => {
@@ -139,8 +184,6 @@ app.post('/signup', async (req, res) => {
     }
 });
 
-
-
 // Login Route
 app.post('/login', async (req, res) => {
     try {
@@ -170,8 +213,6 @@ app.post('/login', async (req, res) => {
     }
 });
 
-
-
 app.get('/mentee-dashboard', authenticateToken, async (req, res) => {
     try {
         if (req.user.role !== 'mentee') {
@@ -200,7 +241,6 @@ app.get('/mentee-dashboard', authenticateToken, async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
-
 
 // Mentor Dashboard Route
 app.get('/mentor-dashboard', authenticateToken, async (req, res) => {
@@ -242,7 +282,6 @@ app.get('/mentor-dashboard', authenticateToken, async (req, res) => {
     }
 });
 
-
 // Logout route
 app.get('/logout', (req, res) => {
     req.session.destroy((err) => {
@@ -252,7 +291,6 @@ app.get('/logout', (req, res) => {
         res.redirect('/');
     });
 });
-
 
 // Find Mentor Route
 app.post('/find-mentor', authenticateToken, async (req, res) => {
@@ -274,6 +312,41 @@ app.post('/find-mentor', authenticateToken, async (req, res) => {
         await newRequest.save();
         console.log('Mentee doubt saved:', newRequest);
 
+        // First: Send the doubt to the AI API for processing
+        try {
+            const aiResponse = await axios.post('http://localhost:5001/submit_doubt', {
+                mentee_id: req.user.userId.toString(),
+                doubt: doubt
+            });
+            console.log('Subject breakdown received:', aiResponse.data);
+            
+            // Save the breakdown back to the request
+            newRequest.subjectBreakdown = aiResponse.data.subject_breakdown;
+            await newRequest.save();
+            
+            // Second: Use the algo API to find the best mentor match
+            try {
+                const matchResponse = await axios.post('http://localhost:5000/match_advanced', {
+                    mentee_id: req.user.userId.toString()
+                });
+                console.log('Mentor match received:', matchResponse.data);
+                
+                // Save the match information to the request
+                if (matchResponse.data.match) {
+                    newRequest.matchedMentorId = matchResponse.data.match.mentor_id;
+                    newRequest.compatibilityScore = matchResponse.data.match.compatibility_score;
+                    await newRequest.save();
+                }
+            } catch (algoError) {
+                console.error('Error calling matching algorithm:', algoError);
+                // Continue even if matching fails
+            }
+            
+        } catch (apiError) {
+            console.error('Error calling Python API:', apiError);
+            // Continue with the request even if API call fails
+        }
+
         // Redirect to dashboard with success message
         res.redirect('/mentee-dashboard?doubt=submitted');
     } catch (error) {
@@ -282,13 +355,10 @@ app.post('/find-mentor', authenticateToken, async (req, res) => {
     }
 });
 
-
-
 // Mentor_profile after login 
 app.get('/mentor_profile', async (req, res) => {
     res.render('mentor_after_profile');
 });
-
 
 app.post('/submit_profile', authenticateToken, async (req, res) => {
    
@@ -329,7 +399,6 @@ app.post('/submit_profile', authenticateToken, async (req, res) => {
     }
 });
 
-
 // Mentee Request Page Route
 app.get('/mentee-request', authenticateToken, async (req, res) => {
     try {
@@ -343,6 +412,38 @@ app.get('/mentee-request', authenticateToken, async (req, res) => {
     }
 });
 
+// Get Mentor Match Results
+app.get('/mentor-match-results', authenticateToken, async (req, res) => {
+    try {
+        if (req.user.role !== 'mentee') {
+            return res.status(403).json({ error: 'Unauthorized access' });
+        }
+        
+        // Find the latest mentee request
+        const latestRequest = await MenteeRequest.findOne({ 
+            menteeId: req.user.userId 
+        }).sort({ createdAt: -1 });
+        
+        if (!latestRequest) {
+            return res.status(404).json({ error: 'No mentor match found' });
+        }
+        
+        // Get matched mentor details if there is a match
+        let matchedMentor = null;
+        if (latestRequest.matchedMentorId) {
+            matchedMentor = await Mentor.findById(latestRequest.matchedMentorId);
+        }
+        
+        res.render('mentor_match_results', {
+            request: latestRequest,
+            mentor: matchedMentor,
+            compatibilityScore: latestRequest.compatibilityScore || 0
+        });
+    } catch (error) {
+        console.error('Error fetching mentor match results:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
 // Start the server
 const PORT = process.env.PORT || 3000;
