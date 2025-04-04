@@ -1,0 +1,12 @@
+Connected to MongoDB
+ * Serving Flask app 'mentor_processor'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5003
+ * Running on http://172.25.237.255:5003
+Press CTRL+C to quit
+127.0.0.1 - - [04/Apr/2025 23:04:44] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [04/Apr/2025 23:05:22] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [04/Apr/2025 23:12:59] "GET /get_mentor_dashboard/67eda17c77dd19cd081b0eba HTTP/1.1" 404 -
+127.0.0.1 - - [04/Apr/2025 23:13:30] "GET /get_mentor_dashboard/67eda17c77dd19cd081b0eba HTTP/1.1" 404 -

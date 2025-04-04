@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentor Match Results - FatherAdvice</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .match-results {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .match-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .mentor-card {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 2rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+            transition: transform 0.2s;
+        }
+
+        .mentor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .mentor-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #6c757d;
+        }
+
+        .mentor-info {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .mentor-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #212529;
+        }
+
+        .mentor-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .detail-item i {
+            color: #0d47a1;
+        }
+
+        .compatibility-score {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #28a745;
+            text-align: right;
+        }
+
+        .no-matches {
+            text-align: center;
+            padding: 3rem;
+            color: #6c757d;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .action-button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        .connect-button {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .connect-button:hover {
+            background-color: #218838;
+        }
+
+        .view-profile-button {
+            background-color: #0d47a1;
+            color: white;
+        }
+
+        .view-profile-button:hover {
+            background-color: #0a3880;
+        }
+    </style>
+</head>
+<body>
+    <div class="match-results">
+        <div class="match-header">
+            <h1>Your Mentor Matches</h1>
+            <p>Based on your request: <%= request ? request.doubt : 'No doubt specified' %></p>
+        </div>
+
+        <% if (mentor) { %>
+            <div class="mentor-card">
+                <div class="mentor-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="mentor-info">
+                    <div class="mentor-name"><%= mentor.name %></div>
+                    <div class="mentor-details">
+                        <div class="detail-item">
+                            <i class="fas fa-briefcase"></i>
+                            <span><%= mentor.jobRole %></span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span><%= mentor.education %></span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-clock"></i>
+                            <span><%= mentor.experience %> years experience</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span><%= mentor.location %></span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-code"></i>
+                            <span><%= mentor.skills.join(', ') %></span>
+                        </div>
+                    </div>
+                    <div class="compatibility-score">
+                        Compatibility Score: <%= compatibilityScore %>%
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-button connect-button">Connect with Mentor</button>
+                        <button class="action-button view-profile-button">View Full Profile</button>
+                    </div>
+                </div>
+            </div>
+        <% } else { %>
+            <div class="no-matches">
+                <i class="fas fa-search" style="font-size: 4rem; margin-bottom: 1rem;"></i>
+                <h2>No Matches Found</h2>
+                <p>We couldn't find any mentors matching your criteria at the moment. Please try again later or modify your request.</p>
+            </div>
+        <% } %>
+    </div>
+
+    <script>
+        document.querySelectorAll('.connect-button').forEach(button => {
+            button.addEventListener('click', async () => {
+                try {
+                    const response = await fetch('/connect-mentor', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            mentorId: '<%= mentor ? mentor._id : "" %>'
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        alert('Connection request sent successfully!');
+                    } else {
+                        alert('Failed to send connection request');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred while sending the connection request');
+                }
+            });
+        });
+
+        document.querySelectorAll('.view-profile-button').forEach(button => {
+            button.addEventListener('click', () => {
+                window.location.href = '/mentor-profile/<%= mentor ? mentor._id : "" %>';
+            });
+        });
+    </script>
+</body>
+</html> 

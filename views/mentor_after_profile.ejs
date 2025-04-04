@@ -3,55 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mentor Profile Form</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Complete Your Mentor Profile</title>
+    <link rel="stylesheet" href="/css/profile.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="bg-gray-500 flex justify-center items-center min-h-screen">
-    <div class="bg-green-300 p-8 rounded-lg shadow-lg w-full max-w-2xl">
-        <h2 class="text-2xl font-bold text-center text-gray-900 mb-6">Mentor Profile </h2>
-        <form action="/submit_profile" method="POST"  class="space-y-4">
-       
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="text-center">Complete Your Mentor Profile</h2>
+                    </div>
+                    <div class="card-body">
+                        <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <%= errorMessage %>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        <% } %>
+
+                        <% if (typeof successMessage !== 'undefined' && successMessage) { %>
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <%= successMessage %>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        <% } %>
+
+                        <form action="/mentor_after_profile/complete" method="POST" enctype="multipart/form-data">
             <!-- Professional Information -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label for="fieldOfInterest" class="block text-gray-900">Field of Interest:</label>
-                    <input type="text" id="fieldOfInterest" name="fieldOfInterest" required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            <div class="section">
+                                <h3>Professional Information</h3>
+                                <div class="form-group">
+                                    <label for="fieldOfInterest">Job Title <span class="required">*</span></label>
+                                    <input type="text" class="form-control" id="fieldOfInterest" name="fieldOfInterest" 
+                                           value="<%= profile && profile.fieldOfInterest ? profile.fieldOfInterest : '' %>" required>
+                                    <small class="form-text text-muted">e.g., Software Engineer, Data Scientist, Business Analyst</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="yearOfExperience">Years of Experience <span class="required">*</span></label>
+                                    <input type="number" class="form-control" id="yearOfExperience" name="yearOfExperience" 
+                                           value="<%= profile && profile.yearOfExperience ? profile.yearOfExperience : '' %>" required min="0">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="education">Education <span class="required">*</span></label>
+                                    <input type="text" class="form-control" id="education" name="education" 
+                                           value="<%= profile && profile.education ? profile.education : '' %>" required>
+                                    <small class="form-text text-muted">e.g., B.Tech in Computer Science, MBA</small>
+                                </div>
+                            </div>
+
+                            <!-- Skills & Expertise -->
+                            <div class="section">
+                                <h3>Skills & Expertise</h3>
+                                <div class="form-group">
+                                    <label for="skills">Skills <span class="required">*</span></label>
+                                    <input type="text" class="form-control" id="skills" name="skills" 
+                                           value="<%= profile && profile.skills ? profile.skills.join(', ') : '' %>" required>
+                                    <small class="form-text text-muted">Enter multiple skills separated by commas</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="expertise">Areas of Expertise <span class="required">*</span></label>
+                                    <input type="text" class="form-control" id="expertise" name="expertise" 
+                                           value="<%= profile && profile.expertise ? profile.expertise.join(', ') : '' %>" required>
+                                    <small class="form-text text-muted">Enter multiple areas separated by commas</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="specializations">Specializations <span class="required">*</span></label>
+                                    <input type="text" class="form-control" id="specializations" name="specializations" 
+                                           value="<%= profile && profile.specializations ? profile.specializations.join(', ') : '' %>" required>
+                                    <small class="form-text text-muted">Enter multiple specializations separated by commas</small>
+                                </div>
+                            </div>
+
+                            <!-- Availability & Sessions -->
+                            <div class="section">
+                                <h3>Availability & Sessions</h3>
+                                <div class="form-group">
+                                    <label for="availability">Availability <span class="required">*</span></label>
+                                    <textarea class="form-control" id="availability" name="availability" rows="3" 
+                                              required><%= profile && profile.availability ? profile.availability : '' %></textarea>
+                                    <small class="form-text text-muted">Describe your general availability</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="preferredTimeSlots">Preferred Time Slots <span class="required">*</span></label>
+                                    <input type="text" class="form-control" id="preferredTimeSlots" name="preferredTimeSlots" 
+                                           value="<%= profile && profile.preferredTimeSlots ? profile.preferredTimeSlots.join(', ') : '' %>" required>
+                                    <small class="form-text text-muted">e.g., Morning, Evening, Weekend</small>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="maxSessions">Maximum Sessions <span class="required">*</span></label>
+                                            <input type="number" class="form-control" id="maxSessions" name="maxSessions" 
+                                                   value="<%= profile && profile.maxSessions ? profile.maxSessions : '5' %>" required min="1">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="sessionDuration">Session Duration (minutes) <span class="required">*</span></label>
+                                            <input type="number" class="form-control" id="sessionDuration" name="sessionDuration" 
+                                                   value="<%= profile && profile.sessionDuration ? profile.sessionDuration : '60' %>" required min="30" step="30">
+                                        </div>
                 </div>
-                <div>
-                    <label for="yearOfExperience" class="block text-gray-900">Years of Experience:</label>
-                    <input type="number" id="yearOfExperience" name="yearOfExperience" min="0" required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
                 </div>
             </div>
-            <!-- Skills -->
-            <div>
-                <label for="skills" class="block text-gray-900">Skills:</label>
-                <input type="text" id="skills" name="skills" placeholder="E.g., JavaScript, Python, Machine Learning" required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+
+                            <!-- Professional Bio -->
+                            <div class="section">
+                                <h3>Professional Bio</h3>
+                                <div class="form-group">
+                                    <label for="briefBio">Brief Bio</label>
+                                    <textarea class="form-control" id="briefBio" name="briefBio" rows="4"><%= profile && profile.briefBio ? profile.briefBio : '' %></textarea>
+                                    <small class="form-text text-muted">Write a brief introduction about yourself</small>
             </div>
- <!-- Availability -->
-            <div>
-                <label for="availability" class="block text-gray-900">Availability:</label>
-                <select id="availability" name="availability" required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    <option value="full_time">Full-Time</option>
-                    <option value="part_time">Part-Time</option>
-                    <option value="freelance">Freelance</option>
-                </select>
             </div>
 
-            <!-- Bio -->
-            <div>
-                <label for="briefBio" class="block text-gray-900">Brief Bio:</label>
-                <textarea id="briefBio" name="briefBio" rows="4" required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Tell us a little about yourself..."></textarea>
+                            <!-- Resume -->
+                            <div class="section">
+                                <h3>Resume</h3>
+                                <div class="form-group">
+                                    <label for="uploadResume">Upload Resume (Optional)</label>
+                                    <input type="file" class="form-control" id="uploadResume" name="uploadResume" 
+                                           accept=".pdf,.doc,.docx">
+                                    <small class="form-text text-muted">Accepted formats: PDF, DOC, DOCX (Max 5MB)</small>
+                                </div>
             </div>
 
-            <!-- Resume Upload -->
-            <div>
-                <label for="uploadResume" class="block text-gray-900">Upload Resume:</label>
-                <input type="file" id="uploadResume" name="uploadResume" accept=".pdf,.doc,.docx" required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-save"></i> Save Profile
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-
-            <!-- Submit Button -->
-            <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition">Submit</button>
-        </form>
+        </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Auto-hide alerts after 5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(function(alert) {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                });
+            }, 5000);
+        });
+    </script>
 </body>
 </html>

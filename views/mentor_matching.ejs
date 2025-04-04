@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Mentees | Father's Advice</title>
+    <link rel="stylesheet" href="/css/mentor.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet" />
+</head>
+<body>
+    <!-- Page Title -->
+    <div class="page-title">
+        <h1>Mentor Dashboard</h1>
+    </div>
+
+    <!-- Navbar -->
+    <header>
+        <div class="navbar">
+            <!-- Logo on the left side -->
+            <div class="logo-container">
+                <a href="/mentor_dashboard">
+                    <img src="/images/logo only.png" alt="Father's Advice Logo" class="logo">
+                </a>
+            </div>
+            <!-- Navigation links on the right side -->
+            <div class="nav-links">
+                <a href="/mentor_dashboard" class="nav-link">Dashboard</a>
+                <a href="/mentor_after_profile" class="nav-link">Profile</a>
+                <a href="/mentor_profile/change-password" class="nav-link">Change Password</a>
+                <a href="/logout" class="nav-link">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <% if (successMessage) { %>
+            <div class="alert alert-success">
+                <%= successMessage %>
+            </div>
+        <% } %>
+        
+        <% if (errorMessage) { %>
+            <div class="alert alert-error">
+                <%= errorMessage %>
+            </div>
+        <% } %>
+
+        <!-- Matching Criteria Section -->
+        <div class="matching-criteria">
+            <h2>Your Matching Criteria</h2>
+            <div class="criteria-grid">
+                <div class="criteria-item">
+                    <h3>Field of Interest</h3>
+                    <p><%= mentorProfile.fieldOfInterest %></p>
+                </div>
+                <div class="criteria-item">
+                    <h3>Preferred Time Slots</h3>
+                    <p><%= mentorProfile.preferredTimeSlots.join(', ') %></p>
+                </div>
+                <div class="criteria-item">
+                    <h3>Experience</h3>
+                    <p><%= mentorProfile.yearOfExperience %> years</p>
+                </div>
+                <div class="criteria-item">
+                    <h3>Skills</h3>
+                    <div class="skills-list">
+                        <% mentorProfile.skills.forEach(function(skill) { %>
+                            <span class="skill-tag"><%= skill %></span>
+                        <% }); %>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Matched Mentees Section -->
+        <div class="matched-mentees">
+            <h2>Matched Mentees</h2>
+            <% if (matchedMentees.length > 0) { %>
+                <div class="mentees-grid">
+                    <% matchedMentees.forEach(function(mentee) { %>
+                        <div class="mentee-card">
+                            <div class="mentee-info">
+                                <h3><%= mentee.menteeId.name %></h3>
+                                <p><i class="fas fa-envelope"></i> <%= mentee.menteeId.email %></p>
+                                <p><i class="fas fa-phone"></i> <%= mentee.menteeId.phone %></p>
+                                <p><i class="fas fa-graduation-cap"></i> <%= mentee.education %></p>
+                                <p><i class="fas fa-briefcase"></i> <%= mentee.yearOfExperience %> years experience</p>
+                            </div>
+                            <div class="mentee-skills">
+                                <h4>Skills</h4>
+                                <div class="skills-list">
+                                    <% mentee.skills.forEach(function(skill) { %>
+                                        <span class="skill-tag"><%= skill %></span>
+                                    <% }); %>
+                                </div>
+                            </div>
+                            <div class="mentee-actions">
+                                <button class="btn-connect" onclick="connectWithMentee('<%= mentee.menteeId._id %>')">
+                                    <i class="fas fa-handshake"></i> Connect
+                                </button>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } else { %>
+                <div class="no-matches">
+                    <p>No matched mentees found at the moment. Check back later!</p>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <script>
+        // Clear success/error messages after 5 seconds
+        setTimeout(() => {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                alert.style.display = 'none';
+            });
+        }, 5000);
+
+        // Function to handle mentee connection
+        function connectWithMentee(menteeId) {
+            // Add connection logic here
+            alert('Connection request sent to mentee!');
+        }
+    </script>
+
+    <style>
+        .matching-criteria {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 107, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .criteria-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .criteria-item {
+            padding: 1rem;
+            background-color: #fff5e6;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 107, 0, 0.2);
+        }
+
+        .criteria-item h3 {
+            color: var(--primary-color);
+            margin: 0 0 0.5rem 0;
+            font-size: 1.1rem;
+        }
+
+        .matched-mentees {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 107, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .mentees-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .mentee-card {
+            background-color: #fff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 107, 0, 0.1);
+        }
+
+        .mentee-info h3 {
+            color: var(--primary-color);
+            margin: 0 0 1rem 0;
+        }
+
+        .mentee-info p {
+            margin: 0.5rem 0;
+            color: #666;
+        }
+
+        .mentee-skills {
+            margin: 1rem 0;
+        }
+
+        .mentee-skills h4 {
+            color: var(--primary-color);
+            margin: 0 0 0.5rem 0;
+        }
+
+        .mentee-actions {
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .btn-connect {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-connect:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .no-matches {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .criteria-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .mentees-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</body>
+</html> 

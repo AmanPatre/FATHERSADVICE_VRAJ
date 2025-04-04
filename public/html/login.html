@@ -14,6 +14,9 @@
                 <h2 class="section-heading">Login</h2>
             </div>
 
+            <div id="error-message" class="error-message" style="display: none;"></div>
+            <div id="success-message" class="success-message" style="display: none;"></div>
+
             <form action="/login" method="POST" id="loginForm" class="login-form">
                 <div class="input-group">
                     <label for="email" class="input-label">Email:</label>
@@ -42,6 +45,7 @@
                 <div class="input-group">
                     <label for="role" class="input-label">Role:</label>
                     <select id="role" name="role" required class="input-field">
+                        <option value="">Select Role</option>
                         <option value="mentor">Mentor</option>
                         <option value="mentee">Mentee</option>
                     </select>
@@ -52,42 +56,130 @@
 
             <p class="signup-text">
                 Don't have an account? 
-                <a href="signup.html" class="signup-link">Sign up here</a>
+                <a href="/html/signup.html" class="signup-link">Sign up here</a>
             </p>
         </div>
     </section>
 
     <script>
-       // In login.html <script> tag
-// In login.html
-// In login.html
-document.getElementById('loginForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
+        // Check for error message in URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const errorMessage = urlParams.get('error');
+        const successMessage = urlParams.get('message');
 
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const role = document.getElementById('role').value;
-
-    try {
-        const response = await fetch('/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password, role })
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            // No need to store token in localStorage; it's in the cookie
-            window.location.href = `/${role}-dashboard`;
-        } else {
-            alert(data.error || 'Login failed');
+        if (errorMessage) {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = decodeURIComponent(errorMessage);
+            errorDiv.style.display = 'block';
         }
-    } catch (error) {
-        console.error('Login error:', error);
-        alert('An error occurred');
-    }
-});
+
+        if (successMessage) {
+            const successDiv = document.getElementById('success-message');
+            successDiv.textContent = decodeURIComponent(successMessage);
+            successDiv.style.display = 'block';
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.style.display = 'none';
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value;
+
+            if (!email || !password || !role) {
+                errorDiv.textContent = 'All fields are required';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            try {
+                // First try JSON submission
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password, role })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // For mentees, always redirect to mentee_profile
+                    if (role === 'mentee') {
+                        window.location.href = '/mentee_profile';
+                    } else {
+                        // For mentors, use the server's redirect response
+                        window.location.href = data.redirect;
+                    }
+                } else {
+                    // Show error message
+                    errorDiv.textContent = data.error || 'Login failed';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                // If JSON submission fails, try form submission
+                const form = document.getElementById('loginForm');
+                form.submit();
+            }
+        });
     </script>
+
+    <style>
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid #f5c6cb;
+        }
+
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid #c3e6cb;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
 </body>
 </html>

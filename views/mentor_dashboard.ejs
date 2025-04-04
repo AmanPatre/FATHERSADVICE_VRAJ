@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentor Dashboard | Father's Advice</title>
+    <link rel="stylesheet" href="/css/mentor.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet" />
+</head>
+<body>
+    <!-- Navbar -->
+    <header>
+        <div class="navbar">
+            <!-- Logo on the left side -->
+            <div class="logo-container">
+                <a href="/mentor_dashboard">
+                    <img src="/images/Logo Only.png" alt="Father's Advice Logo" class="logo">
+                </a>
+            </div>
+            <!-- Navigation links on the right side -->
+            <div class="nav-links">
+                <a href="/mentor_dashboard" class="nav-link">Dashboard</a>
+                <a href="/mentor_after_profile" class="nav-link">Profile</a>
+                <a href="/mentor/matching" class="nav-link">Find Mentees</a>
+                <a href="/mentor_after_profile/change-password" class="nav-link">Change Password</a>
+                <a href="/logout" class="nav-link">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <% if (errorMessage) { %>
+            <div class="alert alert-error">
+                <%= errorMessage %>
+            </div>
+        <% } %>
+
+        <% if (successMessage) { %>
+            <div class="alert alert-success">
+                <%= successMessage %>
+            </div>
+        <% } %>
+
+        <!-- Profile Header Section -->
+        <div class="profile-header">
+            <div class="profile-image">
+                <img src="/images/profile-pic.jpg" alt="Profile Picture">
+            </div>
+            <div class="profile-info">
+                <h2>Welcome, <%= user.name %></h2>
+                <p><strong>Role:</strong> <%= user.role %></p>
+                <p><strong>Email:</strong> <%= user.email %></p>
+                <% if (user.phone) { %>
+                    <p><strong>Phone:</strong> <%= user.phone %></p>
+                <% } %>
+                <% if (user.address) { %>
+                    <p><strong>Address:</strong> <%= user.address %></p>
+                <% } %>
+            </div>
+        </div>
+
+        <!-- Profile Actions -->
+        <div class="profile-actions">
+            <a href="/mentor/matching" class="find-mentor-btn">
+                <i class="fas fa-search"></i> Find Mentees
+            </a>
+            <a href="/mentor_after_profile" class="btn-edit-profile">
+                <i class="fas fa-edit"></i> Edit Profile
+            </a>
+            <button class="btn-change-password" onclick="window.location.href='/mentor_after_profile/change-password'">
+                <i class="fas fa-key"></i> Change Password
+            </button>
+        </div>
+
+        <!-- Profile Stats Section -->
+        <div class="profile-stats">
+            <div class="stat-item">
+                <h3>Field of Interest</h3>
+                <p><%= profile.fieldOfInterest %></p>
+            </div>
+            <div class="stat-item">
+                <h3>Years of Experience</h3>
+                <p><%= profile.yearOfExperience %> years</p>
+            </div>
+            <div class="stat-item">
+                <h3>Education</h3>
+                <p><%= profile.education %></p>
+            </div>
+            <div class="stat-item">
+                <h3>Availability</h3>
+                <p><%= profile.availability %></p>
+            </div>
+        </div>
+
+        <!-- Skills Section -->
+        <div class="skills-section">
+            <h3>Skills & Expertise</h3>
+            <div class="skills-list">
+                <% profile.skills.forEach(function(skill) { %>
+                    <span class="skill-tag"><%= skill %></span>
+                <% }); %>
+            </div>
+            <h4>Areas of Expertise</h4>
+            <div class="skills-list">
+                <% profile.expertise.forEach(function(exp) { %>
+                    <span class="skill-tag"><%= exp %></span>
+                <% }); %>
+            </div>
+            <h4>Specializations</h4>
+            <div class="skills-list">
+                <% profile.specializations.forEach(function(spec) { %>
+                    <span class="skill-tag"><%= spec %></span>
+                <% }); %>
+            </div>
+        </div>
+
+        <!-- Availability Section -->
+        <div class="bio-section">
+            <h3>Availability Details</h3>
+            <p><strong>Preferred Time Slots:</strong> <%= profile.preferredTimeSlots.join(', ') %></p>
+            <p><strong>Maximum Sessions per Week:</strong> <%= profile.maxSessions %></p>
+            <p><strong>Session Duration:</strong> <%= profile.sessionDuration %> minutes</p>
+        </div>
+
+        <!-- Bio Section -->
+        <div class="bio-section">
+            <h3>Professional Bio</h3>
+            <p><%= profile.briefBio %></p>
+        </div>
+
+        <!-- Resume Section -->
+        <% if (profile.uploadResume) { %>
+            <div class="resume-section">
+                <h3>Resume</h3>
+                <a href="<%= profile.uploadResume %>" target="_blank" class="btn-view-resume">
+                    <i class="fas fa-file-alt"></i> View Resume
+                </a>
+            </div>
+        <% } %>
+
+        <!-- Processed Data Section (if available) -->
+        <% if (processedData && processedData.dashboard_data) { %>
+            <div class="processed-data-section">
+                <h3>Matching Metrics</h3>
+                <div class="metrics-grid">
+                    <% Object.entries(processedData.dashboard_data.matching_metrics || {}).forEach(([key, value]) => { %>
+                        <div class="metric-item">
+                            <h4><%= key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) %></h4>
+                            <p><%= (value * 100).toFixed(1) %>%</p>
+                        </div>
+                    <% }); %>
+                </div>
+            </div>
+        <% } %>
+    </div>
+
+    <style>
+        .profile-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .find-mentor-btn, .btn-edit-profile, .btn-change-password {
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+            min-width: 200px;
+            justify-content: center;
+        }
+
+        .find-mentor-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            text-decoration: none;
+            box-shadow: 0 4px 6px rgba(255, 107, 0, 0.2);
+        }
+
+        .find-mentor-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(255, 107, 0, 0.3);
+        }
+
+        .btn-edit-profile {
+            background-color: #fff5e6;
+            color: var(--primary-color);
+            border: 1px solid rgba(255, 107, 0, 0.2);
+            text-decoration: none;
+        }
+
+        .btn-edit-profile:hover {
+            background-color: #ffe0b2;
+            transform: translateY(-2px);
+        }
+
+        .btn-change-password {
+            background-color: #f5f5f5;
+            color: #666;
+            border: 1px solid #ddd;
+        }
+
+        .btn-change-password:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-2px);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .metric-item {
+            background-color: #fff;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .metric-item h4 {
+            color: var(--primary-color);
+            margin: 0 0 0.5rem 0;
+        }
+
+        .metric-item p {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0;
+            color: var(--text-color);
+        }
+
+        @media (max-width: 768px) {
+            .profile-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .find-mentor-btn, .btn-edit-profile, .btn-change-password {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+
+    <script>
+        // Clear success message after 5 seconds
+        setTimeout(() => {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                alert.style.display = 'none';
+            });
+        }, 5000);
+    </script>
+</body>
+</html> 

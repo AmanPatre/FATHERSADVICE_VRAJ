@@ -1,4 +1,6 @@
+// Load environment variables
 require('dotenv').config();
+
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -15,6 +17,12 @@ const cookieParser = require('cookie-parser');
 const MenteeRequest = require('./models/mentee.request.model.js');
 const { spawn } = require("child_process");
 const axios = require('axios'); // Make sure axios is installed
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
+const Mentee = require('./models/mentee.model.js');
+const Doubt = require('./models/doubt.model.js');
+const Match = require('./models/match.model.js');
+const Session = require('./models/session.model.js');
 
 // Ensure process.env is available
 if (typeof process === 'undefined') {
@@ -39,7 +47,9 @@ mongoose.connect(process.env.MONGO_URI)
 // Script to run the python files
 const runPythonScript = (scriptName) => {
     console.log(`Starting ${scriptName}...`);
-    const process = spawn("python", [scriptName]);
+    const process = spawn("python3", [scriptName], {
+        stdio: ['pipe', 'pipe', 'pipe']
+    });
 
     process.stdout.on("data", (data) => {
         console.log(`Output from ${scriptName}: ${data.toString()}`);
@@ -49,31 +59,146 @@ const runPythonScript = (scriptName) => {
         console.error(`Error from ${scriptName}: ${data.toString()}`);
     });
 
+    process.on("error", (err) => {
+        console.error(`Failed to start ${scriptName}:`, err);
+    });
+
     process.on("close", (code) => {
         console.log(`${scriptName} exited with code ${code}`);
     });
 };
 
 // Start both Python scripts
-runPythonScript("algo.py");
-console.log("Algorithm script started");
-runPythonScript("api.py");
-console.log("API script started");
+async function startPythonServices() {
+        try {
+        console.log('Starting Python services...');
+        
+        // Start services in sequence to ensure proper initialization
+            const services = [
+            { name: 'mentor_processor.py', port: 5003 },
+            { name: 'api.py', port: 5001 },
+            { name: 'algo.py', port: 5000 }
+        ];
+
+        for (const service of services) {
+            console.log(`Starting ${service.name} on port ${service.port}...`);
+            const pythonProcess = spawn('python3', [service.name], {
+                    stdio: ['pipe', 'pipe', 'pipe']
+                });
+
+            pythonProcess.stdout.on('data', (data) => {
+                console.log(`${service.name} output:`, data.toString());
+            });
+
+            pythonProcess.stderr.on('data', (data) => {
+                console.error(`${service.name} error:`, data.toString());
+            });
+
+            pythonProcess.on('close', (code) => {
+                console.log(`${service.name} exited with code ${code}`);
+            });
+
+            // Wait for service to start
+            await new Promise(resolve => setTimeout(resolve, 2000));
+        }
+
+        console.log('All Python services started');
+        return true;
+        } catch (error) {
+        console.error('Error starting Python services:', error);
+        return false;
+        }
+}
 
 // Wait for Python servers to start before continuing
-setTimeout(() => {
-    // Test API connectivity
-    axios.get('http://localhost:5001/test')
-        .then(response => {
-            console.log('API service is running:', response.data);
-        })
-        .catch(error => {
-            console.error('Error connecting to API service:', error.message);
+async function waitForServices() {
+    try {
+        console.log('Waiting for services to be ready...');
+
+        // Check each service's health endpoint
+        const services = [
+            { url: 'http://localhost:5003/health', name: 'Mentor Processor' },
+            { url: 'http://localhost:5001/health', name: 'API' },
+            { url: 'http://localhost:5000/health', name: 'Algorithm' }
+        ];
+
+        for (const service of services) {
+            let retries = 3;
+            while (retries > 0) {
+                try {
+                    const response = await axios.get(service.url);
+                    console.log(`${service.name} is healthy:`, response.data);
+                    break;
+                } catch (error) {
+                    retries--;
+                    if (retries === 0) {
+                        console.error(`${service.name} failed health check`);
+                        return false;
+                    }
+                    console.log(`Retrying ${service.name} health check... (${retries} attempts left)`);
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                }
+            }
+        }
+
+        console.log('All services are healthy');
+        return true;
+    } catch (error) {
+        console.error('Error checking service health:', error);
+        return false;
+    }
+}
+
+// Initialize the application
+async function initializeApp() {
+    try {
+        // Connect to MongoDB
+        await mongoose.connect(process.env.MONGO_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
         });
-        
-    // No test endpoint in algo.py, but we'll log that we're assuming it's running
-    console.log('Assuming algorithm service is running on port 5000');
-}, 3000);
+        console.log('Connected to MongoDB');
+
+        // Start Python services
+        console.log('Starting Python services...');
+        await startPythonServices();
+
+        // Wait for services to be ready
+        console.log('Waiting for services to be ready...');
+        const servicesReady = await waitForServices();
+        if (!servicesReady) {
+            console.error('Some Python services failed to start. The application may not function correctly.');
+        }
+
+        // Configure middleware
+        app.use(express.json());
+        app.use(express.urlencoded({ extended: true }));
+        app.use(cookieParser());
+        app.use(session({
+            secret: process.env.SESSION_SECRET || 'your-secret-key',
+            resave: false,
+            saveUninitialized: false,
+            cookie: { secure: process.env.NODE_ENV === 'production' }
+        }));
+
+        // Serve static files
+        app.use(express.static(path.join(__dirname, 'public')));
+
+        // Set view engine
+        app.set('view engine', 'ejs');
+        app.set('views', path.join(__dirname, 'views'));
+
+        // Start server
+        const port = process.env.PORT || 3001;
+        app.listen(port, () => {
+            console.log(`Server is running on port ${port}`);
+        });
+
+    } catch (error) {
+        console.error('Failed to initialize application:', error);
+        process.exit(1);
+    }
+}
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -86,11 +211,27 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(session({
-    secret: 'yourSecretKey',
+    secret: process.env.SESSION_SECRET || 'yourSecretKey',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }
+    cookie: { 
+        secure: false, // Set to false for HTTP in development
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
 }));
+
+// Add this after session middleware
+app.use((req, res, next) => {
+    // Initialize error message if it doesn't exist
+    if (!req.session.errorMessage) {
+        req.session.errorMessage = null;
+    }
+    next();
+});
+
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Serve static files
 app.use('/css', express.static(path.join(__dirname, 'public', 'css')));
@@ -98,7 +239,40 @@ app.use('/html', express.static(path.join(__dirname, 'public', 'html')));
 app.use('/js', express.static(path.join(__dirname, 'public', 'js')));
 app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
 
+// Define JWT_SECRET at the top level
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-here';
+
+// Configure multer for file upload
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ 
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+    fileFilter: function (req, file, cb) {
+        const filetypes = /pdf|doc|docx/;
+        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+        const mimetype = filetypes.test(file.mimetype);
+        if (extname && mimetype) {
+            return cb(null, true);
+        } else {
+            cb('Error: Only PDF, DOC, and DOCX files are allowed!');
+        }
+    }
+});
+
+// Configure Cloudinary
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 // Serve the main index.html file
 app.get('/', (req, res) => {
@@ -106,179 +280,421 @@ app.get('/', (req, res) => {
         // Allow public access to home page
         res.sendFile(path.join(__dirname, 'public', 'html', 'index.html'));
     } else {
-        // If logged in, redirect to the profile page
-        res.redirect('/profile');
-    }
-});
-
-app.get('/html/login.html',(req,res)=>{
-    res.redirect('/html/login.html');
-});
-
-// Signup Route
-app.post('/signup', async (req, res) => {
-    try {
-        // Extract form data
-        const { name, email, password, role, phone, address } = req.body;
-
-        // Input validation
-        if (!name || !email || !password || !role || !phone || !address) {
-            return res.status(400).send('All fields are required');
-        }
-
-        // Validate email format
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            return res.status(400).send('Invalid email format');
-        }
-
-        // Validate role
-        if (!['mentee', 'mentor'].includes(role)) {
-            return res.status(400).send('Invalid role selected');
-        }
-
-        // Check if user already exists
-        const existingUser = await User.findOne({ email });
-      
-        if (existingUser) {
-            return res.status(400).send('Email already registered');
-        }
-
-        // Hash password
-        const saltRounds = 12;
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-        // Create new user object
-        const userData = {
-            name,
-            email,
-            password: hashedPassword,
-            role,
-            phone,
-            address
-        };
-
-        // Save based on role
-        let savedUser;
-        if (role === 'mentor') {
-            const mentor = new Mentor(userData);
-            savedUser = await mentor.save();
+        // If logged in, redirect to the appropriate dashboard based on role
+        if (req.session.user && req.session.user.role === 'mentor') {
+            res.redirect('/mentor_dashboard');
         } else {
-            const user = new User(userData);
-            savedUser = await user.save();
+            res.redirect('/mentee_profile');
         }
-
-        // Success response
-        console.log(`New ${role} created:`, savedUser);
-        res.redirect('/html/login.html');
-
-    } catch (error) {
-        console.error('Signup error:', error);
-        
-        // Handle specific errors
-        if (error.code === 11000) { // MongoDB duplicate key error
-            return res.status(400).send('Email already registered');
-        }
-        
-        res.status(500).send('Internal server error');
     }
+});
+
+app.get('/html/login.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'html', 'login.html'));
+});
+
+// Login page route
+app.get('/login', (req, res) => {
+    // Get error message from session and clear it
+    const errorMessage = req.session.errorMessage;
+    req.session.errorMessage = null;
+    
+    // Render login page with error message if any
+    res.render('login', { 
+        errorMessage: errorMessage,
+        user: req.session.user || null
+    });
 });
 
 // Login Route
 app.post('/login', async (req, res) => {
     try {
         const { email, password, role } = req.body;
+        console.log('Login attempt:', { email, role });
+        
+        // Input validation
         if (!email || !password || !role) {
+            console.log('Missing required fields');
+            if (req.headers['content-type'] === 'application/json') {
             return res.status(400).json({ error: 'All fields are required' });
+            }
+            return res.redirect(`/html/login.html?error=${encodeURIComponent('All fields are required')}`);
         }
 
-        let user = role === 'mentor' ? await Mentor.findOne({ email }) : await User.findOne({ email });
-        if (!user || !await bcrypt.compare(password, user.password) || user.role !== role) {
-            return res.status(401).json({ error: 'Invalid credentials' });
+        // Find user based on role
+        let user;
+        if (role === 'mentor') {
+            user = await Mentor.findOne({ email: email });
+            console.log('Mentor found:', user ? 'Yes' : 'No');
+            if (user) {
+                console.log('Mentor details:', {
+                    id: user._id,
+                    name: user.name,
+                    email: user.email,
+                    profileCompleted: user.profileCompleted,
+                    fullUser: JSON.stringify(user)
+                });
+            }
+        } else if (role === 'mentee') {
+            user = await User.findOne({ email: email, role: 'mentee' });
+            console.log('Mentee found:', user ? 'Yes' : 'No');
+            if (user) {
+                console.log('Mentee details:', {
+                    id: user._id,
+                    name: user.name,
+                    email: user.email,
+                    role: user.role
+                });
+            }
         }
 
-        const token = jwt.sign({ userId: user._id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '1h' });
+        // Check if user exists
+        if (!user) {
+            console.log('User not found');
+            if (req.headers['content-type'] === 'application/json') {
+            return res.status(401).json({ error: 'Invalid email or password' });
+            }
+            return res.redirect(`/html/login.html?error=${encodeURIComponent('Invalid email or password')}`);
+        }
 
-        // Set token in an HTTP-only cookie
+        // Validate password
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        console.log('Password valid:', isPasswordValid);
+        if (!isPasswordValid) {
+            if (req.headers['content-type'] === 'application/json') {
+            return res.status(401).json({ error: 'Invalid email or password' });
+            }
+            return res.redirect(`/html/login.html?error=${encodeURIComponent('Invalid email or password')}`);
+        }
+
+        // Generate JWT token
+        const token = jwt.sign(
+            { 
+                userId: user._id, 
+                email: user.email, 
+                role: user.role 
+            }, 
+            JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+
+        // Set token in cookie
         res.cookie('token', token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production', // Secure in production
-            maxAge: 3600000 // 1 hour in milliseconds
+            secure: false, // Set to false for HTTP in development
+            maxAge: 24 * 60 * 60 * 1000 // 24 hours
         });
 
-        res.status(200).json({ message: 'Login successful', role });
+        // Set user info in session
+        req.session.user = {
+            id: user._id,
+            email: user.email,
+            role: user.role
+        };
+
+        // Handle role-specific redirects
+        if (role === 'mentor') {
+            console.log('Mentor profile check:', {
+                mentorExists: !!user,
+                profileCompleted: user.profileCompleted,
+                mentorId: user._id,
+                fullUser: JSON.stringify(user)
+            });
+            
+            // If mentor has a completed profile, redirect to dashboard
+            if (user.profileCompleted === true) {
+                console.log('Redirecting to mentor dashboard - profile is completed');
+                if (req.headers['content-type'] === 'application/json') {
+            return res.json({ redirect: '/mentor_dashboard' });
+                }
+                return res.redirect('/mentor_dashboard');
+            }
+            
+            // If profile is not completed, redirect to profile completion
+            console.log('Redirecting to mentor_after_profile - profile not completed');
+            if (req.headers['content-type'] === 'application/json') {
+                return res.json({ redirect: '/mentor_after_profile' });
+            }
+            return res.redirect('/mentor_after_profile');
+        } else {
+            // For mentees, redirect directly to dashboard
+            console.log('Redirecting mentee to profile page');
+            if (req.headers['content-type'] === 'application/json') {
+                return res.json({ redirect: '/mentee_profile' });
+            }
+            return res.redirect('/mentee_profile');
+        }
+
     } catch (error) {
         console.error('Login error:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        if (req.headers['content-type'] === 'application/json') {
+        return res.status(500).json({ error: 'An error occurred during login' });
+        }
+        return res.redirect(`/html/login.html?error=${encodeURIComponent('An error occurred during login')}`);
     }
 });
 
-app.get('/mentee-dashboard', authenticateToken, async (req, res) => {
+// Signup Route
+app.post('/signup', async (req, res) => {
     try {
-        if (req.user.role !== 'mentee') {
-            return res.status(403).json({ error: 'Unauthorized access' });
-        }
-
-        const mentee = await User.findById(req.user.userId);
-        if (!mentee) {
-            return res.status(404).json({ error: 'Mentee not found' });
-        }
-
-        res.render('mentee_profile.ejs', {
-            student: {
-                id: mentee._id,
-                name: mentee.name,
-                email: mentee.email,
-                role: mentee.role,
-                phone: mentee.phone || '',
-                education: mentee.education || 0,
-                institution: mentee.institution || 0,
-                fieldOfInterest: mentee.fieldOfInterest || 0
+        const { name, email, password, role, phone, address } = req.body;
+        console.log('Signup attempt:', { name, email, role });
+        
+        // Input validation
+        if (!name || !email || !password || !role) {
+            console.log('Missing required fields');
+            if (req.headers['content-type'] === 'application/json') {
+                return res.status(400).json({ error: 'All fields are required' });
             }
+            return res.redirect(`/html/signup.html?error=${encodeURIComponent('All fields are required')}`);
+        }
+
+        // Check if user already exists
+        const existingUser = role === 'mentor' 
+            ? await Mentor.findOne({ email: email })
+            : await User.findOne({ email: email, role: 'mentee' });
+
+        if (existingUser) {
+            console.log('User already exists');
+            if (req.headers['content-type'] === 'application/json') {
+                return res.status(400).json({ error: 'User already exists' });
+            }
+            return res.redirect(`/html/signup.html?error=${encodeURIComponent('User already exists')}`);
+        }
+
+        // Hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create new user based on role
+        let newUser;
+        if (role === 'mentor') {
+            newUser = new Mentor({
+                name,
+                email,
+                password: hashedPassword,
+                role,
+                phone: phone || '',
+                address: address || '',
+                profileCompleted: false
+            });
+        } else {
+            newUser = new User({
+                name,
+                email,
+                password: hashedPassword,
+                role,
+                phone: phone || '',
+                address: address || ''
+            });
+        }
+
+        // Save user to database
+        await newUser.save();
+        console.log('New user created:', { id: newUser._id, email: newUser.email, role: newUser.role });
+
+        // Generate JWT token
+        const token = jwt.sign(
+            { 
+                userId: newUser._id, 
+                email: newUser.email, 
+                role: newUser.role 
+            }, 
+            JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+
+        // Set token in cookie
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: false, // Set to false for HTTP in development
+            maxAge: 24 * 60 * 60 * 1000 // 24 hours
         });
+
+        // Set user info in session
+        req.session.user = {
+            id: newUser._id,
+            email: newUser.email,
+            role: newUser.role
+        };
+
+        // Handle role-specific redirects
+        if (role === 'mentor') {
+            if (req.headers['content-type'] === 'application/json') {
+                return res.json({ redirect: '/html/login.html?message=Signup successful! Please login to continue.' });
+            }
+            return res.redirect('/html/login.html?message=Signup successful! Please login to continue.');
+        } else {
+            if (req.headers['content-type'] === 'application/json') {
+                return res.json({ redirect: '/html/login.html?message=Signup successful! Please login to continue.' });
+            }
+            return res.redirect('/html/login.html?message=Signup successful! Please login to continue.');
+        }
+
     } catch (error) {
-        console.error('Mentee dashboard error:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('Signup error:', error);
+        if (req.headers['content-type'] === 'application/json') {
+            return res.status(500).json({ error: 'An error occurred during signup' });
+        }
+        return res.redirect(`/html/signup.html?error=${encodeURIComponent('An error occurred during signup')}`);
+    }
+});
+
+app.get('/mentee_profile', authenticateToken, async (req, res) => {
+    try {
+        console.log('Mentee profile route accessed:', {
+            user: req.user,
+            session: req.session.user,
+            cookies: req.cookies
+        });
+        
+        // Check if user is authenticated and is a mentee
+        if (!req.user || req.user.role !== 'mentee') {
+            console.log('User not authenticated or not a mentee:', req.user);
+            return res.redirect('/login');
+        }
+
+        // Get mentee data
+        const mentee = await User.findById(req.user.userId);
+        console.log('Mentee found:', mentee ? {
+                id: mentee._id,
+                email: mentee.email,
+            name: mentee.name,
+                role: mentee.role,
+            phone: mentee.phone,
+            address: mentee.address
+        } : 'No');
+        
+        if (!mentee) {
+            console.log('Mentee not found in database');
+            req.session.errorMessage = "Mentee not found";
+            return res.redirect('/login');
+        }
+
+        // Ensure all required fields have default values
+        const studentData = {
+            _id: mentee._id,
+            name: mentee.name || 'Not provided',
+            email: mentee.email || 'Not provided',
+            phone: mentee.phone || 'Not provided',
+            address: mentee.address || 'Not provided',
+            education: mentee.education || 'Not provided',
+            institution: mentee.institution || 'Not provided',
+            fieldOfInterest: mentee.fieldOfInterest || 'Not provided'
+        };
+
+        // Render the mentee profile
+        console.log('Rendering mentee profile with data:', {
+            student: studentData
+        });
+        
+        res.render('mentee_profile', {
+            student: studentData,
+            errorMessage: req.session.errorMessage,
+            successMessage: req.session.successMessage
+        });
+
+        // Clear messages after rendering
+        req.session.errorMessage = null;
+        req.session.successMessage = null;
+    } catch (error) {
+        console.error('Error in mentee profile route:', error);
+        req.session.errorMessage = "An error occurred while loading the dashboard";
+        res.redirect('/login');
     }
 });
 
 // Mentor Dashboard Route
-app.get('/mentor-dashboard', authenticateToken, async (req, res) => {
+app.get('/mentor_dashboard', authenticateToken, async (req, res) => {
     try {
-        if (req.user.role !== 'mentor') {
-            return res.status(403).json({ error: 'Unauthorized access' });
+        console.log('Mentor dashboard access attempt:', {
+            user: req.user,
+            session: req.session.user,
+            cookies: req.cookies
+        });
+        
+        // Set cache control headers to prevent caching
+        res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+        res.set('Pragma', 'no-cache');
+        res.set('Expires', '0');
+
+        // Check if user is authenticated and is a mentor
+        if (!req.user || req.user.role !== 'mentor') {
+            console.log('User not authenticated or not a mentor:', req.user);
+            return res.redirect('/login');
         }
 
+        // Get mentor data
         const mentor = await Mentor.findById(req.user.userId);
+        console.log('Mentor found:', mentor ? {
+            id: mentor._id,
+            email: mentor.email,
+            profileCompleted: mentor.profileCompleted,
+            name: mentor.name
+        } : 'No');
+
         if (!mentor) {
-            return res.status(404).json({ error: 'Mentor not found' });
+            console.log('Mentor not found in database');
+            req.session.errorMessage = "Mentor not found";
+            return res.redirect('/login');
         }
 
-        // Fetch the mentor's profile data
-        const mentorProfile = await MentorProfile.findOne({ mentorId: req.user.userId });
-        console.log('Found mentor profile:', mentorProfile); // Debugging
+        // Check if profile is completed
+        console.log('Mentor profile check:', {
+            mentorExists: !!mentor,
+            profileCompleted: mentor.profileCompleted,
+            mentorId: mentor._id
+        });
+        
+        if (mentor.profileCompleted !== true) {
+            console.log('Profile not completed, redirecting to profile page');
+            req.session.errorMessage = "Please complete your profile before accessing the dashboard";
+            return res.redirect('/mentor_after_profile');
+        }
 
-        res.render('mentor_profile', {
-            user: {
+        // Get processed mentor data from Python service - make it optional
+        let processedData = null;
+        try {
+            const response = await axios.get(`http://localhost:5003/get_mentor_dashboard/${req.user.userId}`);
+            if (!response.data.error) {
+                processedData = response.data.dashboard_data;
+                console.log('Processed mentor data retrieved successfully');
+            }
+        } catch (error) {
+            console.log('Processed data not available, continuing without it');
+        }
+
+        // Prepare user data for template
+        const userData = {
                 id: mentor._id,
                 name: mentor.name,
                 email: mentor.email,
                 role: mentor.role,
                 phone: mentor.phone || '',
                 address: mentor.address || ''
-            },
-            profile: mentorProfile || {
-                fieldOfInterest: '',
-                yearOfExperience: 0,
-                skills: [],
-                availability: '',
-                briefBio: '',
-                uploadResume: ''
-            }
+        };
+
+        console.log('Rendering mentor dashboard with data:', {
+            userData,
+            profileCompleted: mentor.profileCompleted,
+            hasProcessedData: !!processedData
         });
+
+        // Render the mentor dashboard with all necessary data
+        res.render('mentor_dashboard', {
+            user: userData,
+            profile: mentor,
+            processedData: processedData,
+            successMessage: req.session.successMessage,
+            errorMessage: req.session.errorMessage
+        });
+
+        // Clear messages after rendering
+        req.session.successMessage = null;
+        req.session.errorMessage = null;
     } catch (error) {
         console.error('Mentor dashboard error:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        req.session.errorMessage = "An error occurred while loading the dashboard";
+        res.redirect('/login');
     }
 });
 
@@ -292,110 +708,434 @@ app.get('/logout', (req, res) => {
     });
 });
 
+// Get offline mentors
+app.get('/api/offline-mentors', authenticateToken, async (req, res) => {
+    try {
+        const mentors = await Mentor.find({}, 'name expertise experience rating skills fieldOfInterest')
+            .limit(5); // Limit to 5 mentors for now
+        
+        res.json(mentors);
+    } catch (error) {
+        console.error('Error fetching offline mentors:', error);
+        res.status(500).json({ error: 'Failed to fetch mentors' });
+    }
+});
+
+// Get Mentor Match Results
+app.get('/mentor-match-results', authenticateToken, async (req, res) => {
+    try {
+        if (req.user.role !== 'mentee') {
+            return res.status(403).json({ error: 'Unauthorized access' });
+        }
+        
+        // Find the latest mentee request
+        const latestRequest = await MenteeRequest.findOne({ 
+            mentee: req.user.userId 
+        }).sort({ createdAt: -1 });
+        
+        if (!latestRequest) {
+            return res.status(404).json({ error: 'No mentor match found' });
+        }
+        
+        // Get matched mentor details if there is a match
+        let matchedMentor = null;
+        if (latestRequest.matchedMentorId) {
+            matchedMentor = await Mentor.findById(latestRequest.matchedMentorId);
+        }
+        
+        // Fetch offline mentors
+        const offlineMentors = await Mentor.find({}, 'name expertise experience rating skills fieldOfInterest')
+            .limit(5);
+        
+        res.render('matching_interface', {
+            menteeRequest: latestRequest,
+            mentor: matchedMentor,
+            compatibilityScore: latestRequest.compatibilityScore || 0,
+            status: latestRequest.status,
+            title: 'Matching Interface',
+            offlineMentors: offlineMentors || []
+        });
+    } catch (error) {
+        console.error('Error fetching mentor match results:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Background processing function
+async function processMenteeRequest(requestId) {
+    try {
+        const request = await MenteeRequest.findById(requestId);
+        if (!request) {
+            console.error('Request not found:', requestId);
+            return;
+        }
+
+        // Update status to processing
+        request.status = 'pending';
+        await request.save();
+
+        try {
+            // Run API and algorithm calls in parallel
+            const [aiResponse, matchResponse] = await Promise.all([
+                axios.post('http://localhost:5001/submit_doubt', {
+                    mentee_id: request.mentee.toString(),
+                    doubt: request.doubt
+                }),
+                axios.post('http://localhost:5000/match_advanced', {
+                    mentee_id: request.mentee.toString()
+                })
+            ]);
+
+            // Update the request with results
+            if (request) {
+                request.subjectBreakdown = aiResponse.data.subject_breakdown;
+                
+                if (matchResponse.data.match) {
+                    request.matchedMentorId = matchResponse.data.match.mentor_id;
+                    request.compatibilityScore = matchResponse.data.match.compatibility_score;
+                    request.status = 'answered';
+                } else {
+                    request.status = 'pending';
+                }
+                
+                await request.save();
+            }
+        } catch (error) {
+            console.error('Error in API calls:', error);
+            // Update request status based on error
+            if (request) {
+                request.status = 'pending';
+                await request.save();
+            }
+        }
+    } catch (error) {
+        console.error('Error in background processing:', error);
+        // Update request status to indicate error
+        const request = await MenteeRequest.findById(requestId);
+        if (request) {
+            request.status = 'pending';
+            await request.save();
+        }
+    }
+}
+
 // Find Mentor Route
 app.post('/find-mentor', authenticateToken, async (req, res) => {
     try {
         const { doubt } = req.body;
+        const menteeId = req.user.userId;
 
-        // Check if doubt is filled
         if (!doubt) {
-            return res.status(400).json({ error: 'Please enter your question' });
+            return res.status(400).json({ error: 'Doubt is required' });
         }
 
         // Create new mentee request
-        const newRequest = new MenteeRequest({
-            menteeId: req.user.userId,
-            doubt,
+        const menteeRequest = new MenteeRequest({
+            mentee: menteeId,
+            doubt: doubt,
             status: 'pending'
         });
+        await menteeRequest.save();
 
-        await newRequest.save();
-        console.log('Mentee doubt saved:', newRequest);
+        // Start background processing
+        processMenteeRequest(menteeRequest._id);
 
-        // First: Send the doubt to the AI API for processing
-        try {
-            const aiResponse = await axios.post('http://localhost:5001/submit_doubt', {
-                mentee_id: req.user.userId.toString(),
-                doubt: doubt
-            });
-            console.log('Subject breakdown received:', aiResponse.data);
-            
-            // Save the breakdown back to the request
-            newRequest.subjectBreakdown = aiResponse.data.subject_breakdown;
-            await newRequest.save();
-            
-            // Second: Use the algo API to find the best mentor match
-            try {
-                const matchResponse = await axios.post('http://localhost:5000/match_advanced', {
-                    mentee_id: req.user.userId.toString()
-                });
-                console.log('Mentor match received:', matchResponse.data);
-                
-                // Save the match information to the request
-                if (matchResponse.data.match) {
-                    newRequest.matchedMentorId = matchResponse.data.match.mentor_id;
-                    newRequest.compatibilityScore = matchResponse.data.match.compatibility_score;
-                    await newRequest.save();
-                }
-            } catch (algoError) {
-                console.error('Error calling matching algorithm:', algoError);
-                // Continue even if matching fails
-            }
-            
-        } catch (apiError) {
-            console.error('Error calling Python API:', apiError);
-            // Continue with the request even if API call fails
-        }
+        // Fetch offline mentors
+        const offlineMentors = await Mentor.find({}, 'name expertise experience rating skills fieldOfInterest')
+            .limit(5);
 
-        // Redirect to dashboard with success message
-        res.redirect('/mentee-dashboard?doubt=submitted');
+        // Directly render the matching interface
+        res.render('matching_interface', {
+            menteeRequest,
+            mentor: null,
+            compatibilityScore: 0,
+            status: 'pending',
+            title: 'Matching Interface',
+            offlineMentors: offlineMentors || []
+        });
     } catch (error) {
-        console.error('Error saving mentee doubt:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        console.error('Error in find-mentor:', error);
+        res.status(500).json({ error: 'Failed to process request' });
     }
 });
 
-// Mentor_profile after login 
-app.get('/mentor_profile', async (req, res) => {
-    res.render('mentor_after_profile');
-});
-
-app.post('/submit_profile', authenticateToken, async (req, res) => {
-   
+// Mentor profile route
+app.get('/mentor_profile', authenticateToken, async (req, res) => {
     try {
-        console.log('Received form data:', req.body); // Debugging
-
-        const { fieldOfInterest, yearOfExperience, skills, availability, briefBio } = req.body;
-
-        // Check if all required fields are filled
-        if (!fieldOfInterest || !yearOfExperience || !skills) {
-            return res.status(400).json({ error: "All required fields must be filled" });
+        // Check if user is authenticated and is a mentor
+        if (!req.user || req.user.role !== 'mentor') {
+            return res.redirect('/login');
         }
 
-        // Convert skills string to array if it's a string
-        const skillsArray = Array.isArray(skills) ? skills : skills.split(',').map(skill => skill.trim());
+        // Get mentor data
+        const mentor = await Mentor.findById(req.user.userId);
+        if (!mentor) {
+            req.session.errorMessage = "Mentor not found";
+            return res.redirect('/login');
+        }
 
-        // Temporary Cloudinary URL
-        const tempCloudinaryUrl = "https://res.cloudinary.com/demo/image/upload/sample.pdf";
+        // Get existing profile if any
+        const existingProfile = await Mentor.findOne({ _id: req.user.userId });
 
-        const mentorProfile = new MentorProfile({
-            mentorId: req.user.userId,
-            fieldOfInterest,
-            yearOfExperience,
-            skills: skillsArray,
-            availability: availability || "",
-            briefBio: briefBio || "",
-            uploadResume: tempCloudinaryUrl
+        // If profile is already completed, redirect to mentor dashboard
+        if (existingProfile && existingProfile.profileCompleted) {
+            req.session.successMessage = "Your profile is already completed";
+            return res.redirect('/mentor_dashboard');
+        }
+
+        // Prepare profile data for the template
+        const profileData = existingProfile || {
+            fieldOfInterest: mentor.fieldOfInterest || '',
+            yearOfExperience: mentor.yearOfExperience || '',
+            skills: mentor.skills || [],
+            availability: mentor.availability || '',
+            briefBio: mentor.briefBio || '',
+            education: mentor.education || '',
+            expertise: mentor.expertise || [],
+            specializations: mentor.specializations || [],
+            preferredTimeSlots: mentor.preferredTimeSlots || [],
+            maxSessions: mentor.maxSessions || 5,
+            sessionDuration: mentor.sessionDuration || 60
+        };
+
+        // Render the profile form with existing data if any
+        res.render('mentor_after_profile', {
+            user: mentor,
+            profile: profileData,
+            errorMessage: req.session.errorMessage,
+            successMessage: req.session.successMessage
         });
 
-        console.log('Saving mentor profile:', mentorProfile); // Debugging
-        await mentorProfile.save();
-        console.log('Profile saved successfully'); // Debugging
-
-        res.redirect('/mentor-dashboard');
+        // Clear messages after rendering
+        req.session.errorMessage = null;
+        req.session.successMessage = null;
     } catch (error) {
-        console.error('Error saving mentor profile:', error); // Debugging
-        res.status(500).json({ error: "Failed to create mentor profile", details: error.message });
+        console.error('Error in mentor profile route:', error);
+        req.session.errorMessage = "An error occurred while loading the profile page";
+        res.redirect('/login');
+    }
+});
+
+// Mentor after profile route
+app.get('/mentor_after_profile', authenticateToken, async (req, res) => {
+    try {
+        // Check if user is authenticated and is a mentor
+        if (!req.user || req.user.role !== 'mentor') {
+            return res.redirect('/login');
+        }
+
+        // Get mentor data
+        const mentor = await Mentor.findById(req.user.userId);
+        if (!mentor) {
+            req.session.errorMessage = "Mentor not found";
+            return res.redirect('/login');
+        }
+
+        // Get existing profile if any
+        const existingProfile = await Mentor.findOne({ _id: req.user.userId });
+
+        // If profile is already completed, redirect to mentor dashboard
+        if (existingProfile && existingProfile.profileCompleted) {
+            req.session.successMessage = "Your profile is already completed";
+            return res.redirect('/mentor_dashboard');
+        }
+
+        // Prepare profile data for the template
+        const profileData = existingProfile || {
+            fieldOfInterest: mentor.fieldOfInterest || '',
+            yearOfExperience: mentor.yearOfExperience || '',
+            skills: mentor.skills || [],
+            availability: mentor.availability || '',
+            briefBio: mentor.briefBio || '',
+            education: mentor.education || '',
+            expertise: mentor.expertise || [],
+            specializations: mentor.specializations || [],
+            preferredTimeSlots: mentor.preferredTimeSlots || [],
+            maxSessions: mentor.maxSessions || 5,
+            sessionDuration: mentor.sessionDuration || 60
+        };
+
+        // Render the profile form with existing data if any
+        res.render('mentor_after_profile', {
+            user: mentor,
+            profile: profileData,
+            errorMessage: req.session.errorMessage,
+            successMessage: req.session.successMessage
+        });
+
+        // Clear messages after rendering
+        req.session.errorMessage = null;
+        req.session.successMessage = null;
+    } catch (error) {
+        console.error('Error in mentor after profile route:', error);
+        req.session.errorMessage = "An error occurred while loading the profile page";
+        res.redirect('/login');
+    }
+});
+
+app.post('/submit_profile', authenticateToken, upload.single('uploadResume'), async (req, res) => {
+    try {
+        console.log('Received form data:', req.body);
+        console.log('Received file:', req.file);
+
+        // Check if user is authenticated and is a mentor
+        if (!req.user || req.user.role !== 'mentor') {
+            console.log('Unauthorized access attempt:', req.user);
+            req.session.errorMessage = "Unauthorized access";
+            return res.redirect('/login');
+        }
+
+        // Validate required fields
+        if (!req.body.fieldOfInterest || !req.body.yearOfExperience || !req.body.skills || 
+            !req.body.education || !req.body.expertise || !req.body.specializations || 
+            !req.body.preferredTimeSlots || !req.body.maxSessions || !req.body.sessionDuration) {
+            console.log('Missing required fields');
+            req.session.errorMessage = "All required fields must be filled";
+            return res.redirect('/mentor_after_profile');
+        }
+
+        // Check if resume was uploaded
+        if (!req.file) {
+            console.log('Resume not uploaded');
+            req.session.errorMessage = "Resume upload is required";
+            return res.redirect('/mentor_after_profile');
+        }
+
+        // Convert comma-separated strings to arrays
+        const skillsArray = req.body.skills.split(',').map(skill => skill.trim()).filter(skill => skill);
+        const expertiseArray = req.body.expertise.split(',').map(exp => exp.trim()).filter(exp => exp);
+        const specializationsArray = req.body.specializations.split(',').map(spec => spec.trim()).filter(spec => spec);
+        const timeSlotsArray = req.body.preferredTimeSlots.split(',').map(slot => slot.trim()).filter(slot => slot);
+
+        // Validate arrays are not empty
+        if (skillsArray.length === 0 || expertiseArray.length === 0 || 
+            specializationsArray.length === 0 || timeSlotsArray.length === 0) {
+            console.log('Empty arrays in profile data');
+            req.session.errorMessage = "Please provide valid values for all fields";
+            return res.redirect('/mentor_after_profile');
+        }
+
+        // Upload resume to Cloudinary
+        let resumeUrl = '';
+            try {
+                const result = await cloudinary.uploader.upload(req.file.path, {
+                    resource_type: 'raw',
+                    folder: 'mentor_resumes'
+                });
+                resumeUrl = result.secure_url;
+            console.log('Resume uploaded successfully:', resumeUrl);
+            } catch (uploadError) {
+                console.error('Error uploading to Cloudinary:', uploadError);
+                req.session.errorMessage = "Failed to upload resume";
+            return res.redirect('/mentor_after_profile');
+        }
+
+        const profileData = {
+            fieldOfInterest: req.body.fieldOfInterest,
+            yearOfExperience: parseInt(req.body.yearOfExperience),
+                skills: skillsArray,
+            availability: req.body.availability || "",
+            briefBio: req.body.briefBio || "",
+                uploadResume: resumeUrl,
+            education: req.body.education,
+                expertise: expertiseArray,
+                specializations: specializationsArray,
+                preferredTimeSlots: timeSlotsArray,
+            maxSessions: parseInt(req.body.maxSessions),
+            sessionDuration: parseInt(req.body.sessionDuration),
+                isOnline: true,
+            lastActive: new Date(),
+            rating: 0,
+            totalSessions: 0,
+            profileCompleted: true
+        };
+
+        console.log('Updating mentor profile with data:', profileData);
+
+        // Update mentor document
+        const updatedMentor = await Mentor.findByIdAndUpdate(
+            req.user.userId,
+            profileData,
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedMentor) {
+            console.log('Failed to update mentor document');
+            req.session.errorMessage = "Failed to update mentor profile";
+            return res.redirect('/mentor_after_profile');
+        }
+
+        console.log('Mentor profile updated successfully:', {
+            id: updatedMentor._id,
+            email: updatedMentor.email,
+            profileCompleted: updatedMentor.profileCompleted
+        });
+
+        // Send profile data to mentor processor and wait for response
+        try {
+            const processorResponse = await axios.post('http://localhost:5003/process_mentor_profile', {
+                mentor_id: updatedMentor._id,
+                mentor_data: {
+                    expertise: {
+                        job_role: profileData.fieldOfInterest,
+                        skills: profileData.skills,
+                        education: profileData.education,
+                        experience: profileData.yearOfExperience,
+                        specializations: profileData.specializations
+                    },
+                    availability: {
+                        available_hours: 8, // Default to 8 hours
+                        preferred_time_slots: profileData.preferredTimeSlots,
+                        timezone: "UTC" // Default timezone
+                    },
+                    workload: {
+                        current_sessions: 0,
+                        max_sessions: profileData.maxSessions,
+                        session_duration: profileData.sessionDuration
+                    },
+                    basic_info: {
+                        name: updatedMentor.name,
+                        email: updatedMentor.email,
+                        is_online: false,
+                        last_active: new Date().toISOString()
+                    },
+                    location: {
+                        country: "Unknown",
+                        city: "Unknown",
+                        timezone: "UTC"
+                    }
+                }
+            });
+
+            if (processorResponse.data.error) {
+                console.error('Error in mentor processor:', processorResponse.data.error);
+                req.session.errorMessage = "Error processing profile data";
+                return res.redirect('/mentor_after_profile');
+            }
+
+            console.log('Profile processed successfully by mentor processor');
+
+            // Verify the processed data
+            const verifyResponse = await axios.get(`http://localhost:5003/get_mentor_dashboard/${updatedMentor._id}`);
+            if (verifyResponse.data.error) {
+                throw new Error(verifyResponse.data.error);
+            }
+            console.log('Processed data verified successfully');
+
+        } catch (processorError) {
+            console.error('Error with mentor processor:', processorError);
+            req.session.errorMessage = "Error processing profile data";
+            return res.redirect('/mentor_after_profile');
+        }
+
+        // Set success message and redirect to mentor dashboard
+        req.session.successMessage = "Profile completed successfully!";
+        return res.redirect('/mentor_dashboard');
+
+    } catch (error) {
+        console.error('Error saving mentor profile:', error);
+        req.session.errorMessage = "Failed to create mentor profile. Please try again.";
+        return res.redirect('/mentor_after_profile');
     }
 });
 
@@ -412,41 +1152,588 @@ app.get('/mentee-request', authenticateToken, async (req, res) => {
     }
 });
 
-// Get Mentor Match Results
-app.get('/mentor-match-results', authenticateToken, async (req, res) => {
+// API endpoint to check mentee request status
+app.get('/api/mentee-request/:requestId', authenticateToken, async (req, res) => {
     try {
-        if (req.user.role !== 'mentee') {
-            return res.status(403).json({ error: 'Unauthorized access' });
+        const request = await MenteeRequest.findById(req.params.requestId)
+            .populate('matchedMentorId', 'name expertise experience rating');
+        
+        if (!request) {
+            return res.status(404).json({ error: 'Request not found' });
         }
-        
-        // Find the latest mentee request
-        const latestRequest = await MenteeRequest.findOne({ 
-            menteeId: req.user.userId 
-        }).sort({ createdAt: -1 });
-        
-        if (!latestRequest) {
-            return res.status(404).json({ error: 'No mentor match found' });
-        }
-        
-        // Get matched mentor details if there is a match
-        let matchedMentor = null;
-        if (latestRequest.matchedMentorId) {
-            matchedMentor = await Mentor.findById(latestRequest.matchedMentorId);
-        }
-        
-        res.render('mentor_match_results', {
-            request: latestRequest,
-            mentor: matchedMentor,
-            compatibilityScore: latestRequest.compatibilityScore || 0
+
+        res.json({
+            status: request.status,
+            matchedMentor: request.matchedMentorId,
+            compatibilityScore: request.compatibilityScore || 0
         });
     } catch (error) {
-        console.error('Error fetching mentor match results:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('Error fetching mentee request:', error);
+        res.status(500).json({ error: 'Failed to fetch request status' });
     }
 });
 
-// Start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running at http://localhost:${PORT}`);
+// Test route to create a complete mentor profile
+app.get('/create-test-profile', async (req, res) => {
+    try {
+        // Find the test mentor
+        const mentor = await Mentor.findOne({ email: 'testmentor@example.com' });
+        if (!mentor) {
+            console.log('Test mentor not found, creating new test mentor');
+            // Create a new test mentor if not found
+            const hashedPassword = await bcrypt.hash('test123', 10);
+            const newMentor = new Mentor({
+                name: 'Test Mentor',
+                email: 'testmentor@example.com',
+                password: hashedPassword,
+                role: 'mentor',
+                phone: '1234567890',
+                address: 'Test Address'
+            });
+            mentor = await newMentor.save();
+            console.log('Created new test mentor:', mentor._id);
+        }
+
+        console.log('Found/Created test mentor:', {
+            id: mentor._id,
+            email: mentor.email,
+            profileCompleted: mentor.profileCompleted
+        });
+
+        const profileData = {
+                fieldOfInterest: 'Software Engineering',
+                yearOfExperience: 5,
+                skills: ['JavaScript', 'Python', 'Node.js', 'React', 'MongoDB'],
+                availability: 'Available 9 AM - 6 PM IST',
+                briefBio: 'Experienced software engineer with expertise in full-stack development',
+                education: 'B.Tech in Computer Science',
+                expertise: ['Web Development', 'Database Design', 'API Development'],
+                specializations: ['Full Stack Development', 'Cloud Computing'],
+                preferredTimeSlots: ['Morning', 'Evening'],
+                maxSessions: 5,
+                sessionDuration: 60,
+                isOnline: true,
+                lastActive: new Date(),
+                profileCompleted: true
+        };
+
+        console.log('Updating mentor with profile data:', profileData);
+
+        // Update the mentor profile
+        const updatedMentor = await Mentor.findByIdAndUpdate(
+            mentor._id,
+            {
+                $set: {
+                    ...profileData,
+                    profileCompleted: true // Ensure this is explicitly set
+                }
+            },
+            { 
+                new: true,
+                runValidators: true
+            }
+        );
+
+        if (!updatedMentor) {
+            console.log('Failed to update test mentor profile');
+            return res.status(500).json({ error: 'Failed to update test mentor profile' });
+        }
+
+        console.log('Test mentor profile updated successfully:', {
+            id: updatedMentor._id,
+            email: updatedMentor.email,
+            profileCompleted: updatedMentor.profileCompleted,
+            fullProfile: JSON.stringify(updatedMentor)
+        });
+
+        // Verify the update
+        const verifiedMentor = await Mentor.findById(mentor._id);
+        console.log('Verified mentor profile:', {
+            id: verifiedMentor._id,
+            profileCompleted: verifiedMentor.profileCompleted,
+            fullProfile: JSON.stringify(verifiedMentor)
+        });
+
+        // Send profile data to mentor processor
+        try {
+            await axios.post('http://localhost:5003/process_mentor_profile', {
+                mentor_id: mentor._id,
+                mentor_data: {
+                    expertise: {
+                        job_role: profileData.fieldOfInterest,
+                        skills: profileData.skills,
+                        education: profileData.education,
+                        experience: profileData.yearOfExperience,
+                        specializations: profileData.specializations
+                    },
+                    availability: {
+                        available_hours: 8, // Default to 8 hours
+                        preferred_time_slots: profileData.preferredTimeSlots,
+                        timezone: "UTC" // Default timezone
+                    },
+                    workload: {
+                        current_sessions: 0,
+                        max_sessions: profileData.maxSessions,
+                        session_duration: profileData.sessionDuration
+                    },
+                    basic_info: {
+                        name: verifiedMentor.name,
+                        email: verifiedMentor.email,
+                        is_online: false,
+                        last_active: new Date().toISOString()
+                    },
+                    location: {
+                        country: "Unknown",
+                        city: "Unknown",
+                        timezone: "UTC"
+                    }
+                }
+            });
+            console.log('Test profile data sent to mentor processor successfully');
+        } catch (processorError) {
+            console.error('Error sending test profile data to mentor processor:', processorError);
+            // Continue with the flow even if processor update fails
+        }
+
+        res.json({ 
+            message: 'Test profile created/updated successfully', 
+            mentorId: mentor._id,
+            profileCompleted: verifiedMentor.profileCompleted,
+            profile: verifiedMentor
+        });
+    } catch (error) {
+        console.error('Error in create-test-profile:', error);
+        res.status(500).json({ 
+            error: 'Failed to create test profile',
+            details: error.message
+        });
+    }
+});
+
+// Mentor profile completion route
+app.post('/mentor_profile/complete', authenticateToken, upload.single('uploadResume'), async (req, res) => {
+    try {
+        // Validate user authentication and role
+        if (!req.user || req.user.role !== 'mentor') {
+            console.log('Unauthorized access attempt:', req.user);
+            return res.redirect('/login');
+        }
+
+        const mentorId = req.user.userId;
+        console.log('Processing profile completion for mentor:', mentorId);
+        
+        // Validate required fields
+        if (!req.body.fieldOfInterest || !req.body.yearOfExperience || !req.body.skills || 
+            !req.body.education || !req.body.expertise || !req.body.specializations || 
+            !req.body.preferredTimeSlots || !req.body.maxSessions || !req.body.sessionDuration) {
+            console.log('Missing required fields in profile completion');
+            req.session.errorMessage = "All required fields must be filled";
+            return res.redirect('/mentor_after_profile');
+        }
+
+        // Check if resume was uploaded
+        if (!req.file) {
+            console.log('Resume not uploaded');
+            req.session.errorMessage = "Resume upload is required";
+            return res.redirect('/mentor_after_profile');
+        }
+
+        // Process comma-separated strings into arrays with validation
+        const skills = req.body.skills.split(',').map(skill => skill.trim()).filter(skill => skill);
+        const expertise = req.body.expertise.split(',').map(exp => exp.trim()).filter(exp => exp);
+        const specializations = req.body.specializations.split(',').map(spec => spec.trim()).filter(spec => spec);
+        const preferredTimeSlots = req.body.preferredTimeSlots.split(',').map(slot => slot.trim()).filter(slot => slot);
+
+        // Validate arrays are not empty
+        if (skills.length === 0 || expertise.length === 0 || specializations.length === 0 || preferredTimeSlots.length === 0) {
+            console.log('Empty arrays in profile data');
+            req.session.errorMessage = "Please provide valid values for all fields";
+            return res.redirect('/mentor_after_profile');
+        }
+
+        // Upload resume to Cloudinary
+        let resumeUrl = '';
+        try {
+            const result = await cloudinary.uploader.upload(req.file.path, {
+                resource_type: 'raw',
+                folder: 'mentor_resumes'
+            });
+            resumeUrl = result.secure_url;
+        } catch (uploadError) {
+            console.error('Error uploading to Cloudinary:', uploadError);
+            req.session.errorMessage = "Failed to upload resume";
+            return res.redirect('/mentor_after_profile');
+        }
+
+        const profileData = {
+            fieldOfInterest: req.body.fieldOfInterest,
+            yearOfExperience: parseInt(req.body.yearOfExperience) || 0,
+            skills,
+            expertise,
+            specializations,
+            availability: req.body.availability || "",
+            briefBio: req.body.briefBio || "",
+            uploadResume: resumeUrl,
+            profileCompleted: true,
+            education: req.body.education,
+            preferredTimeSlots,
+            maxSessions: parseInt(req.body.maxSessions) || 1,
+            sessionDuration: parseInt(req.body.sessionDuration) || 30,
+            isOnline: true,
+            lastActive: new Date(),
+            rating: 0,
+            totalSessions: 0
+        };
+
+        console.log('Updating mentor profile with data:', profileData);
+
+        // Update mentor document with profile data
+        const updatedMentor = await Mentor.findByIdAndUpdate(
+            mentorId,
+            profileData,
+            { new: true }
+        );
+
+        if (!updatedMentor) {
+            console.log('Failed to update mentor document');
+            req.session.errorMessage = "Failed to update mentor profile";
+            return res.redirect('/mentor_after_profile');
+        }
+
+        console.log('Mentor profile updated successfully:', {
+            mentorId: updatedMentor._id,
+            profileCompleted: updatedMentor.profileCompleted
+        });
+
+        // Send profile data to mentor processor and wait for response
+        try {
+            const processorResponse = await axios.post('http://localhost:5003/process_mentor_profile', {
+                mentor_id: mentorId,
+                mentor_data: {
+                    expertise: {
+                        job_role: profileData.fieldOfInterest,
+                        skills: profileData.skills,
+                        education: profileData.education,
+                        experience: profileData.yearOfExperience,
+                        specializations: profileData.specializations
+                    },
+                    availability: {
+                        available_hours: 8, // Default to 8 hours
+                        preferred_time_slots: profileData.preferredTimeSlots,
+                        timezone: "UTC" // Default timezone
+                    },
+                    workload: {
+                        current_sessions: 0,
+                        max_sessions: profileData.maxSessions,
+                        session_duration: profileData.sessionDuration
+                    },
+                    basic_info: {
+                        name: updatedMentor.name,
+                        email: updatedMentor.email,
+                        is_online: false,
+                        last_active: new Date().toISOString()
+                    },
+                    location: {
+                        country: "Unknown",
+                        city: "Unknown",
+                        timezone: "UTC"
+                    }
+                }
+            });
+            
+            if (processorResponse.data.error) {
+                console.error('Error in mentor processor:', processorResponse.data.error);
+                req.session.errorMessage = "Error processing profile data";
+                return res.redirect('/mentor_after_profile');
+            }
+            
+            console.log('Profile data processed successfully by mentor processor');
+        } catch (processorError) {
+            console.error('Error sending data to mentor processor:', processorError);
+            req.session.errorMessage = "Error processing profile data";
+            return res.redirect('/mentor_after_profile');
+        }
+
+        // Set success message in session
+        req.session.successMessage = 'Profile completed successfully!';
+        
+        // Redirect to mentor dashboard with success message
+        return res.redirect('/mentor_dashboard');
+    } catch (error) {
+        console.error('Error in mentor profile completion:', error);
+        req.session.errorMessage = "An error occurred while completing your profile";
+        return res.redirect('/mentor_after_profile');
+    }
+});
+
+// Mentor matching route
+app.get('/mentor/matching', authenticateToken, async (req, res) => {
+    try {
+        // Check if user is authenticated
+        if (!req.user || !req.user.userId) {
+            console.log('User not authenticated');
+            return res.redirect('/login');
+        }
+
+        // Check if user is a mentor
+        if (req.user.role !== 'mentor') {
+            console.log('User is not a mentor');
+            return res.redirect('/mentee_profile');
+        }
+
+        // Get mentor's profile
+        const mentorProfile = await Mentor.findOne({ _id: req.user.userId });
+        
+        if (!mentorProfile) {
+            console.log('No mentor profile found for user:', req.user.userId);
+            return res.render('matching_interface', { 
+                matchedMentees: [],
+                user: req.user,
+                mentorProfile: null,
+                error: 'Please complete your mentor profile first'
+            });
+        }
+
+        // Find mentees based on mentor's field of interest
+        const mentees = await Mentee.find({
+            fieldOfInterest: mentorProfile.fieldOfInterest,
+            profileCompleted: true
+        }).select('name email fieldOfInterest education skills briefBio');
+
+        console.log('Found mentees:', mentees.length);
+        
+        // Format mentees for the template
+        const matchedMentees = mentees.map(mentee => ({
+            mentee: {
+                _id: mentee._id,
+                name: mentee.name,
+                email: mentee.email
+            },
+            fieldOfInterest: mentee.fieldOfInterest,
+            education: mentee.education,
+            skills: mentee.skills,
+            briefBio: mentee.briefBio
+        }));
+        
+        // Render the matching interface with all necessary data
+        res.render('matching_interface', {
+            matchedMentees: matchedMentees || [],
+            user: req.user,
+            mentorProfile: mentorProfile
+        });
+    } catch (error) {
+        console.error('Error in mentor matching route:', error);
+        res.render('matching_interface', {
+            matchedMentees: [],
+            user: req.user,
+            mentorProfile: null,
+            error: 'Error loading matching interface. Please try again later.'
+        });
+    }
+});
+
+// Mentee profile view route
+app.get('/mentor/mentee/:id', authenticateToken, async (req, res) => {
+    try {
+        // Check if user is authenticated and is a mentor
+        if (!req.user || req.user.role !== 'mentor') {
+            return res.redirect('/login');
+        }
+
+        // Find the mentee
+        const mentee = await Mentee.findById(req.params.id);
+        if (!mentee) {
+            req.session.errorMessage = "Mentee not found";
+            return res.redirect('/mentor/matching');
+        }
+
+        // Render the mentee profile
+        res.render('mentee_profile_view', {
+            user: req.user,
+            mentee: mentee
+        });
+    } catch (error) {
+        console.error('Error viewing mentee profile:', error);
+        req.session.errorMessage = "An error occurred while loading the mentee profile";
+        res.redirect('/mentor/matching');
+    }
+});
+
+// Update mentee profile route
+app.post('/update-student-profile', authenticateToken, async (req, res) => {
+    try {
+        console.log('Update mentee profile route accessed:', {
+            user: req.user,
+            body: req.body
+        });
+        
+        // Check if user is authenticated and is a mentee
+        if (!req.user || req.user.role !== 'mentee') {
+            console.log('User not authenticated or not a mentee:', req.user);
+            return res.status(403).json({ success: false, error: 'Unauthorized' });
+        }
+
+        // Get mentee data
+        const mentee = await User.findById(req.user.userId);
+        console.log('Mentee found:', mentee ? {
+            id: mentee._id,
+            email: mentee.email,
+            name: mentee.name
+        } : 'No');
+        
+        if (!mentee) {
+            console.log('Mentee not found in database');
+            return res.status(404).json({ success: false, error: 'Mentee not found' });
+        }
+
+        // Update mentee data
+        const { name, phone, address } = req.body;
+        
+        // Only update fields that are provided
+        if (name && name.trim() !== '') mentee.name = name;
+        if (phone && phone.trim() !== '') mentee.phone = phone;
+        if (address && address.trim() !== '') mentee.address = address;
+        
+        // Save changes
+        await mentee.save();
+        
+        console.log('Mentee profile updated successfully:', {
+            id: mentee._id,
+            name: mentee.name,
+            phone: mentee.phone,
+            address: mentee.address
+        });
+        
+        return res.json({ success: true, message: 'Profile updated successfully' });
+    } catch (error) {
+        console.error('Error updating mentee profile:', error);
+        return res.status(500).json({ success: false, error: 'An error occurred while updating the profile' });
+    }
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err);
+    process.exit(1);
+});
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+    process.exit(1);
+});
+
+// Start the application
+initializeApp().catch(error => {
+    console.error('Failed to start application:', error);
+    process.exit(1);
+});
+
+// Add error handling for Python service failures
+app.use(async (req, res, next) => {
+    // Check if the request requires Python services
+    if (req.path.startsWith('/api/') || 
+        req.path.includes('mentor') || 
+        req.path.includes('doubt') ||
+        req.path.includes('workflow')) {
+        
+        try {
+            // Determine which service to check based on the request path
+            let servicePort;
+            let serviceName;
+            
+            if (req.path.includes('doubt')) {
+                servicePort = 5001;
+                serviceName = 'API';
+            } else if (req.path.includes('match')) {
+                servicePort = 5000;
+                serviceName = 'Algorithm';
+            } else if (req.path.includes('workflow')) {
+                servicePort = 5002;
+                serviceName = 'Workflow';
+            } else {
+                servicePort = 5003;
+                serviceName = 'Mentor Processor';
+            }
+            
+            // Check service health with retry logic
+            let healthResponse = null;
+            let retries = 3;
+            let lastError = null;
+            
+            while (retries > 0) {
+                try {
+                    healthResponse = await axios.get(`http://localhost:${servicePort}/health`, {
+                        timeout: 5000
+                    });
+                    break;
+                } catch (error) {
+                    lastError = error;
+                    retries--;
+                    if (retries > 0) {
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                    }
+                }
+            }
+            
+            if (!healthResponse) {
+                throw lastError || new Error('Service health check failed after retries');
+            }
+            
+            // If service is unhealthy, return error
+            if (healthResponse.data.status !== 'healthy') {
+                return res.status(503).json({
+                    error: 'Service temporarily unavailable',
+                    message: `The ${serviceName} service is not healthy. Please try again later.`,
+                    details: healthResponse.data
+                });
+            }
+            
+            // If workflow service is involved, check its dependencies
+            if (req.path.includes('workflow')) {
+                // Check mentor processor health
+                const mentorProcessorHealth = await axios.get('http://localhost:5003/health', {
+                    timeout: 5000
+                }).catch(() => null);
+                
+                if (!mentorProcessorHealth || mentorProcessorHealth.data.status !== 'healthy') {
+                    return res.status(503).json({
+                        error: 'Service dependency unavailable',
+                        message: 'The Mentor Processor service is not healthy. Workflow service cannot function properly.',
+                        details: mentorProcessorHealth?.data
+                    });
+                }
+                
+                // Check API service health
+                const apiHealth = await axios.get('http://localhost:5001/health', {
+                    timeout: 5000
+                }).catch(() => null);
+                
+                if (!apiHealth || apiHealth.data.status !== 'healthy') {
+                    return res.status(503).json({
+                        error: 'Service dependency unavailable',
+                        message: 'The API service is not healthy. Workflow service cannot function properly.',
+                        details: apiHealth?.data
+                    });
+                }
+            }
+            
+            next();
+        } catch (error) {
+            console.error(`Service health check failed: ${error.message}`);
+            return res.status(503).json({
+                error: 'Service temporarily unavailable',
+                message: 'The required service is not running or not responding. Please try again later.',
+                details: error.message
+            });
+        }
+    } else {
+        next();
+    }
 });

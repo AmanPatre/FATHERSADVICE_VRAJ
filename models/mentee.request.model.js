@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const MenteeRequestSchema = new mongoose.Schema({
-    menteeId: { 
+    mentee: { 
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User', 
         required: true 
@@ -13,7 +13,7 @@ const MenteeRequestSchema = new mongoose.Schema({
     status: { 
         type: String, 
         default: 'pending',
-        enum: ['pending', 'answered', 'closed']
+        enum: ['pending', 'processing', 'completed', 'error', 'answered', 'closed']
     },
     answer: {
         type: String
@@ -24,7 +24,36 @@ const MenteeRequestSchema = new mongoose.Schema({
     },
     answeredAt: {
         type: Date
+    },
+    matchedMentorId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Mentor'
+    },
+    compatibilityScore: {
+        type: Number,
+        min: 0,
+        max: 100
+    },
+    subjectBreakdown: {
+        type: Map,
+        of: Number
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now
     }
-}, { timestamps: true });
+});
 
-module.exports = mongoose.model('MenteeRequest', MenteeRequestSchema); 
+// Update the updatedAt field before saving
+MenteeRequestSchema.pre('save', function(next) {
+    this.updatedAt = new Date();
+    next();
+});
+
+const MenteeRequest = mongoose.model('MenteeRequest', MenteeRequestSchema);
+
+module.exports = MenteeRequest; 

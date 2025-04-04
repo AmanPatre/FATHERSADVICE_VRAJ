@@ -1,0 +1,16 @@
+2025-04-03 01:44:07,731 - INFO - Started api with PID 89946
+2025-04-03 01:44:07,732 - INFO - Started api service on port 5000
+2025-04-03 01:44:09,734 - WARNING - Service api is not listening on port 5000
+2025-04-03 01:44:09,734 - WARNING - Service api not responding, retrying in 2 seconds...
+2025-04-03 01:44:11,735 - INFO - Service api is listening on port 5000
+2025-04-03 01:44:11,736 - INFO - Service api is running and responding on port 5000
+2025-04-03 01:44:11,742 - INFO - Started algo with PID 89990
+2025-04-03 01:44:11,743 - INFO - Started algo service on port 5001
+2025-04-03 01:44:13,743 - INFO - Service algo is listening on port 5001
+2025-04-03 01:44:13,744 - INFO - Service algo is running and responding on port 5001
+2025-04-03 01:44:13,746 - INFO - Started workflow with PID 90017
+2025-04-03 01:44:13,746 - INFO - Started workflow service on port 5002
+2025-04-03 01:44:15,747 - INFO - Service workflow is listening on port 5002
+2025-04-03 01:44:15,747 - INFO - Service workflow is running and responding on port 5002
+2025-04-03 01:44:15,749 - ERROR - Port 5003 is already in use. Please free up the port and try again.
+2025-04-03 01:44:15,749 - ERROR - Failed to start all services. Check the logs for details.

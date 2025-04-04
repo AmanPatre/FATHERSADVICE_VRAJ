@@ -31,7 +31,7 @@
           </h2>
           <p class="student-id">
             Student ID: <span id="student-id">
-              <%= student.id %>
+              <%= student._id %>
             </span>
           </p>
         </div>
@@ -62,9 +62,12 @@
           </div>
           <div class="detail-item">
             <label>Phone Number</label>
-            <input type="tel" id="phone" value="<%= student.phone %>" readonly />
+            <input type="tel" id="phone" value="<%= student.phone || 'Not provided' %>" readonly />
           </div>
-
+          <div class="detail-item">
+            <label>Address</label>
+            <input type="text" id="address" value="<%= student.address || 'Not provided' %>" readonly />
+          </div>
         </div>
 
         <h3>Academic Information</h3>
@@ -133,12 +136,7 @@
       const formData = {
         name: document.getElementById("name").value,
         phone: document.getElementById("phone").value,
-        dateOfBirth: document.getElementById("dateOfBirth").value,
-        education: document.getElementById("education").value,
-        institution: document.getElementById("institution").value,
-        fieldOfInterest: document.getElementById("fieldOfInterest").value,
-        expectedGraduation:
-          document.getElementById("expectedGraduation").value,
+        address: document.getElementById("address").value
       };
 
       try {
@@ -147,6 +145,7 @@
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: 'include',
           body: JSON.stringify(formData),
         });
 

@@ -14,22 +14,153 @@
                 <img src="/images/Logo Only.png" class="logo" alt="Logo"> <!-- Your logo image -->
                 <h2 class="section-heading">Sign Up</h2>
             </div>
-            <form action="/signup" method="POST">
-                <input type="text" name="name" required placeholder="Name">
-                <input type="email" name="email" required placeholder="Email">
-                <input type="password" name="password" required placeholder="Password">
-                <select name="role" required>
-                    <option value="mentee">Mentee</option>
-                    <option value="mentor">Mentor</option>
-                </select>
-                <input type="text" name="phone" required placeholder="Phone Number">
-                <input type="text" name="address" required placeholder="Address">
-                <button type="submit" style="background-color: #4CAF50; color: white;">Sign Up</button>
+
+            <div id="error-message" class="error-message" style="display: none;"></div>
+
+            <form id="signupForm" action="/signup" method="POST">
+                <div class="input-group">
+                    <label for="name" class="input-label">Name:</label>
+                    <input type="text" id="name" name="name" required placeholder="Enter your name" class="input-field">
+                </div>
+
+                <div class="input-group">
+                    <label for="email" class="input-label">Email:</label>
+                    <input type="email" id="email" name="email" required placeholder="Enter your email" class="input-field">
+                </div>
+
+                <div class="input-group">
+                    <label for="password" class="input-label">Password:</label>
+                    <input type="password" id="password" name="password" required placeholder="Enter your password" class="input-field">
+                </div>
+
+                <div class="input-group">
+                    <label for="role" class="input-label">Role:</label>
+                    <select id="role" name="role" required class="input-field">
+                        <option value="">Select Role</option>
+                        <option value="mentor">Mentor</option>
+                        <option value="mentee">Mentee</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="phone" class="input-label">Phone Number:</label>
+                    <input type="text" id="phone" name="phone" required placeholder="Enter your phone number" class="input-field">
+                </div>
+
+                <div class="input-group">
+                    <label for="address" class="input-label">Address:</label>
+                    <input type="text" id="address" name="address" required placeholder="Enter your address" class="input-field">
+                </div>
+
+                <button type="submit" class="submit-btn">Sign Up</button>
             </form>
             
-            <p class="signup-text bg-blue">Already have an account? <a href="login.html">Login here</a></p> <!-- Link to the login page -->
+            <p class="signup-text">Already have an account? <a href="/html/login.html">Login here</a></p> <!-- Link to the login page -->
         </div>
     </section>
+
+    <script>
+        // Check for error message in URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const errorMessage = urlParams.get('error');
+        if (errorMessage) {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = decodeURIComponent(errorMessage);
+            errorDiv.style.display = 'block';
+        }
+
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.style.display = 'none';
+
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                role: document.getElementById('role').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value
+            };
+
+            if (!formData.name || !formData.email || !formData.password || !formData.role || !formData.phone || !formData.address) {
+                errorDiv.textContent = 'All fields are required';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            try {
+                // First try JSON submission
+                const response = await fetch('/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Redirect based on the server's response
+                    window.location.href = data.redirect;
+                } else {
+                    // Show error message
+                    errorDiv.textContent = data.error || 'Signup failed';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Signup error:', error);
+                // If JSON submission fails, try form submission
+                const form = document.getElementById('signupForm');
+                form.submit();
+            }
+        });
+    </script>
+
+    <style>
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid #f5c6cb;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
 
 </body>
 </html>

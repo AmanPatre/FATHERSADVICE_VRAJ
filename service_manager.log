@@ -1,0 +1,824 @@
+2025-04-02 22:45:05,453 - INFO - MongoDB is installed
+2025-04-02 22:45:05,617 - INFO - MongoDB is running on port 27017
+2025-04-02 22:45:05,695 - ERROR - Port 5000 is already in use. Please free up the port or modify the configuration.
+2025-04-02 22:45:05,696 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-02 22:45:29,959 - INFO - MongoDB is installed
+2025-04-02 22:45:30,062 - INFO - MongoDB is running on port 27017
+2025-04-02 22:45:30,112 - INFO - Started api with PID 43059
+2025-04-02 22:45:30,114 - INFO - Started api service on port 5000
+2025-04-02 22:45:32,174 - INFO - Started algo with PID 43079
+2025-04-02 22:45:32,174 - INFO - Started algo service on port 5001
+2025-04-02 22:45:34,238 - INFO - Started workflow with PID 43109
+2025-04-02 22:45:34,238 - INFO - Started workflow service on port 5002
+2025-04-02 22:45:36,238 - INFO - 
+All services are running successfully!
+2025-04-02 22:45:36,242 - INFO - Service ports:
+2025-04-02 22:45:36,242 - INFO - - api: http://localhost:5000
+2025-04-02 22:45:36,242 - INFO - - algo: http://localhost:5001
+2025-04-02 22:45:36,242 - INFO - - workflow: http://localhost:5002
+2025-04-02 22:45:36,242 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-02 22:45:36,242 - INFO - Logs are being written to the 'logs' directory.
+2025-04-02 23:05:16,827 - INFO - MongoDB is installed
+2025-04-02 23:05:16,892 - INFO - MongoDB is running on port 27017
+2025-04-02 23:05:16,950 - ERROR - Port 5000 is already in use. Please free up the port or modify the configuration.
+2025-04-02 23:05:16,951 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-02 23:06:50,439 - INFO - MongoDB is installed
+2025-04-02 23:06:50,557 - INFO - MongoDB is running on port 27017
+2025-04-02 23:06:50,634 - ERROR - Port 5000 is already in use. Please free up the port or modify the configuration.
+2025-04-02 23:06:50,635 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-02 23:24:20,925 - INFO - MongoDB is installed
+2025-04-02 23:24:20,981 - INFO - MongoDB is running on port 27017
+2025-04-02 23:24:21,053 - ERROR - Port 5000 is already in use. Please free up the port or modify the configuration.
+2025-04-02 23:24:21,053 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-02 23:24:42,442 - INFO - MongoDB is installed
+2025-04-02 23:24:42,512 - INFO - MongoDB is running on port 27017
+2025-04-02 23:24:42,572 - ERROR - Port 5000 is already in use. Please free up the port or modify the configuration.
+2025-04-02 23:24:42,573 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-02 23:37:22,468 - INFO - Database initialized successfully
+2025-04-02 23:37:22,573 - INFO - MongoDB is installed
+2025-04-02 23:37:22,658 - INFO - MongoDB is running on port 27017
+2025-04-02 23:37:22,723 - INFO - Started api with PID 58950
+2025-04-02 23:37:22,724 - INFO - Started api service on port 5000
+2025-04-02 23:37:24,780 - INFO - Started algo with PID 58965
+2025-04-02 23:37:24,781 - INFO - Started algo service on port 5001
+2025-04-02 23:37:26,833 - ERROR - Port 5002 is already in use. Please free up the port or modify the configuration.
+2025-04-02 23:37:26,834 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-02 23:38:48,096 - INFO - Database initialized successfully
+2025-04-02 23:38:48,190 - INFO - MongoDB is installed
+2025-04-02 23:38:48,253 - INFO - MongoDB is running on port 27017
+2025-04-02 23:38:48,316 - INFO - Started api with PID 59557
+2025-04-02 23:38:48,316 - INFO - Started api service on port 5000
+2025-04-02 23:38:50,382 - INFO - Started algo with PID 59572
+2025-04-02 23:38:50,382 - INFO - Started algo service on port 5001
+2025-04-02 23:38:52,446 - ERROR - Port 5002 is already in use. Please free up the port or modify the configuration.
+2025-04-02 23:38:52,446 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-02 23:39:54,060 - INFO - Database initialized successfully
+2025-04-02 23:39:54,138 - INFO - MongoDB is installed
+2025-04-02 23:39:54,205 - INFO - MongoDB is running on port 27017
+2025-04-02 23:39:54,264 - ERROR - Port 5000 is already in use. Please free up the port or modify the configuration.
+2025-04-02 23:39:54,265 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-02 23:41:14,212 - INFO - Database initialized successfully
+2025-04-02 23:41:14,290 - INFO - MongoDB is installed
+2025-04-02 23:41:14,356 - INFO - MongoDB is running on port 27017
+2025-04-02 23:41:14,415 - INFO - Started api with PID 60275
+2025-04-02 23:41:14,416 - INFO - Started api service on port 5000
+2025-04-02 23:41:16,470 - ERROR - Port 5001 is already in use. Please free up the port or modify the configuration.
+2025-04-02 23:41:16,470 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-02 23:41:59,744 - INFO - Database initialized successfully
+2025-04-02 23:41:59,814 - INFO - MongoDB is installed
+2025-04-02 23:41:59,877 - INFO - MongoDB is running on port 27017
+2025-04-02 23:41:59,939 - INFO - Started api with PID 60564
+2025-04-02 23:41:59,939 - INFO - Started api service on port 5000
+2025-04-02 23:42:01,993 - INFO - Started algo with PID 60592
+2025-04-02 23:42:01,994 - INFO - Started algo service on port 5001
+2025-04-02 23:42:04,067 - INFO - Started workflow with PID 60618
+2025-04-02 23:42:04,067 - INFO - Started workflow service on port 5002
+2025-04-02 23:42:06,070 - INFO - 
+All services are running successfully!
+2025-04-02 23:42:06,082 - INFO - Service ports:
+2025-04-02 23:42:06,101 - INFO - - api: http://localhost:5000
+2025-04-02 23:42:06,110 - INFO - - algo: http://localhost:5001
+2025-04-02 23:42:06,110 - INFO - - workflow: http://localhost:5002
+2025-04-02 23:42:06,110 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-02 23:42:06,110 - INFO - Logs are being written to the 'logs' directory.
+2025-04-02 23:52:47,770 - INFO - Database initialized successfully
+2025-04-02 23:52:48,252 - INFO - MongoDB is installed
+2025-04-02 23:52:48,340 - INFO - MongoDB is running on port 27017
+2025-04-02 23:52:48,417 - ERROR - Port 5000 is already in use. Please free up the port or modify the configuration.
+2025-04-02 23:52:48,417 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-03 00:04:24,174 - INFO - Received shutdown signal
+2025-04-03 00:04:24,226 - INFO - Shutting down services...
+2025-04-03 00:04:24,229 - INFO - Stopping api...
+2025-04-03 00:04:24,245 - INFO - Successfully stopped api
+2025-04-03 00:04:24,246 - INFO - Stopping algo...
+2025-04-03 00:04:24,248 - INFO - Successfully stopped algo
+2025-04-03 00:04:24,249 - INFO - Stopping workflow...
+2025-04-03 00:04:24,256 - INFO - Successfully stopped workflow
+2025-04-03 00:04:29,768 - INFO - Database initialized successfully
+2025-04-03 00:04:30,153 - INFO - MongoDB is installed
+2025-04-03 00:04:30,233 - INFO - MongoDB is running on port 27017
+2025-04-03 00:04:30,297 - INFO - Started api with PID 66534
+2025-04-03 00:04:30,298 - INFO - Started api service on port 5000
+2025-04-03 00:04:32,355 - INFO - Started algo with PID 66548
+2025-04-03 00:04:32,355 - INFO - Started algo service on port 5001
+2025-04-03 00:04:34,447 - INFO - Started workflow with PID 66557
+2025-04-03 00:04:34,448 - INFO - Started workflow service on port 5002
+2025-04-03 00:04:36,449 - INFO - 
+All services are running successfully!
+2025-04-03 00:04:36,450 - INFO - Service ports:
+2025-04-03 00:04:36,450 - INFO - - api: http://localhost:5000
+2025-04-03 00:04:36,450 - INFO - - algo: http://localhost:5001
+2025-04-03 00:04:36,450 - INFO - - workflow: http://localhost:5002
+2025-04-03 00:04:36,450 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-03 00:04:36,450 - INFO - Logs are being written to the 'logs' directory.
+2025-04-03 00:08:58,335 - INFO - Received shutdown signal
+2025-04-03 00:08:58,336 - INFO - Shutting down services...
+2025-04-03 00:08:58,336 - INFO - Stopping api...
+2025-04-03 00:08:58,338 - INFO - Successfully stopped api
+2025-04-03 00:08:58,338 - INFO - Stopping algo...
+2025-04-03 00:08:58,339 - INFO - Successfully stopped algo
+2025-04-03 00:08:58,339 - INFO - Stopping workflow...
+2025-04-03 00:08:58,340 - INFO - Successfully stopped workflow
+2025-04-03 00:09:02,451 - INFO - Database initialized successfully
+2025-04-03 00:09:02,555 - INFO - MongoDB is installed
+2025-04-03 00:09:02,634 - INFO - MongoDB is running on port 27017
+2025-04-03 00:09:02,701 - INFO - Started api with PID 67591
+2025-04-03 00:09:02,701 - INFO - Started api service on port 5000
+2025-04-03 00:09:04,869 - INFO - Started algo with PID 67629
+2025-04-03 00:09:04,869 - INFO - Started algo service on port 5001
+2025-04-03 00:09:07,014 - INFO - Started workflow with PID 67648
+2025-04-03 00:09:07,014 - INFO - Started workflow service on port 5002
+2025-04-03 00:09:09,014 - INFO - 
+All services are running successfully!
+2025-04-03 00:09:09,017 - INFO - Service ports:
+2025-04-03 00:09:09,017 - INFO - - api: http://localhost:5000
+2025-04-03 00:09:09,019 - INFO - - algo: http://localhost:5001
+2025-04-03 00:09:09,021 - INFO - - workflow: http://localhost:5002
+2025-04-03 00:09:09,021 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-03 00:09:09,021 - INFO - Logs are being written to the 'logs' directory.
+2025-04-03 00:09:58,428 - INFO - Database initialized successfully
+2025-04-03 00:09:58,504 - INFO - MongoDB is installed
+2025-04-03 00:09:58,565 - INFO - MongoDB is running on port 27017
+2025-04-03 00:09:58,622 - ERROR - Port 5000 is already in use. Please free up the port or modify the configuration.
+2025-04-03 00:09:58,622 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-03 00:11:23,031 - INFO - Database initialized successfully
+2025-04-03 00:11:23,122 - INFO - MongoDB is installed
+2025-04-03 00:11:23,391 - INFO - MongoDB is running on port 27017
+2025-04-03 00:11:23,454 - ERROR - Port 5000 is already in use. Please free up the port or modify the configuration.
+2025-04-03 00:11:23,454 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-03 00:11:46,592 - INFO - Received shutdown signal
+2025-04-03 00:11:46,593 - INFO - Shutting down services...
+2025-04-03 00:11:46,593 - INFO - Stopping api...
+2025-04-03 00:11:46,594 - INFO - Successfully stopped api
+2025-04-03 00:11:46,595 - INFO - Stopping algo...
+2025-04-03 00:11:46,595 - INFO - Successfully stopped algo
+2025-04-03 00:11:46,596 - INFO - Stopping workflow...
+2025-04-03 00:11:46,597 - INFO - Successfully stopped workflow
+2025-04-03 00:11:50,069 - INFO - Database initialized successfully
+2025-04-03 00:11:50,171 - INFO - MongoDB is installed
+2025-04-03 00:11:50,265 - INFO - MongoDB is running on port 27017
+2025-04-03 00:11:50,338 - INFO - Started api with PID 68790
+2025-04-03 00:11:50,339 - INFO - Started api service on port 5000
+2025-04-03 00:11:52,394 - INFO - Started algo with PID 68804
+2025-04-03 00:11:52,395 - INFO - Started algo service on port 5001
+2025-04-03 00:11:54,450 - INFO - Started workflow with PID 68836
+2025-04-03 00:11:54,451 - INFO - Started workflow service on port 5002
+2025-04-03 00:11:56,451 - INFO - 
+All services are running successfully!
+2025-04-03 00:11:56,451 - INFO - Service ports:
+2025-04-03 00:11:56,452 - INFO - - api: http://localhost:5000
+2025-04-03 00:11:56,452 - INFO - - algo: http://localhost:5001
+2025-04-03 00:11:56,452 - INFO - - workflow: http://localhost:5002
+2025-04-03 00:11:56,452 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-03 00:11:56,452 - INFO - Logs are being written to the 'logs' directory.
+2025-04-03 00:48:56,040 - INFO - Received shutdown signal
+2025-04-03 00:48:56,042 - INFO - Shutting down services...
+2025-04-03 00:48:56,043 - INFO - Stopping api...
+2025-04-03 00:48:56,077 - INFO - Successfully stopped api
+2025-04-03 00:48:56,079 - INFO - Stopping algo...
+2025-04-03 00:48:56,082 - INFO - Successfully stopped algo
+2025-04-03 00:48:56,082 - INFO - Stopping workflow...
+2025-04-03 00:48:56,084 - INFO - Successfully stopped workflow
+2025-04-03 00:49:00,215 - INFO - Database initialized successfully
+2025-04-03 00:49:00,489 - INFO - MongoDB is installed
+2025-04-03 00:49:00,560 - INFO - MongoDB is running on port 27017
+2025-04-03 00:49:00,618 - INFO - Started api with PID 74551
+2025-04-03 00:49:00,618 - INFO - Started api service on port 5000
+2025-04-03 00:49:02,671 - INFO - Started algo with PID 74582
+2025-04-03 00:49:02,672 - INFO - Started algo service on port 5001
+2025-04-03 00:49:04,723 - INFO - Started workflow with PID 74600
+2025-04-03 00:49:04,724 - INFO - Started workflow service on port 5002
+2025-04-03 00:49:06,776 - INFO - Started mentor_processor with PID 74611
+2025-04-03 00:49:06,776 - INFO - Started mentor_processor service on port 5003
+2025-04-03 00:49:08,777 - INFO - 
+All services are running successfully!
+2025-04-03 00:49:08,777 - INFO - Service ports:
+2025-04-03 00:49:08,778 - INFO - - api: http://localhost:5000
+2025-04-03 00:49:08,778 - INFO - - algo: http://localhost:5001
+2025-04-03 00:49:08,778 - INFO - - workflow: http://localhost:5002
+2025-04-03 00:49:08,778 - INFO - - mentor_processor: http://localhost:5003
+2025-04-03 00:49:08,778 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-03 00:49:08,779 - INFO - Logs are being written to the 'logs' directory.
+2025-04-03 01:01:09,977 - INFO - Started api with PID 76883
+2025-04-03 01:01:09,977 - INFO - Started api service on port 5000
+2025-04-03 01:01:11,981 - INFO - Started algo with PID 76917
+2025-04-03 01:01:11,983 - INFO - Started algo service on port 5001
+2025-04-03 01:01:13,986 - INFO - Started workflow with PID 76943
+2025-04-03 01:01:13,988 - INFO - Started workflow service on port 5002
+2025-04-03 01:01:15,993 - INFO - Started mentor_processor with PID 76950
+2025-04-03 01:01:15,993 - INFO - Started mentor_processor service on port 5003
+2025-04-03 01:01:17,994 - INFO - 
+All services are running successfully!
+2025-04-03 01:01:17,995 - INFO - Service ports:
+2025-04-03 01:01:17,996 - INFO - - api: http://localhost:5000
+2025-04-03 01:01:17,996 - INFO - - algo: http://localhost:5001
+2025-04-03 01:01:17,996 - INFO - - workflow: http://localhost:5002
+2025-04-03 01:01:17,996 - INFO - - mentor_processor: http://localhost:5003
+2025-04-03 01:01:17,997 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-03 01:01:17,998 - INFO - Logs are being written to the 'logs' directory.
+2025-04-03 01:07:57,318 - ERROR - Port 5000 is already in use. Please free up the port and try again.
+2025-04-03 01:07:57,321 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-03 01:08:19,241 - ERROR - Port 5000 is already in use. Please free up the port and try again.
+2025-04-03 01:08:19,241 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-03 01:08:42,616 - INFO - Started api with PID 81425
+2025-04-03 01:08:42,619 - INFO - Started api service on port 5000
+2025-04-03 01:08:44,622 - INFO - Started algo with PID 81453
+2025-04-03 01:08:44,622 - INFO - Started algo service on port 5001
+2025-04-03 01:08:46,624 - INFO - Started workflow with PID 81470
+2025-04-03 01:08:46,625 - INFO - Started workflow service on port 5002
+2025-04-03 01:08:48,627 - INFO - Started mentor_processor with PID 81490
+2025-04-03 01:08:48,627 - INFO - Started mentor_processor service on port 5003
+2025-04-03 01:08:50,627 - INFO - 
+All services are running successfully!
+2025-04-03 01:08:50,628 - INFO - Service ports:
+2025-04-03 01:08:50,628 - INFO - - api: http://localhost:5000
+2025-04-03 01:08:50,628 - INFO - - algo: http://localhost:5001
+2025-04-03 01:08:50,628 - INFO - - workflow: http://localhost:5002
+2025-04-03 01:08:50,628 - INFO - - mentor_processor: http://localhost:5003
+2025-04-03 01:08:50,628 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-03 01:08:50,628 - INFO - Logs are being written to the 'logs' directory.
+2025-04-03 01:17:47,976 - ERROR - Port 5000 is already in use. Please free up the port and try again.
+2025-04-03 01:17:47,977 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-03 01:18:07,872 - INFO - Received shutdown signal
+2025-04-03 01:18:07,873 - INFO - Shutting down services...
+2025-04-03 01:18:07,874 - INFO - Stopping api...
+2025-04-03 01:18:07,908 - INFO - Successfully stopped api
+2025-04-03 01:18:07,908 - INFO - Stopping algo...
+2025-04-03 01:18:07,941 - INFO - Successfully stopped algo
+2025-04-03 01:18:07,942 - INFO - Stopping workflow...
+2025-04-03 01:18:07,975 - INFO - Successfully stopped workflow
+2025-04-03 01:18:07,975 - INFO - Stopping mentor_processor...
+2025-04-03 01:18:08,551 - INFO - Successfully stopped mentor_processor
+2025-04-03 01:18:13,360 - INFO - Started api with PID 83455
+2025-04-03 01:18:13,361 - INFO - Started api service on port 5000
+2025-04-03 01:18:15,366 - INFO - Started algo with PID 83478
+2025-04-03 01:18:15,366 - INFO - Started algo service on port 5001
+2025-04-03 01:18:17,370 - INFO - Started workflow with PID 83489
+2025-04-03 01:18:17,370 - INFO - Started workflow service on port 5002
+2025-04-03 01:18:19,374 - INFO - Started mentor_processor with PID 83509
+2025-04-03 01:18:19,376 - INFO - Started mentor_processor service on port 5003
+2025-04-03 01:18:21,376 - INFO - 
+All services are running successfully!
+2025-04-03 01:18:21,378 - INFO - Service ports:
+2025-04-03 01:18:21,378 - INFO - - api: http://localhost:5000
+2025-04-03 01:18:21,378 - INFO - - algo: http://localhost:5001
+2025-04-03 01:18:21,378 - INFO - - workflow: http://localhost:5002
+2025-04-03 01:18:21,378 - INFO - - mentor_processor: http://localhost:5003
+2025-04-03 01:18:21,378 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-03 01:18:21,378 - INFO - Logs are being written to the 'logs' directory.
+2025-04-03 01:26:30,928 - INFO - Received shutdown signal
+2025-04-03 01:26:30,928 - INFO - Shutting down services...
+2025-04-03 01:26:30,929 - INFO - Stopping api...
+2025-04-03 01:26:30,929 - INFO - Successfully stopped api
+2025-04-03 01:26:30,929 - INFO - Stopping algo...
+2025-04-03 01:26:30,929 - INFO - Successfully stopped algo
+2025-04-03 01:26:30,929 - INFO - Stopping workflow...
+2025-04-03 01:26:30,929 - INFO - Successfully stopped workflow
+2025-04-03 01:26:30,930 - INFO - Stopping mentor_processor...
+2025-04-03 01:26:30,930 - INFO - Successfully stopped mentor_processor
+2025-04-03 01:26:45,596 - INFO - Started api with PID 85265
+2025-04-03 01:26:45,597 - INFO - Started api service on port 5000
+2025-04-03 01:26:47,599 - INFO - Started algo with PID 85296
+2025-04-03 01:26:47,599 - INFO - Started algo service on port 5001
+2025-04-03 01:26:49,602 - INFO - Started workflow with PID 85303
+2025-04-03 01:26:49,603 - INFO - Started workflow service on port 5002
+2025-04-03 01:26:51,606 - INFO - Started mentor_processor with PID 85324
+2025-04-03 01:26:51,606 - INFO - Started mentor_processor service on port 5003
+2025-04-03 01:26:53,607 - INFO - 
+All services are running successfully!
+2025-04-03 01:26:53,608 - INFO - Service ports:
+2025-04-03 01:26:53,608 - INFO - - api: http://localhost:5000
+2025-04-03 01:26:53,608 - INFO - - algo: http://localhost:5001
+2025-04-03 01:26:53,609 - INFO - - workflow: http://localhost:5002
+2025-04-03 01:26:53,609 - INFO - - mentor_processor: http://localhost:5003
+2025-04-03 01:26:53,609 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-03 01:26:53,609 - INFO - Logs are being written to the 'logs' directory.
+2025-04-03 01:28:36,470 - INFO - Received shutdown signal
+2025-04-03 01:28:36,470 - INFO - Shutting down services...
+2025-04-03 01:28:36,471 - INFO - Stopping api...
+2025-04-03 01:28:36,471 - INFO - Successfully stopped api
+2025-04-03 01:28:36,471 - INFO - Stopping algo...
+2025-04-03 01:28:36,472 - INFO - Successfully stopped algo
+2025-04-03 01:28:36,472 - INFO - Stopping workflow...
+2025-04-03 01:28:36,472 - INFO - Successfully stopped workflow
+2025-04-03 01:28:36,472 - INFO - Stopping mentor_processor...
+2025-04-03 01:28:36,473 - INFO - Successfully stopped mentor_processor
+2025-04-03 01:29:17,101 - INFO - Started api with PID 86210
+2025-04-03 01:29:17,104 - INFO - Started api service on port 5000
+2025-04-03 01:29:19,128 - INFO - Started algo with PID 86232
+2025-04-03 01:29:19,129 - INFO - Started algo service on port 5001
+2025-04-03 01:29:21,131 - INFO - Started workflow with PID 86269
+2025-04-03 01:29:21,131 - INFO - Started workflow service on port 5002
+2025-04-03 01:29:23,139 - INFO - Started mentor_processor with PID 86294
+2025-04-03 01:29:23,139 - INFO - Started mentor_processor service on port 5003
+2025-04-03 01:29:25,140 - INFO - 
+All services are running successfully!
+2025-04-03 01:29:25,143 - INFO - Service ports:
+2025-04-03 01:29:25,144 - INFO - - api: http://localhost:5000
+2025-04-03 01:29:25,144 - INFO - - algo: http://localhost:5001
+2025-04-03 01:29:25,144 - INFO - - workflow: http://localhost:5002
+2025-04-03 01:29:25,144 - INFO - - mentor_processor: http://localhost:5003
+2025-04-03 01:29:25,144 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-03 01:29:25,145 - INFO - Logs are being written to the 'logs' directory.
+2025-04-03 01:29:49,482 - INFO - Received shutdown signal
+2025-04-03 01:29:49,507 - INFO - Shutting down services...
+2025-04-03 01:29:49,508 - INFO - Stopping api...
+2025-04-03 01:29:49,514 - INFO - Successfully stopped api
+2025-04-03 01:29:49,514 - INFO - Stopping algo...
+2025-04-03 01:29:49,515 - INFO - Successfully stopped algo
+2025-04-03 01:29:49,515 - INFO - Stopping workflow...
+2025-04-03 01:29:49,515 - INFO - Successfully stopped workflow
+2025-04-03 01:29:49,515 - INFO - Stopping mentor_processor...
+2025-04-03 01:29:49,516 - INFO - Successfully stopped mentor_processor
+2025-04-03 01:32:51,870 - INFO - Started api with PID 87148
+2025-04-03 01:32:51,870 - INFO - Started api service on port 5000
+2025-04-03 01:32:53,872 - INFO - Started algo with PID 87156
+2025-04-03 01:32:53,873 - INFO - Started algo service on port 5001
+2025-04-03 01:32:55,875 - INFO - Started workflow with PID 87186
+2025-04-03 01:32:55,875 - INFO - Started workflow service on port 5002
+2025-04-03 01:34:39,274 - INFO - Started api with PID 87481
+2025-04-03 01:34:39,274 - INFO - Started api service on port 5000
+2025-04-03 01:34:41,279 - INFO - Started algo with PID 87489
+2025-04-03 01:34:41,279 - INFO - Started algo service on port 5001
+2025-04-03 01:34:43,282 - INFO - Started workflow with PID 87510
+2025-04-03 01:34:43,282 - INFO - Started workflow service on port 5002
+2025-04-03 01:35:43,946 - INFO - Started api with PID 87930
+2025-04-03 01:35:43,946 - INFO - Started api service on port 5000
+2025-04-03 01:35:45,949 - INFO - Started algo with PID 87938
+2025-04-03 01:35:45,949 - INFO - Started algo service on port 5001
+2025-04-03 01:35:47,953 - INFO - Started workflow with PID 87981
+2025-04-03 01:35:47,953 - INFO - Started workflow service on port 5002
+2025-04-03 01:37:43,609 - INFO - Started api with PID 88266
+2025-04-03 01:37:43,610 - INFO - Started api service on port 5000
+2025-04-03 01:37:45,610 - INFO - Service api is running and responding on port 5000
+2025-04-03 01:37:45,613 - INFO - Started algo with PID 88276
+2025-04-03 01:37:45,614 - INFO - Started algo service on port 5001
+2025-04-03 01:37:47,615 - INFO - Service algo is running and responding on port 5001
+2025-04-03 01:37:47,618 - INFO - Started workflow with PID 88298
+2025-04-03 01:37:47,618 - INFO - Started workflow service on port 5002
+2025-04-03 01:39:21,081 - INFO - Started api with PID 88665
+2025-04-03 01:39:21,081 - INFO - Started api service on port 5000
+2025-04-03 01:39:23,082 - INFO - Service api is listening on port 5000
+2025-04-03 01:39:23,082 - INFO - Service api is running and responding on port 5000
+2025-04-03 01:39:23,089 - INFO - Started algo with PID 88675
+2025-04-03 01:39:23,090 - INFO - Started algo service on port 5001
+2025-04-03 01:39:25,114 - INFO - Service algo is listening on port 5001
+2025-04-03 01:39:25,115 - INFO - Service algo is running and responding on port 5001
+2025-04-03 01:39:25,120 - INFO - Started workflow with PID 88698
+2025-04-03 01:39:25,120 - INFO - Started workflow service on port 5002
+2025-04-03 01:40:05,432 - INFO - Started api with PID 88886
+2025-04-03 01:40:05,433 - INFO - Started api service on port 5000
+2025-04-03 01:40:07,434 - INFO - Service api is listening on port 5000
+2025-04-03 01:40:07,434 - INFO - Service api is running and responding on port 5000
+2025-04-03 01:40:07,436 - INFO - Started algo with PID 88900
+2025-04-03 01:40:07,437 - INFO - Started algo service on port 5001
+2025-04-03 01:40:09,440 - INFO - Service algo is listening on port 5001
+2025-04-03 01:40:09,440 - INFO - Service algo is running and responding on port 5001
+2025-04-03 01:40:09,448 - INFO - Started workflow with PID 88915
+2025-04-03 01:40:09,449 - INFO - Started workflow service on port 5002
+2025-04-03 01:41:18,565 - INFO - Started api with PID 89431
+2025-04-03 01:41:18,566 - INFO - Started api service on port 5000
+2025-04-03 01:41:20,567 - INFO - Service api is listening on port 5000
+2025-04-03 01:41:20,568 - INFO - Service api is running and responding on port 5000
+2025-04-03 01:41:20,571 - INFO - Started algo with PID 89439
+2025-04-03 01:41:20,574 - INFO - Started algo service on port 5001
+2025-04-03 01:41:22,575 - INFO - Service algo is listening on port 5001
+2025-04-03 01:41:22,576 - INFO - Service algo is running and responding on port 5001
+2025-04-03 01:41:22,578 - INFO - Started workflow with PID 89480
+2025-04-03 01:41:22,578 - INFO - Started workflow service on port 5002
+2025-04-03 01:42:45,624 - INFO - Started api with PID 89694
+2025-04-03 01:42:45,624 - INFO - Started api service on port 5000
+2025-04-03 01:42:47,625 - INFO - Service api is listening on port 5000
+2025-04-03 01:42:47,626 - INFO - Service api is running and responding on port 5000
+2025-04-03 01:42:47,630 - INFO - Started algo with PID 89704
+2025-04-03 01:42:47,630 - INFO - Started algo service on port 5001
+2025-04-03 01:42:49,631 - INFO - Service algo is listening on port 5001
+2025-04-03 01:42:49,631 - INFO - Service algo is running and responding on port 5001
+2025-04-03 01:42:49,634 - INFO - Started workflow with PID 89726
+2025-04-03 01:42:49,635 - INFO - Started workflow service on port 5002
+2025-04-03 01:44:07,731 - INFO - Started api with PID 89946
+2025-04-03 01:44:07,732 - INFO - Started api service on port 5000
+2025-04-03 01:44:09,734 - WARNING - Service api is not listening on port 5000
+2025-04-03 01:44:09,734 - WARNING - Service api not responding, retrying in 2 seconds...
+2025-04-03 01:44:11,735 - INFO - Service api is listening on port 5000
+2025-04-03 01:44:11,736 - INFO - Service api is running and responding on port 5000
+2025-04-03 01:44:11,742 - INFO - Started algo with PID 89990
+2025-04-03 01:44:11,743 - INFO - Started algo service on port 5001
+2025-04-03 01:44:13,743 - INFO - Service algo is listening on port 5001
+2025-04-03 01:44:13,744 - INFO - Service algo is running and responding on port 5001
+2025-04-03 01:44:13,746 - INFO - Started workflow with PID 90017
+2025-04-03 01:44:13,746 - INFO - Started workflow service on port 5002
+2025-04-03 01:44:15,747 - INFO - Service workflow is listening on port 5002
+2025-04-03 01:44:15,747 - INFO - Service workflow is running and responding on port 5002
+2025-04-03 01:44:15,749 - ERROR - Port 5003 is already in use. Please free up the port and try again.
+2025-04-03 01:44:15,749 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-03 01:58:53,095 - ERROR - Port 5000 is already in use. Please free up the port and try again.
+2025-04-03 01:58:53,096 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-03 02:26:24,620 - ERROR - Port 5000 is already in use. Please free up the port and try again.
+2025-04-03 02:26:24,622 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-03 14:39:25,326 - INFO - Started api with PID 8697
+2025-04-03 14:39:25,327 - INFO - Started api service on port 5000
+2025-04-03 14:39:27,328 - INFO - Service api is listening on port 5000
+2025-04-03 14:39:27,328 - INFO - Service api is running and responding on port 5000
+2025-04-03 14:39:27,330 - INFO - Started algo with PID 8712
+2025-04-03 14:39:27,331 - INFO - Started algo service on port 5001
+2025-04-03 14:39:29,332 - INFO - Service algo is listening on port 5001
+2025-04-03 14:39:29,332 - INFO - Service algo is running and responding on port 5001
+2025-04-03 14:39:29,336 - INFO - Started workflow with PID 8750
+2025-04-03 14:39:29,337 - INFO - Started workflow service on port 5002
+2025-04-03 14:39:31,337 - INFO - Service workflow is listening on port 5002
+2025-04-03 14:39:31,338 - INFO - Service workflow is running and responding on port 5002
+2025-04-03 14:39:31,340 - INFO - Started mentor_processor with PID 8766
+2025-04-03 14:39:31,342 - INFO - Started mentor_processor service on port 5003
+2025-04-03 14:39:33,343 - INFO - Service mentor_processor is listening on port 5003
+2025-04-03 14:39:33,343 - INFO - Service mentor_processor is running and responding on port 5003
+2025-04-03 14:39:33,343 - INFO - 
+All services are running successfully!
+2025-04-03 14:39:33,344 - INFO - Service ports:
+2025-04-03 14:39:33,344 - INFO - - api: http://localhost:5000
+2025-04-03 14:39:33,344 - INFO - - algo: http://localhost:5001
+2025-04-03 14:39:33,344 - INFO - - workflow: http://localhost:5002
+2025-04-03 14:39:33,344 - INFO - - mentor_processor: http://localhost:5003
+2025-04-03 14:39:33,344 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-03 14:39:33,344 - INFO - Logs are being written to the 'logs' directory.
+2025-04-03 19:24:30,644 - INFO - Started api with PID 29895
+2025-04-03 19:24:30,645 - INFO - Started api service on port 5000
+2025-04-03 19:24:32,645 - INFO - Service api is listening on port 5000
+2025-04-03 19:24:32,646 - INFO - Service api is running and responding on port 5000
+2025-04-03 19:24:32,647 - INFO - Started algo with PID 29903
+2025-04-03 19:24:32,647 - INFO - Started algo service on port 5001
+2025-04-03 19:24:34,648 - INFO - Service algo is listening on port 5001
+2025-04-03 19:24:34,649 - INFO - Service algo is running and responding on port 5001
+2025-04-03 19:24:34,650 - INFO - Started workflow with PID 29951
+2025-04-03 19:24:34,651 - INFO - Started workflow service on port 5002
+2025-04-03 19:24:36,652 - INFO - Service workflow is listening on port 5002
+2025-04-03 19:24:36,653 - INFO - Service workflow is running and responding on port 5002
+2025-04-03 19:24:36,655 - INFO - Started mentor_processor with PID 29958
+2025-04-03 19:24:36,656 - INFO - Started mentor_processor service on port 5003
+2025-04-03 19:24:38,656 - INFO - Service mentor_processor is listening on port 5003
+2025-04-03 19:24:38,657 - INFO - Service mentor_processor is running and responding on port 5003
+2025-04-03 19:24:38,657 - INFO - 
+All services are running successfully!
+2025-04-03 19:24:38,657 - INFO - Service ports:
+2025-04-03 19:24:38,657 - INFO - - api: http://localhost:5000
+2025-04-03 19:24:38,657 - INFO - - algo: http://localhost:5001
+2025-04-03 19:24:38,657 - INFO - - workflow: http://localhost:5002
+2025-04-03 19:24:38,657 - INFO - - mentor_processor: http://localhost:5003
+2025-04-03 19:24:38,657 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-03 19:24:38,657 - INFO - Logs are being written to the 'logs' directory.
+2025-04-04 00:17:42,245 - ERROR - Port 5000 is already in use. Please free up the port and try again.
+2025-04-04 00:17:42,245 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-04 00:18:03,512 - INFO - Started api with PID 17138
+2025-04-04 00:18:03,513 - INFO - Started api service on port 5000
+2025-04-04 00:18:05,514 - INFO - Service api is listening on port 5000
+2025-04-04 00:18:05,514 - INFO - Service api is running and responding on port 5000
+2025-04-04 00:18:05,516 - INFO - Started algo with PID 17154
+2025-04-04 00:18:05,516 - INFO - Started algo service on port 5001
+2025-04-04 00:18:07,517 - INFO - Service algo is listening on port 5001
+2025-04-04 00:18:07,517 - INFO - Service algo is running and responding on port 5001
+2025-04-04 00:18:07,519 - INFO - Started workflow with PID 17162
+2025-04-04 00:18:07,520 - INFO - Started workflow service on port 5002
+2025-04-04 00:18:09,521 - INFO - Service workflow is listening on port 5002
+2025-04-04 00:18:09,522 - INFO - Service workflow is running and responding on port 5002
+2025-04-04 00:18:09,527 - INFO - Started mentor_processor with PID 17170
+2025-04-04 00:18:09,529 - INFO - Started mentor_processor service on port 5003
+2025-04-04 00:18:11,530 - INFO - Service mentor_processor is listening on port 5003
+2025-04-04 00:18:11,531 - INFO - Service mentor_processor is running and responding on port 5003
+2025-04-04 00:18:11,531 - INFO - 
+All services are running successfully!
+2025-04-04 00:18:11,531 - INFO - Service ports:
+2025-04-04 00:18:11,531 - INFO - - api: http://localhost:5000
+2025-04-04 00:18:11,531 - INFO - - algo: http://localhost:5001
+2025-04-04 00:18:11,532 - INFO - - workflow: http://localhost:5002
+2025-04-04 00:18:11,532 - INFO - - mentor_processor: http://localhost:5003
+2025-04-04 00:18:11,532 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-04 00:18:11,532 - INFO - Logs are being written to the 'logs' directory.
+2025-04-04 01:34:24,696 - INFO - Received shutdown signal
+2025-04-04 01:34:24,721 - INFO - Shutting down services...
+2025-04-04 01:34:24,723 - INFO - Stopping api...
+2025-04-04 01:34:24,751 - INFO - Successfully stopped api
+2025-04-04 01:34:24,752 - INFO - Stopping algo...
+2025-04-04 01:34:24,786 - INFO - Successfully stopped algo
+2025-04-04 01:34:24,786 - INFO - Stopping workflow...
+2025-04-04 01:34:24,803 - INFO - Successfully stopped workflow
+2025-04-04 01:34:24,803 - INFO - Stopping mentor_processor...
+2025-04-04 01:34:24,836 - INFO - Successfully stopped mentor_processor
+2025-04-04 01:34:31,571 - INFO - Started api with PID 27849
+2025-04-04 01:34:31,574 - INFO - Started api service on port 5000
+2025-04-04 01:34:33,575 - INFO - Service api is listening on port 5000
+2025-04-04 01:34:33,575 - INFO - Service api is running and responding on port 5000
+2025-04-04 01:34:33,577 - INFO - Started algo with PID 27857
+2025-04-04 01:34:33,577 - INFO - Started algo service on port 5001
+2025-04-04 01:34:35,578 - INFO - Service algo is listening on port 5001
+2025-04-04 01:34:35,578 - INFO - Service algo is running and responding on port 5001
+2025-04-04 01:34:35,580 - INFO - Started workflow with PID 27865
+2025-04-04 01:34:35,580 - INFO - Started workflow service on port 5002
+2025-04-04 01:34:37,581 - INFO - Service workflow is listening on port 5002
+2025-04-04 01:34:37,581 - INFO - Service workflow is running and responding on port 5002
+2025-04-04 01:34:37,584 - INFO - Started mentor_processor with PID 27872
+2025-04-04 01:34:37,585 - INFO - Started mentor_processor service on port 5003
+2025-04-04 01:34:39,585 - INFO - Service mentor_processor is listening on port 5003
+2025-04-04 01:34:39,586 - INFO - Service mentor_processor is running and responding on port 5003
+2025-04-04 01:34:39,587 - INFO - 
+All services are running successfully!
+2025-04-04 01:34:39,587 - INFO - Service ports:
+2025-04-04 01:34:39,587 - INFO - - api: http://localhost:5000
+2025-04-04 01:34:39,588 - INFO - - algo: http://localhost:5001
+2025-04-04 01:34:39,588 - INFO - - workflow: http://localhost:5002
+2025-04-04 01:34:39,588 - INFO - - mentor_processor: http://localhost:5003
+2025-04-04 01:34:39,588 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-04 01:34:39,589 - INFO - Logs are being written to the 'logs' directory.
+2025-04-04 14:38:01,010 - INFO - Started api with PID 20344
+2025-04-04 14:38:01,010 - INFO - Started api service on port 5000
+2025-04-04 14:38:03,018 - INFO - Service api is listening on port 5000
+2025-04-04 14:38:03,031 - INFO - Service api is running and responding on port 5000
+2025-04-04 14:38:03,113 - INFO - Started algo with PID 20359
+2025-04-04 14:38:03,122 - INFO - Started algo service on port 5001
+2025-04-04 14:38:05,123 - INFO - Service algo is listening on port 5001
+2025-04-04 14:38:05,126 - INFO - Service algo is running and responding on port 5001
+2025-04-04 14:38:05,133 - INFO - Started workflow with PID 20367
+2025-04-04 14:38:05,134 - INFO - Started workflow service on port 5002
+2025-04-04 14:38:07,135 - INFO - Service workflow is listening on port 5002
+2025-04-04 14:38:07,135 - INFO - Service workflow is running and responding on port 5002
+2025-04-04 14:38:07,138 - INFO - Started mentor_processor with PID 20374
+2025-04-04 14:38:07,139 - INFO - Started mentor_processor service on port 5003
+2025-04-04 14:38:09,139 - INFO - Service mentor_processor is listening on port 5003
+2025-04-04 14:38:09,140 - INFO - Service mentor_processor is running and responding on port 5003
+2025-04-04 14:38:09,140 - INFO - 
+All services are running successfully!
+2025-04-04 14:38:09,140 - INFO - Service ports:
+2025-04-04 14:38:09,140 - INFO - - api: http://localhost:5000
+2025-04-04 14:38:09,141 - INFO - - algo: http://localhost:5001
+2025-04-04 14:38:09,141 - INFO - - workflow: http://localhost:5002
+2025-04-04 14:38:09,141 - INFO - - mentor_processor: http://localhost:5003
+2025-04-04 14:38:09,141 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-04 14:38:09,141 - INFO - Logs are being written to the 'logs' directory.
+2025-04-04 17:26:03,142 - INFO - Received shutdown signal
+2025-04-04 17:26:03,164 - INFO - Shutting down services...
+2025-04-04 17:26:03,165 - INFO - Stopping api...
+2025-04-04 17:26:03,209 - INFO - Successfully stopped api
+2025-04-04 17:26:03,211 - INFO - Stopping algo...
+2025-04-04 17:26:03,245 - INFO - Successfully stopped algo
+2025-04-04 17:26:03,246 - INFO - Stopping workflow...
+2025-04-04 17:26:03,282 - INFO - Successfully stopped workflow
+2025-04-04 17:26:03,283 - INFO - Stopping mentor_processor...
+2025-04-04 17:26:03,352 - INFO - Successfully stopped mentor_processor
+2025-04-04 17:26:06,106 - INFO - Started api with PID 66196
+2025-04-04 17:26:06,106 - INFO - Started api service on port 5000
+2025-04-04 17:26:08,114 - WARNING - Service api is not listening on port 5000
+2025-04-04 17:26:08,114 - WARNING - Service api not responding, retrying in 2 seconds...
+2025-04-04 17:26:10,115 - INFO - Service api is listening on port 5000
+2025-04-04 17:26:10,115 - INFO - Service api is running and responding on port 5000
+2025-04-04 17:26:10,120 - INFO - Started algo with PID 66244
+2025-04-04 17:26:10,120 - INFO - Started algo service on port 5001
+2025-04-04 17:26:12,121 - INFO - Service algo is listening on port 5001
+2025-04-04 17:26:12,122 - INFO - Service algo is running and responding on port 5001
+2025-04-04 17:26:12,124 - INFO - Started workflow with PID 66253
+2025-04-04 17:26:12,125 - INFO - Started workflow service on port 5002
+2025-04-04 17:26:14,126 - INFO - Service workflow is listening on port 5002
+2025-04-04 17:26:14,126 - INFO - Service workflow is running and responding on port 5002
+2025-04-04 17:26:14,131 - INFO - Started mentor_processor with PID 66263
+2025-04-04 17:26:14,135 - INFO - Started mentor_processor service on port 5003
+2025-04-04 17:26:16,135 - INFO - Service mentor_processor is listening on port 5003
+2025-04-04 17:26:16,136 - INFO - Service mentor_processor is running and responding on port 5003
+2025-04-04 17:26:16,136 - INFO - 
+All services are running successfully!
+2025-04-04 17:26:16,136 - INFO - Service ports:
+2025-04-04 17:26:16,136 - INFO - - api: http://localhost:5000
+2025-04-04 17:26:16,136 - INFO - - algo: http://localhost:5001
+2025-04-04 17:26:16,137 - INFO - - workflow: http://localhost:5002
+2025-04-04 17:26:16,137 - INFO - - mentor_processor: http://localhost:5003
+2025-04-04 17:26:16,137 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-04 17:26:16,137 - INFO - Logs are being written to the 'logs' directory.
+2025-04-04 17:34:19,204 - INFO - Received shutdown signal
+2025-04-04 17:34:19,205 - INFO - Shutting down services...
+2025-04-04 17:34:19,206 - INFO - Stopping api...
+2025-04-04 17:34:19,207 - INFO - Successfully stopped api
+2025-04-04 17:34:19,207 - INFO - Stopping algo...
+2025-04-04 17:34:19,207 - INFO - Successfully stopped algo
+2025-04-04 17:34:19,207 - INFO - Stopping workflow...
+2025-04-04 17:34:19,240 - INFO - Successfully stopped workflow
+2025-04-04 17:34:19,240 - INFO - Stopping mentor_processor...
+2025-04-04 17:34:19,240 - INFO - Successfully stopped mentor_processor
+2025-04-04 17:36:32,523 - ERROR - Port 5000 is already in use. Please free up the port and try again.
+2025-04-04 17:36:32,523 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-04 21:28:24,729 - INFO - Started api with PID 11097
+2025-04-04 21:28:24,729 - INFO - Started api service on port 5000
+2025-04-04 21:28:26,730 - INFO - Service api is listening on port 5000
+2025-04-04 21:28:26,731 - INFO - Service api is running and responding on port 5000
+2025-04-04 21:28:26,733 - INFO - Started algo with PID 11135
+2025-04-04 21:28:26,733 - INFO - Started algo service on port 5001
+2025-04-04 21:28:28,734 - INFO - Service algo is listening on port 5001
+2025-04-04 21:28:28,734 - INFO - Service algo is running and responding on port 5001
+2025-04-04 21:28:28,737 - INFO - Started workflow with PID 11149
+2025-04-04 21:28:28,738 - INFO - Started workflow service on port 5002
+2025-04-04 21:28:30,738 - INFO - Service workflow is listening on port 5002
+2025-04-04 21:28:30,739 - INFO - Service workflow is running and responding on port 5002
+2025-04-04 21:28:30,741 - INFO - Started mentor_processor with PID 11178
+2025-04-04 21:28:30,741 - INFO - Started mentor_processor service on port 5003
+2025-04-04 21:28:32,742 - INFO - Service mentor_processor is listening on port 5003
+2025-04-04 21:28:32,743 - INFO - Service mentor_processor is running and responding on port 5003
+2025-04-04 21:28:32,743 - INFO - 
+All services are running successfully!
+2025-04-04 21:28:32,743 - INFO - Service ports:
+2025-04-04 21:28:32,743 - INFO - - api: http://localhost:5000
+2025-04-04 21:28:32,743 - INFO - - algo: http://localhost:5001
+2025-04-04 21:28:32,743 - INFO - - workflow: http://localhost:5002
+2025-04-04 21:28:32,743 - INFO - - mentor_processor: http://localhost:5003
+2025-04-04 21:28:32,744 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-04 21:28:32,744 - INFO - Logs are being written to the 'logs' directory.
+2025-04-04 22:23:08,747 - INFO - Received shutdown signal
+2025-04-04 22:23:08,748 - INFO - Shutting down services...
+2025-04-04 22:23:08,748 - INFO - Stopping api...
+2025-04-04 22:23:08,782 - INFO - Successfully stopped api
+2025-04-04 22:23:08,784 - INFO - Stopping algo...
+2025-04-04 22:23:08,820 - INFO - Successfully stopped algo
+2025-04-04 22:23:08,820 - INFO - Stopping workflow...
+2025-04-04 22:23:08,837 - INFO - Successfully stopped workflow
+2025-04-04 22:23:08,837 - INFO - Stopping mentor_processor...
+2025-04-04 22:23:08,869 - INFO - Successfully stopped mentor_processor
+2025-04-04 22:23:15,081 - INFO - Started api with PID 21158
+2025-04-04 22:23:15,081 - INFO - Started api service on port 5000
+2025-04-04 22:23:17,089 - INFO - Service api is listening on port 5000
+2025-04-04 22:23:17,102 - INFO - Service api is running and responding on port 5000
+2025-04-04 22:23:17,126 - INFO - Started algo with PID 21190
+2025-04-04 22:23:17,126 - INFO - Started algo service on port 5001
+2025-04-04 22:23:19,127 - INFO - Service algo is listening on port 5001
+2025-04-04 22:23:19,127 - INFO - Service algo is running and responding on port 5001
+2025-04-04 22:23:19,129 - INFO - Started workflow with PID 21202
+2025-04-04 22:23:19,130 - INFO - Started workflow service on port 5002
+2025-04-04 22:23:21,130 - INFO - Service workflow is listening on port 5002
+2025-04-04 22:23:21,130 - INFO - Service workflow is running and responding on port 5002
+2025-04-04 22:23:21,132 - INFO - Started mentor_processor with PID 21234
+2025-04-04 22:23:21,132 - INFO - Started mentor_processor service on port 5003
+2025-04-04 22:23:23,134 - INFO - Service mentor_processor is listening on port 5003
+2025-04-04 22:23:23,135 - INFO - Service mentor_processor is running and responding on port 5003
+2025-04-04 22:23:23,135 - INFO - 
+All services are running successfully!
+2025-04-04 22:23:23,135 - INFO - Service ports:
+2025-04-04 22:23:23,135 - INFO - - api: http://localhost:5000
+2025-04-04 22:23:23,135 - INFO - - algo: http://localhost:5001
+2025-04-04 22:23:23,135 - INFO - - workflow: http://localhost:5002
+2025-04-04 22:23:23,135 - INFO - - mentor_processor: http://localhost:5003
+2025-04-04 22:23:23,135 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-04 22:23:23,135 - INFO - Logs are being written to the 'logs' directory.
+2025-04-04 22:48:57,389 - INFO - Received shutdown signal
+2025-04-04 22:48:57,390 - INFO - Shutting down services...
+2025-04-04 22:48:57,390 - INFO - Stopping api...
+2025-04-04 22:48:57,422 - INFO - Successfully stopped api
+2025-04-04 22:48:57,423 - INFO - Stopping algo...
+2025-04-04 22:48:57,455 - INFO - Successfully stopped algo
+2025-04-04 22:48:57,456 - INFO - Stopping workflow...
+2025-04-04 22:48:57,471 - INFO - Successfully stopped workflow
+2025-04-04 22:48:57,472 - INFO - Stopping mentor_processor...
+2025-04-04 22:48:57,504 - INFO - Successfully stopped mentor_processor
+2025-04-04 22:49:00,637 - INFO - Started mentor_processor with PID 25500
+2025-04-04 22:49:02,780 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-04 22:49:02,783 - INFO - Started api with PID 25532
+2025-04-04 22:49:04,799 - WARNING - Service api not healthy, retrying in 2 seconds...
+2025-04-04 22:49:06,803 - WARNING - Service api not healthy, retrying in 2 seconds...
+2025-04-04 22:49:08,806 - ERROR - Service api is running but not healthy on port 5001
+2025-04-04 22:49:08,806 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-04 22:54:04,209 - INFO - Started mentor_processor with PID 27095
+2025-04-04 22:54:07,367 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-04 22:54:07,368 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-04 22:54:07,370 - INFO - Started api with PID 27118
+2025-04-04 22:54:10,375 - WARNING - Health check failed for api on attempt 1: HTTPConnectionPool(host='localhost', port=5001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7671608ccaa0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-04 22:54:10,375 - INFO - Waiting 2 seconds before next retry...
+2025-04-04 22:54:12,379 - WARNING - Health check failed for api on attempt 2: HTTPConnectionPool(host='localhost', port=5001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x76715fab85c0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-04 22:54:12,380 - INFO - Waiting 2 seconds before next retry...
+2025-04-04 22:54:14,388 - WARNING - Health check failed for api on attempt 3: HTTPConnectionPool(host='localhost', port=5001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x76715fab8ce0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-04 22:54:14,388 - INFO - Waiting 2 seconds before next retry...
+2025-04-04 22:54:16,390 - WARNING - Health check failed for api on attempt 4: HTTPConnectionPool(host='localhost', port=5001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x76715fab9400>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-04 22:54:16,391 - INFO - Waiting 2 seconds before next retry...
+2025-04-04 22:54:18,393 - WARNING - Health check failed for api on attempt 5: HTTPConnectionPool(host='localhost', port=5001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x76715fab9b80>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-04 22:54:18,394 - ERROR - Service api failed health check on port 5001
+2025-04-04 22:54:18,394 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-04 22:54:52,500 - INFO - Started mentor_processor with PID 27456
+2025-04-04 22:54:55,711 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-04 22:54:55,712 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-04 22:54:55,715 - INFO - Started api with PID 27468
+2025-04-04 22:54:58,723 - WARNING - Health check failed for api on attempt 1: HTTPConnectionPool(host='localhost', port=5001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x761f20bd0cb0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-04 22:54:58,723 - INFO - Waiting 2 seconds before next retry...
+2025-04-04 22:55:00,725 - WARNING - Health check failed for api on attempt 2: HTTPConnectionPool(host='localhost', port=5001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x761f1fdc0710>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-04 22:55:00,726 - INFO - Waiting 2 seconds before next retry...
+2025-04-04 22:55:02,728 - WARNING - Health check failed for api on attempt 3: HTTPConnectionPool(host='localhost', port=5001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x761f1fdc0e30>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-04 22:55:02,728 - INFO - Waiting 2 seconds before next retry...
+2025-04-04 22:55:04,731 - WARNING - Health check failed for api on attempt 4: HTTPConnectionPool(host='localhost', port=5001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x761f1fdc1550>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-04 22:55:04,731 - INFO - Waiting 2 seconds before next retry...
+2025-04-04 22:55:06,735 - WARNING - Health check failed for api on attempt 5: HTTPConnectionPool(host='localhost', port=5001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x761f1fdc1cd0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-04 22:55:06,736 - ERROR - Service api failed health check on port 5001
+2025-04-04 22:55:06,736 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-04 22:56:23,787 - INFO - Started mentor_processor with PID 27709
+2025-04-04 22:56:26,987 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-04 22:56:26,988 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-04 22:56:26,991 - INFO - Started api with PID 27722
+2025-04-04 22:56:30,012 - INFO - Service api health check passed on attempt 1
+2025-04-04 22:56:30,013 - INFO - Service api is healthy on port 5001
+2025-04-04 22:56:30,016 - INFO - Started workflow with PID 27751
+2025-04-04 22:56:33,033 - INFO - Service workflow health check passed on attempt 1
+2025-04-04 22:56:33,035 - INFO - Service workflow is healthy on port 5002
+2025-04-04 22:56:33,047 - INFO - Started algo with PID 27777
+2025-04-04 22:56:36,055 - WARNING - Health check failed for algo on attempt 1: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x76d19f524380>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-04 22:56:36,056 - INFO - Waiting 2 seconds before next retry...
+2025-04-04 22:56:38,129 - WARNING - Health check failed for algo on attempt 2: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x76d19f524a10>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-04 22:56:38,129 - INFO - Waiting 2 seconds before next retry...
+2025-04-04 22:56:40,131 - WARNING - Health check failed for algo on attempt 3: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x76d19f525130>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-04 22:56:40,132 - INFO - Waiting 2 seconds before next retry...
+2025-04-04 22:56:42,134 - WARNING - Health check failed for algo on attempt 4: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x76d19f5258e0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-04 22:56:42,135 - INFO - Waiting 2 seconds before next retry...
+2025-04-04 22:56:44,138 - WARNING - Health check failed for algo on attempt 5: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x76d19f526150>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-04 22:56:44,139 - ERROR - Service algo process exited with code 1
+2025-04-04 22:56:44,140 - ERROR - Service algo log content:
+algo.py is running...
+ * Serving Flask app 'algo'
+ * Debug mode: off
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+
+2025-04-04 22:56:44,140 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-04 22:57:39,575 - INFO - Started mentor_processor with PID 28294
+2025-04-04 22:57:42,720 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-04 22:57:42,721 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-04 22:57:42,723 - INFO - Started api with PID 28317
+2025-04-04 22:57:45,735 - INFO - Service api health check passed on attempt 1
+2025-04-04 22:57:45,736 - INFO - Service api is healthy on port 5001
+2025-04-04 22:57:45,738 - INFO - Started workflow with PID 28334
+2025-04-04 22:57:48,749 - INFO - Service workflow health check passed on attempt 1
+2025-04-04 22:57:48,750 - INFO - Service workflow is healthy on port 5002
+2025-04-04 22:57:48,752 - INFO - Started algo with PID 28371
+2025-04-04 22:57:51,765 - INFO - Service algo health check passed on attempt 1
+2025-04-04 22:57:51,766 - INFO - Service algo is healthy on port 5000
+2025-04-04 22:57:51,766 - INFO - 
+All services are running successfully!
+2025-04-04 22:57:51,766 - INFO - Service ports:
+2025-04-04 22:57:51,766 - INFO - - mentor_processor: http://localhost:5003
+2025-04-04 22:57:51,766 - INFO - - api: http://localhost:5001
+2025-04-04 22:57:51,766 - INFO - - workflow: http://localhost:5002
+2025-04-04 22:57:51,766 - INFO - - algo: http://localhost:5000
+2025-04-04 22:57:51,766 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-04 22:57:51,767 - INFO - Logs are being written to the 'logs' directory.
+2025-04-04 23:01:07,833 - INFO - Started mentor_processor with PID 29631
+2025-04-04 23:01:11,087 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-04 23:01:11,088 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-04 23:01:11,090 - INFO - Started api with PID 29657
+2025-04-04 23:01:14,158 - INFO - Service api health check passed on attempt 1
+2025-04-04 23:01:14,160 - INFO - Service api is healthy on port 5001
+2025-04-04 23:01:14,166 - INFO - Started workflow with PID 29688
+2025-04-04 23:01:17,181 - INFO - Service workflow health check passed on attempt 1
+2025-04-04 23:01:17,182 - INFO - Service workflow is healthy on port 5002
+2025-04-04 23:01:17,184 - INFO - Started algo with PID 29740
+2025-04-04 23:01:20,227 - INFO - Service algo health check passed on attempt 1
+2025-04-04 23:01:20,227 - INFO - Service algo is healthy on port 5000
+2025-04-04 23:01:20,227 - INFO - 
+All services are running successfully!
+2025-04-04 23:01:20,228 - INFO - Service ports:
+2025-04-04 23:01:20,228 - INFO - - mentor_processor: http://localhost:5003
+2025-04-04 23:01:20,228 - INFO - - api: http://localhost:5001
+2025-04-04 23:01:20,228 - INFO - - workflow: http://localhost:5002
+2025-04-04 23:01:20,228 - INFO - - algo: http://localhost:5000
+2025-04-04 23:01:20,228 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-04 23:01:20,228 - INFO - Logs are being written to the 'logs' directory.
+2025-04-04 23:04:40,907 - INFO - Started mentor_processor with PID 32959
+2025-04-04 23:04:44,092 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-04 23:04:44,093 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-04 23:04:44,095 - INFO - Started api with PID 32989
+2025-04-04 23:04:47,112 - INFO - Service api health check passed on attempt 1
+2025-04-04 23:04:47,113 - INFO - Service api is healthy on port 5001
+2025-04-04 23:04:47,118 - INFO - Started workflow with PID 32997
+2025-04-04 23:04:50,139 - INFO - Service workflow health check passed on attempt 1
+2025-04-04 23:04:50,142 - INFO - Service workflow is healthy on port 5002
+2025-04-04 23:04:50,145 - INFO - Started algo with PID 33034
+2025-04-04 23:04:53,160 - INFO - Service algo health check passed on attempt 1
+2025-04-04 23:04:53,164 - INFO - Service algo is healthy on port 5000
+2025-04-04 23:04:53,165 - INFO - 
+All services are running successfully!
+2025-04-04 23:04:53,165 - INFO - Service ports:
+2025-04-04 23:04:53,165 - INFO - - mentor_processor: http://localhost:5003
+2025-04-04 23:04:53,165 - INFO - - api: http://localhost:5001
+2025-04-04 23:04:53,166 - INFO - - workflow: http://localhost:5002
+2025-04-04 23:04:53,166 - INFO - - algo: http://localhost:5000
+2025-04-04 23:04:53,166 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-04 23:04:53,166 - INFO - Logs are being written to the 'logs' directory.
