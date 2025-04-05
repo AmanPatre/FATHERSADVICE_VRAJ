@@ -16,20 +16,17 @@
     <!-- Navbar -->
     <header>
         <div class="navbar">
-            <!-- Logo on the left side -->
             <div class="logo-container">
-                <a href="/mentor_dashboard">
-                    <img src="/images/logo only.png" alt="Father's Advice Logo" class="logo">
+                <a href="/matching_interface">
+                    <img src="/images/logo only.png" alt="Logo" class="logo">
                 </a>
-                    </div>
-            <!-- Navigation links on the right side -->
+            </div>
             <div class="nav-links">
+                <a href="/matching_interface" class="nav-link">Matching</a>
                 <a href="/mentor_dashboard" class="nav-link">Dashboard</a>
-                <a href="/mentor_profile" class="nav-link">Profile</a>
-                <a href="/mentor_profile/change-password" class="nav-link">Change Password</a>
-                <a href="/logout" class="nav-link">Logout</a>
-                </div>
-                            </div>
+            </div>
+        </div>
+    
     </header>
 
     <div class="container">
@@ -39,50 +36,146 @@
             </div>
         <% } %>
 
-        <div class="matching-section">
-            <h2>Matched Mentees</h2>
-            
-            <% if (matchedMentees && matchedMentees.length > 0) { %>
-                <div class="mentees-grid">
-                    <% matchedMentees.forEach(mentee => { %>
-                        <div class="card mb-4">
-                                <div class="card-body">
-                                <h5 class="card-title"><%= mentee.name %></h5>
-                                <p class="text-muted"><%= mentee.email %></p>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <p><strong>Field of Interest:</strong> <%= mentee.fieldOfInterest %></p>
-                                        <p><strong>Education:</strong> <%= mentee.education %></p>
+        <% if (isMentor) { %>
+            <!-- Mentor View - Only Matched Section -->
+            <div class="matched-section">
+                <h2>Matched Mentees</h2>
+                <% if (matchedMentees && matchedMentees.length > 0) { %>
+                    <div class="mentee-cards">
+                        <% matchedMentees.forEach(mentee => { %>
+                            <div class="mentee-card">
+                                <div class="mentee-header">
+                                    <h3><%= mentee.name %></h3>
+                                    <span class="compatibility-score">
+                                        <%= mentee.compatibility_score %>% Match
+                                    </span>
+                                </div>
+                                <div class="mentee-details">
+                                    <p><strong>Email:</strong> <%= mentee.email %></p>
+                                    <p><strong>Education:</strong> <%= mentee.education %></p>
+                                    <div class="skills-section">
+                                        <strong>Skills:</strong>
+                                        <% if (mentee.skills && mentee.skills.length > 0) { %>
+                                            <div class="skill-badges">
+                                                <% mentee.skills.forEach(skill => { %>
+                                                    <span class="skill-badge"><%= skill %></span>
+                                                <% }); %>
+                                            </div>
+                                        <% } else { %>
+                                            <p>No skills listed</p>
+                                        <% } %>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="bio-section">
+                                        <strong>Bio:</strong>
+                                        <p><%= mentee.brief_bio %></p>
+                                    </div>
+                                </div>
+                                <div class="action-buttons">
+                                    <button class="btn btn-primary" onclick="startSession('<%= mentee._id %>')">
+                                        Start Session
+                                    </button>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                <% } else { %>
+                    <div class="no-matches">
+                        <p>No matched mentees found at the moment. Please check back later.</p>
+                    </div>
+                <% } %>
+            </div>
+        <% } else { %>
+            <!-- Mentee View -->
+            <div class="matching-section">
+                <h2>Your Question</h2>
+                <div class="question-card">
+                    <p class="question-text"><%= menteeRequest.doubt %></p>
+                    <p class="question-status">Status: <span class="status-badge <%= menteeRequest.status %>"><%= menteeRequest.status %></span></p>
+                </div>
+
+                <% if (mentor) { %>
+                    <div class="matched-mentor">
+                        <h3>Matched Mentor</h3>
+                        <div class="mentor-card">
+                            <div class="mentor-header">
+                                <h4><%= mentor.name %></h4>
+                                <p class="compatibility">Compatibility: <%= compatibilityScore %>%</p>
+                            </div>
+                            <div class="mentor-details">
+                                <p><strong>Expertise:</strong> <%= mentor.expertise.join(', ') %></p>
+                                <p><strong>Experience:</strong> <%= mentor.yearOfExperience %> years</p>
+                                <p><strong>Skills:</strong></p>
+                                <div class="skills-container">
+                                    <% mentor.skills.forEach(skill => { %>
+                                        <span class="badge bg-primary me-2 mb-2"><%= skill %></span>
+                                    <% }); %>
+                                </div>
+                            </div>
+                            <div class="mentor-actions">
+                                <button class="btn-connect" onclick="startSession('<%= mentor._id %>')">
+                                    <i class="fas fa-video"></i> Start Session
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+
+                <% if (offlineMentors && offlineMentors.length > 0) { %>
+                    <div class="offline-mentors">
+                        <h3>Other Available Mentors</h3>
+                        <div class="mentors-grid">
+                            <% offlineMentors.forEach(mentor => { %>
+                                <div class="mentor-card">
+                                    <div class="mentor-header">
+                                        <h4><%= mentor.name %></h4>
+                                    </div>
+                                    <div class="mentor-details">
+                                        <p><strong>Expertise:</strong> <%= mentor.expertise.join(', ') %></p>
+                                        <p><strong>Experience:</strong> <%= mentor.yearOfExperience %> years</p>
                                         <p><strong>Skills:</strong></p>
                                         <div class="skills-container">
-                                            <% mentee.skills.forEach(skill => { %>
+                                            <% mentor.skills.forEach(skill => { %>
                                                 <span class="badge bg-primary me-2 mb-2"><%= skill %></span>
                                             <% }); %>
                                         </div>
                                     </div>
+                                    <div class="mentor-actions">
+                                        <button class="btn-connect" onclick="requestMentor('<%= mentor._id %>')">
+                                            <i class="fas fa-user-plus"></i> Request Mentor
+                                        </button>
+                                    </div>
                                 </div>
-                                <p><strong>Bio:</strong> <%= mentee.bio || 'No bio available' %></p>
-                                            <div class="mt-3">
-                                    <a href="/mentor/mentee/<%= mentee._id %>" class="btn btn-primary">View Profile</a>
-                                    <button class="btn btn-success" onclick="sendConnectionRequest('<%= mentee._id %>')">
-                                        Send Connection Request
-                                                </button>
-                                </div>
-                            </div>
+                            <% }); %>
                         </div>
-                    <% }); %>
                     </div>
-            <% } else { %>
-                <div class="no-matches">
-                    <i class="fas fa-search"></i>
-                    <p>No matched mentees found at the moment.</p>
-                    <p>We'll notify you when we find matches based on your profile.</p>
-                </div>
-            <% } %>
-        </div>
+                <% } %>
+            </div>
+        <% } %>
     </div>
+    <% if (errorMessage) { %>
+        <div class="error-container">
+            <% switch(errorMessage) { 
+                case 'algorithm_failed': %>
+                    <p>匹配算法运行失败，请稍后再试</p>
+                <% break; %>
+                
+                <% case 'no_matches_found': %>
+                    <p>暂时没有找到匹配的学员，请尝试调整您的资料</p>
+                <% break; %>
+                
+                <% case 'processing_error': %>
+                    <p>数据处理错误，请联系管理员</p>
+                <% break; %>
+                
+                <% default: %>
+                    <p>匹配过程中出现错误: <%= errorMessage %></p>
+            <% } %>
+            
+            <button onclick="window.location.href='/matching_interface'" class="retry-button">
+                重新尝试
+            </button>
+        </div>
+    <% } %>
 
     <style>
         .matching-section {
@@ -101,13 +194,39 @@
             text-align: center;
         }
 
-        .mentees-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+        .question-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .mentee-card {
+        .question-text {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .status-badge.pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-badge.answered {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .mentor-card, .mentee-card {
             background-color: white;
             border-radius: 12px;
             padding: 1.5rem;
@@ -115,37 +234,53 @@
             border: 1px solid rgba(255, 107, 0, 0.1);
         }
 
-        .mentee-header {
+        .mentor-header, .mentee-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 1rem;
             margin-bottom: 1rem;
         }
 
-        .mentee-image {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--primary-color);
-        }
-
-        .mentee-header h3 {
+        .mentor-header h4, .mentee-header h3 {
             margin: 0;
             color: var(--text-color);
             font-size: 1.2rem;
         }
 
-        .mentee-details {
+        .compatibility {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .mentor-details, .mentee-details {
             margin-bottom: 1.5rem;
         }
 
-        .mentee-details p {
+        .mentor-details p, .mentee-details p {
             margin: 0.5rem 0;
             color: #666;
         }
 
-        .mentee-actions {
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .mentor-actions, .mentee-actions {
             display: flex;
             gap: 1rem;
         }
@@ -185,6 +320,12 @@
             transform: translateY(-2px);
         }
 
+        .mentors-grid, .mentees-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
         .no-matches {
             text-align: center;
             padding: 3rem;
@@ -203,16 +344,75 @@
         }
 
         @media (max-width: 768px) {
-            .mentees-grid {
+            .mentors-grid, .mentees-grid {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 
     <script>
-        function connectWithMentee(menteeId) {
-            // This function will be implemented later
-            alert('Connection feature coming soon!');
+        async function startSession(userId) {
+            try {
+                const response = await fetch('/start-session', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ userId })
+                });
+                
+                if (response.ok) {
+                    window.location.href = '/session-room';
+                } else {
+                    const data = await response.json();
+                    alert(data.error || 'Failed to start session');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while starting the session');
+            }
+        }
+
+        async function requestMentor(mentorId) {
+            try {
+                const response = await fetch('/request-mentor', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ mentorId })
+                });
+                
+                if (response.ok) {
+                    alert('Request sent successfully! The mentor will be notified.');
+                } else {
+                    alert('Failed to send request. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while sending the request.');
+            }
+        }
+
+        async function sendConnectionRequest(menteeId) {
+            try {
+                const response = await fetch('/send-connection-request', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ menteeId })
+                });
+                
+                if (response.ok) {
+                    alert('Connection request sent successfully!');
+                } else {
+                    alert('Failed to send connection request. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while sending the connection request.');
+            }
         }
     </script>
 </body>

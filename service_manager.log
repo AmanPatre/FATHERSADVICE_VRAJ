@@ -822,3 +822,480 @@ All services are running successfully!
 2025-04-04 23:04:53,166 - INFO - 
 Press Ctrl+C to stop all services.
 2025-04-04 23:04:53,166 - INFO - Logs are being written to the 'logs' directory.
+2025-04-05 00:22:18,700 - INFO - Started mentor_processor with PID 52385
+2025-04-05 00:22:21,880 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-05 00:22:21,881 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-05 00:22:21,884 - INFO - Started api with PID 52412
+2025-04-05 00:22:24,902 - INFO - Service api health check passed on attempt 1
+2025-04-05 00:22:24,903 - INFO - Service api is healthy on port 5001
+2025-04-05 00:22:24,905 - INFO - Started workflow with PID 52425
+2025-04-05 00:22:27,924 - INFO - Service workflow health check passed on attempt 1
+2025-04-05 00:22:27,924 - INFO - Service workflow is healthy on port 5002
+2025-04-05 00:22:27,927 - INFO - Started algo with PID 52462
+2025-04-05 00:22:33,172 - WARNING - Service algo returned unhealthy status on attempt 1
+2025-04-05 00:22:33,173 - INFO - Waiting 2 seconds before next retry...
+2025-04-05 00:22:35,185 - WARNING - Service algo returned unhealthy status on attempt 2
+2025-04-05 00:22:35,186 - INFO - Waiting 2 seconds before next retry...
+2025-04-05 00:22:37,200 - WARNING - Service algo returned unhealthy status on attempt 3
+2025-04-05 00:22:37,201 - INFO - Waiting 2 seconds before next retry...
+2025-04-05 00:22:39,229 - WARNING - Service algo returned unhealthy status on attempt 4
+2025-04-05 00:22:39,230 - INFO - Waiting 2 seconds before next retry...
+2025-04-05 00:22:41,247 - WARNING - Service algo returned unhealthy status on attempt 5
+2025-04-05 00:22:41,249 - ERROR - Service algo failed health check on port 5000
+2025-04-05 00:22:41,250 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-05 00:23:55,633 - INFO - Started mentor_processor with PID 53237
+2025-04-05 00:23:58,781 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-05 00:23:58,781 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-05 00:23:58,783 - INFO - Started api with PID 53263
+2025-04-05 00:24:01,793 - INFO - Service api health check passed on attempt 1
+2025-04-05 00:24:01,794 - INFO - Service api is healthy on port 5001
+2025-04-05 00:24:01,795 - INFO - Started workflow with PID 53278
+2025-04-05 00:24:04,806 - INFO - Service workflow health check passed on attempt 1
+2025-04-05 00:24:04,806 - INFO - Service workflow is healthy on port 5002
+2025-04-05 00:24:04,809 - INFO - Started algo with PID 53315
+2025-04-05 00:24:07,818 - INFO - Service algo health check passed on attempt 1
+2025-04-05 00:24:07,818 - INFO - Service algo is healthy on port 5000
+2025-04-05 00:24:07,819 - INFO - 
+All services are running successfully!
+2025-04-05 00:24:07,819 - INFO - Service ports:
+2025-04-05 00:24:07,819 - INFO - - mentor_processor: http://localhost:5003
+2025-04-05 00:24:07,819 - INFO - - api: http://localhost:5001
+2025-04-05 00:24:07,819 - INFO - - workflow: http://localhost:5002
+2025-04-05 00:24:07,819 - INFO - - algo: http://localhost:5000
+2025-04-05 00:24:07,819 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-05 00:24:07,819 - INFO - Logs are being written to the 'logs' directory.
+2025-04-05 00:28:34,787 - INFO - Received shutdown signal
+2025-04-05 00:28:34,789 - INFO - Shutting down services...
+2025-04-05 00:28:34,789 - INFO - Stopping algo...
+2025-04-05 00:28:34,790 - INFO - Successfully stopped algo
+2025-04-05 00:28:34,790 - INFO - Stopping workflow...
+2025-04-05 00:28:34,806 - INFO - Successfully stopped workflow
+2025-04-05 00:28:34,806 - INFO - Stopping api...
+2025-04-05 00:28:34,807 - INFO - Successfully stopped api
+2025-04-05 00:28:34,807 - INFO - Stopping mentor_processor...
+2025-04-05 00:28:34,807 - INFO - Successfully stopped mentor_processor
+2025-04-05 00:29:47,129 - INFO - Started mentor_processor with PID 55586
+2025-04-05 00:29:50,290 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-05 00:29:50,291 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-05 00:29:50,294 - INFO - Started api with PID 55622
+2025-04-05 00:29:53,313 - INFO - Service api health check passed on attempt 1
+2025-04-05 00:29:53,314 - INFO - Service api is healthy on port 5001
+2025-04-05 00:29:53,316 - INFO - Started workflow with PID 55649
+2025-04-05 00:29:56,328 - INFO - Service workflow health check passed on attempt 1
+2025-04-05 00:29:56,328 - INFO - Service workflow is healthy on port 5002
+2025-04-05 00:29:56,333 - INFO - Started algo with PID 55693
+2025-04-05 00:29:59,960 - INFO - Service algo health check passed on attempt 1
+2025-04-05 00:29:59,961 - INFO - Service algo is healthy on port 5000
+2025-04-05 00:29:59,961 - INFO - 
+All services are running successfully!
+2025-04-05 00:29:59,961 - INFO - Service ports:
+2025-04-05 00:29:59,961 - INFO - - mentor_processor: http://localhost:5003
+2025-04-05 00:29:59,964 - INFO - - api: http://localhost:5001
+2025-04-05 00:29:59,965 - INFO - - workflow: http://localhost:5002
+2025-04-05 00:29:59,965 - INFO - - algo: http://localhost:5000
+2025-04-05 00:29:59,966 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-05 00:29:59,966 - INFO - Logs are being written to the 'logs' directory.
+2025-04-05 00:53:42,390 - INFO - Received shutdown signal
+2025-04-05 00:53:42,400 - INFO - Shutting down services...
+2025-04-05 00:53:42,402 - INFO - Stopping algo...
+2025-04-05 00:53:42,406 - INFO - Successfully stopped algo
+2025-04-05 00:53:42,406 - INFO - Stopping workflow...
+2025-04-05 00:53:42,426 - INFO - Successfully stopped workflow
+2025-04-05 00:53:42,426 - INFO - Stopping api...
+2025-04-05 00:53:42,426 - INFO - Successfully stopped api
+2025-04-05 00:53:42,427 - INFO - Stopping mentor_processor...
+2025-04-05 00:53:42,427 - INFO - Successfully stopped mentor_processor
+2025-04-05 00:55:37,307 - WARNING - Port 5003 is in use, attempting to free it...
+2025-04-05 00:55:39,721 - ERROR - Failed to free port 5003
+2025-04-05 00:55:39,722 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-05 00:56:04,748 - INFO - Started mentor_processor with PID 64159
+2025-04-05 00:56:07,890 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-05 00:56:07,890 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-05 00:56:07,892 - INFO - Started api with PID 64183
+2025-04-05 00:56:10,901 - INFO - Service api health check passed on attempt 1
+2025-04-05 00:56:10,901 - INFO - Service api is healthy on port 5001
+2025-04-05 00:56:10,903 - INFO - Started workflow with PID 64199
+2025-04-05 00:56:13,915 - INFO - Service workflow health check passed on attempt 1
+2025-04-05 00:56:13,915 - INFO - Service workflow is healthy on port 5002
+2025-04-05 00:56:13,917 - INFO - Started algo with PID 64237
+2025-04-05 00:56:21,924 - WARNING - Health check failed for algo on attempt 1: HTTPConnectionPool(host='localhost', port=5000): Read timed out. (read timeout=5)
+2025-04-05 00:56:21,925 - INFO - Waiting 2 seconds before next retry...
+2025-04-05 00:56:23,963 - INFO - Service algo health check passed on attempt 2
+2025-04-05 00:56:23,963 - INFO - Service algo is healthy on port 5000
+2025-04-05 00:56:23,963 - INFO - 
+All services are running successfully!
+2025-04-05 00:56:23,963 - INFO - Service ports:
+2025-04-05 00:56:23,964 - INFO - - mentor_processor: http://localhost:5003
+2025-04-05 00:56:23,964 - INFO - - api: http://localhost:5001
+2025-04-05 00:56:23,964 - INFO - - workflow: http://localhost:5002
+2025-04-05 00:56:23,964 - INFO - - algo: http://localhost:5000
+2025-04-05 00:56:23,964 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-05 00:56:23,964 - INFO - Logs are being written to the 'logs' directory.
+2025-04-05 01:26:34,262 - INFO - Started mentor_processor with PID 69562
+2025-04-05 01:26:37,376 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-05 01:26:37,377 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-05 01:26:37,378 - INFO - Started api with PID 69593
+2025-04-05 01:26:40,389 - INFO - Service api health check passed on attempt 1
+2025-04-05 01:26:40,389 - INFO - Service api is healthy on port 5001
+2025-04-05 01:26:40,391 - INFO - Started workflow with PID 69602
+2025-04-05 01:26:43,401 - INFO - Service workflow health check passed on attempt 1
+2025-04-05 01:26:43,401 - INFO - Service workflow is healthy on port 5002
+2025-04-05 01:26:43,404 - INFO - Started algo with PID 69636
+2025-04-05 01:26:51,411 - WARNING - Health check failed for algo on attempt 1: HTTPConnectionPool(host='localhost', port=5000): Read timed out. (read timeout=5)
+2025-04-05 01:26:51,411 - INFO - Waiting 2 seconds before next retry...
+2025-04-05 01:26:53,446 - INFO - Service algo health check passed on attempt 2
+2025-04-05 01:26:53,446 - INFO - Service algo is healthy on port 5000
+2025-04-05 01:26:53,446 - INFO - 
+All services are running successfully!
+2025-04-05 01:26:53,447 - INFO - Service ports:
+2025-04-05 01:26:53,447 - INFO - - mentor_processor: http://localhost:5003
+2025-04-05 01:26:53,447 - INFO - - api: http://localhost:5001
+2025-04-05 01:26:53,447 - INFO - - workflow: http://localhost:5002
+2025-04-05 01:26:53,448 - INFO - - algo: http://localhost:5000
+2025-04-05 01:26:53,448 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-05 01:26:53,448 - INFO - Logs are being written to the 'logs' directory.
+2025-04-05 01:32:16,806 - INFO - Started mentor_processor with PID 70851
+2025-04-05 01:32:19,963 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-05 01:32:19,963 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-05 01:32:19,965 - INFO - Started api with PID 70864
+2025-04-05 01:32:22,976 - INFO - Service api health check passed on attempt 1
+2025-04-05 01:32:22,977 - INFO - Service api is healthy on port 5001
+2025-04-05 01:32:22,978 - INFO - Started workflow with PID 70893
+2025-04-05 01:32:25,984 - INFO - Service workflow health check passed on attempt 1
+2025-04-05 01:32:25,985 - INFO - Service workflow is healthy on port 5002
+2025-04-05 01:32:25,986 - INFO - Started algo with PID 70919
+2025-04-05 01:32:26,403 - INFO - Received shutdown signal
+2025-04-05 01:32:26,404 - INFO - Shutting down services...
+2025-04-05 01:32:26,404 - INFO - Stopping algo...
+2025-04-05 01:32:26,404 - INFO - Successfully stopped algo
+2025-04-05 01:32:26,404 - INFO - Stopping workflow...
+2025-04-05 01:32:26,405 - INFO - Successfully stopped workflow
+2025-04-05 01:32:26,405 - INFO - Stopping api...
+2025-04-05 01:32:26,405 - INFO - Successfully stopped api
+2025-04-05 01:32:26,407 - INFO - Stopping mentor_processor...
+2025-04-05 01:32:26,408 - INFO - Successfully stopped mentor_processor
+2025-04-05 01:32:28,989 - WARNING - Health check failed for algo on attempt 1: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f2f7e2ccd70>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-05 01:32:28,990 - INFO - Waiting 2 seconds before next retry...
+2025-04-05 01:32:30,995 - WARNING - Health check failed for algo on attempt 2: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f2f7d5208c0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-05 01:32:30,996 - INFO - Waiting 2 seconds before next retry...
+2025-04-05 01:32:31,465 - INFO - Received shutdown signal
+2025-04-05 01:32:31,497 - INFO - Shutting down services...
+2025-04-05 01:32:31,499 - INFO - Stopping algo...
+2025-04-05 01:32:31,509 - INFO - Successfully stopped algo
+2025-04-05 01:32:31,511 - INFO - Stopping workflow...
+2025-04-05 01:32:31,513 - INFO - Successfully stopped workflow
+2025-04-05 01:32:31,514 - INFO - Stopping api...
+2025-04-05 01:32:31,516 - INFO - Successfully stopped api
+2025-04-05 01:32:31,517 - INFO - Stopping mentor_processor...
+2025-04-05 01:32:31,518 - INFO - Successfully stopped mentor_processor
+2025-04-05 01:32:32,998 - WARNING - Health check failed for algo on attempt 3: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f2f7d520fe0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-05 01:32:32,998 - INFO - Waiting 2 seconds before next retry...
+2025-04-05 01:32:35,000 - WARNING - Health check failed for algo on attempt 4: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f2f7d521790>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-05 01:32:35,000 - INFO - Waiting 2 seconds before next retry...
+2025-04-05 01:32:37,002 - WARNING - Health check failed for algo on attempt 5: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f2f7d521fd0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-05 01:32:37,003 - ERROR - Service algo process exited with code 1
+2025-04-05 01:32:37,003 - ERROR - Service algo log content:
+Connected to MongoDB
+Successfully connected to MongoDB
+Traceback (most recent call last):
+  File "/home/vraj-shah/Desktop/fatheradvice-main/algo.py", line 45, in <module>
+    mentors_collection = db['mentors'] if db else None
+                                          ^^
+  File "/home/vraj-shah/.local/lib/python3.12/site-packages/pymongo/database.py", line 1337, in __bool__
+    raise NotImplementedError(
+NotImplementedError: Database objects do not implement truth value testing or bool(). Please compare with None instead: database is not None
+
+2025-04-05 01:32:37,003 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-05 01:33:11,158 - INFO - Started mentor_processor with PID 71223
+2025-04-05 01:33:14,303 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-05 01:33:14,303 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-05 01:33:14,305 - INFO - Started api with PID 71238
+2025-04-05 01:33:17,319 - INFO - Service api health check passed on attempt 1
+2025-04-05 01:33:17,319 - INFO - Service api is healthy on port 5001
+2025-04-05 01:33:17,321 - INFO - Started workflow with PID 71264
+2025-04-05 01:33:20,341 - INFO - Service workflow health check passed on attempt 1
+2025-04-05 01:33:20,343 - INFO - Service workflow is healthy on port 5002
+2025-04-05 01:33:20,346 - INFO - Started algo with PID 71290
+2025-04-05 01:33:23,349 - WARNING - Health check failed for algo on attempt 1: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x78300a4b8320>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-05 01:33:23,349 - INFO - Waiting 2 seconds before next retry...
+2025-04-05 01:33:26,115 - INFO - Service algo health check passed on attempt 2
+2025-04-05 01:33:26,116 - INFO - Service algo is healthy on port 5000
+2025-04-05 01:33:26,117 - INFO - 
+All services are running successfully!
+2025-04-05 01:33:26,118 - INFO - Service ports:
+2025-04-05 01:33:26,119 - INFO - - mentor_processor: http://localhost:5003
+2025-04-05 01:33:26,119 - INFO - - api: http://localhost:5001
+2025-04-05 01:33:26,120 - INFO - - workflow: http://localhost:5002
+2025-04-05 01:33:26,121 - INFO - - algo: http://localhost:5000
+2025-04-05 01:33:26,122 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-05 01:33:26,125 - INFO - Logs are being written to the 'logs' directory.
+2025-04-05 01:35:22,431 - INFO - Started mentor_processor with PID 72137
+2025-04-05 01:35:25,610 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-05 01:35:25,610 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-05 01:35:25,612 - INFO - Started api with PID 72150
+2025-04-05 01:35:28,644 - INFO - Service api health check passed on attempt 1
+2025-04-05 01:35:28,644 - INFO - Service api is healthy on port 5001
+2025-04-05 01:35:28,646 - INFO - Started workflow with PID 72176
+2025-04-05 01:35:31,657 - INFO - Service workflow health check passed on attempt 1
+2025-04-05 01:35:31,657 - INFO - Service workflow is healthy on port 5002
+2025-04-05 01:35:31,659 - INFO - Started algo with PID 72202
+2025-04-05 01:35:36,698 - INFO - Service algo health check passed on attempt 1
+2025-04-05 01:35:36,699 - INFO - Service algo is healthy on port 5000
+2025-04-05 01:35:36,699 - INFO - 
+All services are running successfully!
+2025-04-05 01:35:36,699 - INFO - Service ports:
+2025-04-05 01:35:36,699 - INFO - - mentor_processor: http://localhost:5003
+2025-04-05 01:35:36,699 - INFO - - api: http://localhost:5001
+2025-04-05 01:35:36,700 - INFO - - workflow: http://localhost:5002
+2025-04-05 01:35:36,700 - INFO - - algo: http://localhost:5000
+2025-04-05 01:35:36,700 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-05 01:35:36,700 - INFO - Logs are being written to the 'logs' directory.
+2025-04-05 01:36:45,715 - INFO - Received shutdown signal
+2025-04-05 01:36:45,716 - INFO - Shutting down services...
+2025-04-05 01:36:45,716 - INFO - Stopping algo...
+2025-04-05 01:36:46,646 - INFO - Successfully stopped algo
+2025-04-05 01:36:46,646 - INFO - Stopping workflow...
+2025-04-05 01:36:46,647 - INFO - Successfully stopped workflow
+2025-04-05 01:36:46,647 - INFO - Stopping api...
+2025-04-05 01:36:46,647 - INFO - Successfully stopped api
+2025-04-05 01:36:46,647 - INFO - Stopping mentor_processor...
+2025-04-05 01:36:46,647 - INFO - Successfully stopped mentor_processor
+2025-04-05 01:36:50,763 - INFO - Started mentor_processor with PID 72824
+2025-04-05 01:36:53,924 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-05 01:36:53,924 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-05 01:36:53,925 - INFO - Started api with PID 72850
+2025-04-05 01:36:56,940 - INFO - Service api health check passed on attempt 1
+2025-04-05 01:36:56,940 - INFO - Service api is healthy on port 5001
+2025-04-05 01:36:56,942 - INFO - Started workflow with PID 72877
+2025-04-05 01:36:59,951 - INFO - Service workflow health check passed on attempt 1
+2025-04-05 01:36:59,951 - INFO - Service workflow is healthy on port 5002
+2025-04-05 01:36:59,954 - INFO - Started algo with PID 72905
+2025-04-05 01:37:02,956 - WARNING - Health check failed for algo on attempt 1: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7d0b62558350>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-05 01:37:02,956 - INFO - Waiting 2 seconds before next retry...
+2025-04-05 01:37:05,294 - INFO - Service algo health check passed on attempt 2
+2025-04-05 01:37:05,294 - INFO - Service algo is healthy on port 5000
+2025-04-05 01:37:05,294 - INFO - 
+All services are running successfully!
+2025-04-05 01:37:05,294 - INFO - Service ports:
+2025-04-05 01:37:05,294 - INFO - - mentor_processor: http://localhost:5003
+2025-04-05 01:37:05,295 - INFO - - api: http://localhost:5001
+2025-04-05 01:37:05,295 - INFO - - workflow: http://localhost:5002
+2025-04-05 01:37:05,295 - INFO - - algo: http://localhost:5000
+2025-04-05 01:37:05,295 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-05 01:37:05,295 - INFO - Logs are being written to the 'logs' directory.
+2025-04-05 02:10:21,735 - INFO - Started mentor_processor with PID 85233
+2025-04-05 02:10:24,875 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-05 02:10:24,877 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-05 02:10:24,880 - INFO - Started api with PID 85248
+2025-04-05 02:10:27,894 - INFO - Service api health check passed on attempt 1
+2025-04-05 02:10:27,894 - INFO - Service api is healthy on port 5001
+2025-04-05 02:10:27,896 - INFO - Started workflow with PID 85298
+2025-04-05 02:10:30,912 - INFO - Service workflow health check passed on attempt 1
+2025-04-05 02:10:30,912 - INFO - Service workflow is healthy on port 5002
+2025-04-05 02:10:30,915 - INFO - Started algo with PID 85557
+2025-04-05 02:10:33,918 - WARNING - Health check failed for algo on attempt 1: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7a99639c03e0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-05 02:10:33,919 - INFO - Waiting 2 seconds before next retry...
+2025-04-05 02:10:36,552 - INFO - Service algo health check passed on attempt 2
+2025-04-05 02:10:36,553 - INFO - Service algo is healthy on port 5000
+2025-04-05 02:10:36,553 - INFO - 
+All services are running successfully!
+2025-04-05 02:10:36,553 - INFO - Service ports:
+2025-04-05 02:10:36,553 - INFO - - mentor_processor: http://localhost:5003
+2025-04-05 02:10:36,553 - INFO - - api: http://localhost:5001
+2025-04-05 02:10:36,553 - INFO - - workflow: http://localhost:5002
+2025-04-05 02:10:36,553 - INFO - - algo: http://localhost:5000
+2025-04-05 02:10:36,553 - INFO - 
+Press Ctrl+C to stop all services.
+2025-04-05 02:10:36,554 - INFO - Logs are being written to the 'logs' directory.
+2025-04-05 14:07:26,597 - INFO - Received shutdown signal
+2025-04-05 14:07:26,598 - INFO - Shutting down services...
+2025-04-05 14:07:43,272 - INFO - Received shutdown signal
+2025-04-05 14:07:43,273 - INFO - Shutting down services...
+2025-04-05 14:08:13,978 - INFO - Received shutdown signal
+2025-04-05 14:08:13,979 - INFO - Shutting down services...
+2025-04-05 14:33:18,492 - INFO - Received shutdown signal
+2025-04-05 14:33:18,493 - INFO - Shutting down services...
+2025-04-05 14:36:42,631 - INFO - Started mentor_processor with PID 30053
+2025-04-05 14:36:45,640 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-05 14:36:45,642 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-05 14:36:45,649 - INFO - Started api with PID 30062
+2025-04-05 14:36:48,666 - INFO - Service api health check passed on attempt 1
+2025-04-05 14:36:48,666 - INFO - Service api is healthy on port 5001
+2025-04-05 14:36:48,669 - INFO - Started workflow with PID 30070
+2025-04-05 14:36:51,695 - INFO - Service workflow health check passed on attempt 1
+2025-04-05 14:36:51,695 - INFO - Service workflow is healthy on port 5002
+2025-04-05 14:36:51,697 - INFO - Started algo with PID 30081
+2025-04-05 14:36:54,700 - WARNING - Health check failed for algo on attempt 1: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x719fc09f3560>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-05 14:36:54,701 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-05 14:36:56,703 - WARNING - Health check failed for algo on attempt 2: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x719fc082c710>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-05 14:36:56,704 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-05 14:36:58,707 - WARNING - Health check failed for algo on attempt 3: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x719fc09c66c0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-05 14:36:58,707 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-05 14:37:00,710 - WARNING - Health check failed for algo on attempt 4: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x719fc082ce90>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-05 14:37:00,710 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-05 14:37:02,714 - WARNING - Health check failed for algo on attempt 5: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x719fc082d700>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-05 14:37:02,714 - ERROR - Service algo process exited with code 1
+2025-04-05 14:37:02,714 - ERROR - Service algo log content:
+  File "/home/vraj-shah/Desktop/fatheradvice-main/algo.py", line 30
+    db = client[DB_NAME]  # Use the same database name as other services
+    ^^
+SyntaxError: expected 'except' or 'finally' block
+
+2025-04-05 14:37:02,714 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-05 15:08:37,616 - INFO - Started mentor_processor with PID 12413
+2025-04-05 15:08:40,627 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-05 15:08:40,628 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-05 15:08:40,630 - INFO - Started api with PID 12423
+2025-04-05 15:08:43,678 - INFO - Service api health check passed on attempt 1
+2025-04-05 15:08:43,678 - INFO - Service api is healthy on port 5001
+2025-04-05 15:08:43,681 - INFO - Started workflow with PID 12431
+2025-04-05 15:08:46,700 - INFO - Service workflow health check passed on attempt 1
+2025-04-05 15:08:46,701 - INFO - Service workflow is healthy on port 5002
+2025-04-05 15:08:46,703 - INFO - Started algo with PID 12441
+2025-04-05 15:08:49,706 - WARNING - Health check failed for algo on attempt 1: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x75be09fbcda0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-05 15:08:49,707 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-05 15:08:51,710 - WARNING - Health check failed for algo on attempt 2: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x75be09fbd2e0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-05 15:08:51,710 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-05 15:08:53,713 - WARNING - Health check failed for algo on attempt 3: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x75be09fbca70>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-05 15:08:53,714 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-05 15:08:55,716 - WARNING - Health check failed for algo on attempt 4: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x75be09fbda90>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-05 15:08:55,717 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-05 15:08:57,719 - WARNING - Health check failed for algo on attempt 5: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x75be09fbe300>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-05 15:08:57,719 - ERROR - Service algo process exited with code 1
+2025-04-05 15:08:57,720 - ERROR - Service algo log content:
+  File "/home/vraj-shah/Desktop/fatheradvice-main/algo.py", line 30
+    db = client[DB_NAME]  # Use the same database name as other services
+    ^^
+SyntaxError: expected 'except' or 'finally' block
+
+2025-04-05 15:08:57,720 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-05 15:16:11,366 - INFO - Started mentor_processor with PID 12760
+2025-04-05 15:16:14,375 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-05 15:16:14,375 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-05 15:16:14,377 - INFO - Started api with PID 12770
+2025-04-05 15:16:17,390 - INFO - Service api health check passed on attempt 1
+2025-04-05 15:16:17,391 - INFO - Service api is healthy on port 5001
+2025-04-05 15:16:17,393 - INFO - Started workflow with PID 12779
+2025-04-05 15:16:20,404 - INFO - Service workflow health check passed on attempt 1
+2025-04-05 15:16:20,404 - INFO - Service workflow is healthy on port 5002
+2025-04-05 15:16:20,406 - INFO - Started algo with PID 12787
+2025-04-05 15:16:23,409 - WARNING - Health check failed for algo on attempt 1: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7a08108b8890>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-05 15:16:23,410 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-05 15:16:25,442 - WARNING - Service algo returned status 500 on attempt 2
+2025-04-05 15:16:25,442 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-05 15:16:27,451 - WARNING - Service algo returned status 500 on attempt 3
+2025-04-05 15:16:27,451 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-05 15:16:29,461 - WARNING - Service algo returned status 500 on attempt 4
+2025-04-05 15:16:29,462 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-05 15:16:31,471 - WARNING - Service algo returned status 500 on attempt 5
+2025-04-05 15:16:31,472 - ERROR - Service algo failed health check on port 5000
+2025-04-05 15:16:31,472 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-05 15:37:43,359 - INFO - Started mentor_processor with PID 13626
+2025-04-05 15:37:46,370 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-05 15:37:46,370 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-05 15:37:46,373 - INFO - Started api with PID 13634
+2025-04-05 15:37:49,385 - INFO - Service api health check passed on attempt 1
+2025-04-05 15:37:49,385 - INFO - Service api is healthy on port 5001
+2025-04-05 15:37:49,387 - INFO - Started workflow with PID 13643
+2025-04-05 15:37:52,399 - INFO - Service workflow health check passed on attempt 1
+2025-04-05 15:37:52,399 - INFO - Service workflow is healthy on port 5002
+2025-04-05 15:37:52,402 - INFO - Started algo with PID 13651
+2025-04-05 15:37:57,158 - INFO - Service algo health check passed on attempt 1
+2025-04-05 15:37:57,158 - INFO - Service algo is healthy on port 5000
+2025-04-05 15:37:57,159 - INFO - All services are running successfully!
+2025-04-05 15:37:57,159 - INFO - - mentor_processor: http://localhost:5003
+2025-04-05 15:37:57,159 - INFO - - api: http://localhost:5001
+2025-04-05 15:37:57,159 - INFO - - workflow: http://localhost:5002
+2025-04-05 15:37:57,159 - INFO - - algo: http://localhost:5000
+2025-04-05 15:37:57,159 - INFO - Press Ctrl+C to stop all services.
+2025-04-05 15:37:57,159 - INFO - Logs are available in the 'logs' directory.
+2025-04-05 18:31:09,186 - WARNING - Port 5003 is in use, attempting to free it...
+2025-04-05 18:31:11,237 - ERROR - Failed to free port 5003 for mentor_processor
+2025-04-05 18:31:11,237 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-05 18:31:48,750 - INFO - Started mentor_processor with PID 56854
+2025-04-05 18:31:51,761 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-05 18:31:51,762 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-05 18:31:51,764 - INFO - Started api with PID 56863
+2025-04-05 18:31:54,779 - INFO - Service api health check passed on attempt 1
+2025-04-05 18:31:54,779 - INFO - Service api is healthy on port 5001
+2025-04-05 18:31:54,782 - INFO - Started workflow with PID 56871
+2025-04-05 18:31:57,799 - INFO - Service workflow health check passed on attempt 1
+2025-04-05 18:31:57,799 - INFO - Service workflow is healthy on port 5002
+2025-04-05 18:31:57,802 - INFO - Started algo with PID 56879
+2025-04-05 18:32:01,683 - INFO - Service algo health check passed on attempt 1
+2025-04-05 18:32:01,684 - INFO - Service algo is healthy on port 5000
+2025-04-05 18:32:01,684 - INFO - All services are running successfully!
+2025-04-05 18:32:01,684 - INFO - - mentor_processor: http://localhost:5003
+2025-04-05 18:32:01,684 - INFO - - api: http://localhost:5001
+2025-04-05 18:32:01,684 - INFO - - workflow: http://localhost:5002
+2025-04-05 18:32:01,684 - INFO - - algo: http://localhost:5000
+2025-04-05 18:32:01,684 - INFO - Press Ctrl+C to stop all services.
+2025-04-05 18:32:01,684 - INFO - Logs are available in the 'logs' directory.
+2025-04-05 21:00:28,100 - INFO - Received shutdown signal
+2025-04-05 21:00:28,101 - INFO - Shutting down services...
+2025-04-05 21:00:28,101 - INFO - Stopping algo with PID 56879...
+2025-04-05 21:00:28,102 - INFO - Successfully stopped algo
+2025-04-05 21:00:28,102 - INFO - Stopping workflow with PID 56871...
+2025-04-05 21:00:28,135 - INFO - Successfully stopped workflow
+2025-04-05 21:00:28,135 - INFO - Stopping api with PID 56863...
+2025-04-05 21:00:28,168 - INFO - Successfully stopped api
+2025-04-05 21:00:28,169 - INFO - Stopping mentor_processor with PID 56854...
+2025-04-05 21:00:28,234 - INFO - Successfully stopped mentor_processor
+2025-04-05 21:00:33,137 - INFO - Started mentor_processor with PID 61023
+2025-04-05 21:00:36,147 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-05 21:00:36,148 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-05 21:00:36,150 - INFO - Started api with PID 61036
+2025-04-05 21:00:39,163 - INFO - Service api health check passed on attempt 1
+2025-04-05 21:00:39,163 - INFO - Service api is healthy on port 5001
+2025-04-05 21:00:39,166 - INFO - Started workflow with PID 61048
+2025-04-05 21:00:42,176 - INFO - Service workflow health check passed on attempt 1
+2025-04-05 21:00:42,177 - INFO - Service workflow is healthy on port 5002
+2025-04-05 21:00:42,179 - INFO - Started algo with PID 61062
+2025-04-05 21:00:45,182 - WARNING - Health check failed for algo on attempt 1: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x759570e24d40>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-05 21:00:45,183 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-05 21:00:47,186 - WARNING - Health check failed for algo on attempt 2: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x759570e25250>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-05 21:00:47,187 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-05 21:00:49,189 - WARNING - Health check failed for algo on attempt 3: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x759570e246e0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-05 21:00:49,189 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-05 21:00:51,192 - WARNING - Health check failed for algo on attempt 4: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x759570e259d0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-05 21:00:51,192 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-05 21:00:53,195 - WARNING - Health check failed for algo on attempt 5: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x759570e26240>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-05 21:00:53,195 - ERROR - Service algo process exited with code 1
+2025-04-05 21:00:53,196 - ERROR - Service algo log content:
+{"error": "Mentor ID argument required"}
+
+2025-04-05 21:00:53,196 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-05 21:29:40,576 - WARNING - Port 5003 is in use, attempting to free it...
+2025-04-05 21:29:42,656 - ERROR - Failed to free port 5003 for mentor_processor
+2025-04-05 21:29:42,657 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-05 21:29:59,204 - WARNING - Port 5003 is in use, attempting to free it...
+2025-04-05 21:30:01,265 - ERROR - Failed to free port 5003 for mentor_processor
+2025-04-05 21:30:01,266 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-05 21:31:30,246 - INFO - Started mentor_processor with PID 65055
+2025-04-05 21:31:33,257 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-05 21:31:33,258 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-05 21:31:33,262 - INFO - Started api with PID 65069
+2025-04-05 21:31:36,289 - INFO - Service api health check passed on attempt 1
+2025-04-05 21:31:36,290 - INFO - Service api is healthy on port 5001
+2025-04-05 21:31:36,293 - INFO - Started workflow with PID 65088
+2025-04-05 21:31:39,309 - INFO - Service workflow health check passed on attempt 1
+2025-04-05 21:31:39,311 - INFO - Service workflow is healthy on port 5002
+2025-04-05 21:31:39,319 - INFO - Started algo with PID 65106
+2025-04-05 21:31:42,329 - WARNING - Health check failed for algo on attempt 1: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x79de11b58d10>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2025-04-05 21:31:42,329 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-05 21:31:44,397 - INFO - Service algo health check passed on attempt 2
+2025-04-05 21:31:44,398 - INFO - Service algo is healthy on port 5000
+2025-04-05 21:31:44,399 - INFO - All services are running successfully!
+2025-04-05 21:31:44,400 - INFO - - mentor_processor: http://localhost:5003
+2025-04-05 21:31:44,401 - INFO - - api: http://localhost:5001
+2025-04-05 21:31:44,401 - INFO - - workflow: http://localhost:5002
+2025-04-05 21:31:44,402 - INFO - - algo: http://localhost:5000
+2025-04-05 21:31:44,403 - INFO - Press Ctrl+C to stop all services.
+2025-04-05 21:31:44,403 - INFO - Logs are available in the 'logs' directory.

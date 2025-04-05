@@ -24,6 +24,7 @@ const Doubt = require('./models/doubt.model.js');
 const Match = require('./models/match.model.js');
 const Session = require('./models/session.model.js');
 
+
 // Ensure process.env is available
 if (typeof process === 'undefined') {
     global.process = require('process');
@@ -189,7 +190,7 @@ async function initializeApp() {
         app.set('views', path.join(__dirname, 'views'));
 
         // Start server
-        const port = process.env.PORT || 3001;
+        const port = process.env.PORT || 3000;
         app.listen(port, () => {
             console.log(`Server is running on port ${port}`);
         });
@@ -761,64 +762,6 @@ app.get('/mentor-match-results', authenticateToken, async (req, res) => {
     }
 });
 
-// Background processing function
-async function processMenteeRequest(requestId) {
-    try {
-        const request = await MenteeRequest.findById(requestId);
-        if (!request) {
-            console.error('Request not found:', requestId);
-            return;
-        }
-
-        // Update status to processing
-        request.status = 'pending';
-        await request.save();
-
-        try {
-            // Run API and algorithm calls in parallel
-            const [aiResponse, matchResponse] = await Promise.all([
-                axios.post('http://localhost:5001/submit_doubt', {
-                    mentee_id: request.mentee.toString(),
-                    doubt: request.doubt
-                }),
-                axios.post('http://localhost:5000/match_advanced', {
-                    mentee_id: request.mentee.toString()
-                })
-            ]);
-
-            // Update the request with results
-            if (request) {
-                request.subjectBreakdown = aiResponse.data.subject_breakdown;
-                
-                if (matchResponse.data.match) {
-                    request.matchedMentorId = matchResponse.data.match.mentor_id;
-                    request.compatibilityScore = matchResponse.data.match.compatibility_score;
-                    request.status = 'answered';
-                } else {
-                    request.status = 'pending';
-                }
-                
-                await request.save();
-            }
-        } catch (error) {
-            console.error('Error in API calls:', error);
-            // Update request status based on error
-            if (request) {
-                request.status = 'pending';
-                await request.save();
-            }
-        }
-    } catch (error) {
-        console.error('Error in background processing:', error);
-        // Update request status to indicate error
-        const request = await MenteeRequest.findById(requestId);
-        if (request) {
-            request.status = 'pending';
-            await request.save();
-        }
-    }
-}
-
 // Find Mentor Route
 app.post('/find-mentor', authenticateToken, async (req, res) => {
     try {
@@ -837,19 +780,53 @@ app.post('/find-mentor', authenticateToken, async (req, res) => {
         });
         await menteeRequest.save();
 
-        // Start background processing
-        processMenteeRequest(menteeRequest._id);
+        // Call the Python API service
+        try {
+            const apiResponse = await axios.post('http://localhost:5001/submit_doubt', {
+                mentee_id: menteeId,
+                doubt: doubt
+            });
+
+            // Update request with subject breakdown
+            menteeRequest.subjectBreakdown = apiResponse.data.subject_breakdown;
+            await menteeRequest.save();
+
+            // Call the matching algorithm
+            const matchResponse = await axios.post('http://localhost:5000/match_advanced', {
+                mentee_id: menteeId
+            });
+
+            if (matchResponse.data.match) {
+                // Update request with match details
+                menteeRequest.matchedMentorId = matchResponse.data.match.mentor_id;
+                menteeRequest.compatibilityScore = matchResponse.data.match.compatibility_score;
+                menteeRequest.status = 'answered';
+                await menteeRequest.save();
+
+                // Create a new session
+                const session = new Session({
+                    mentee: menteeId,
+                    mentor: matchResponse.data.match.mentor_id,
+                    status: 'active',
+                    doubt: doubt
+                });
+                await session.save();
+            }
+        } catch (error) {
+            console.error('Error in Python services:', error);
+            // Continue with offline mentors if Python services fail
+        }
 
         // Fetch offline mentors
         const offlineMentors = await Mentor.find({}, 'name expertise experience rating skills fieldOfInterest')
             .limit(5);
 
-        // Directly render the matching interface
+        // Render the matching interface
         res.render('matching_interface', {
             menteeRequest,
-            mentor: null,
-            compatibilityScore: 0,
-            status: 'pending',
+            mentor: menteeRequest.matchedMentorId ? await Mentor.findById(menteeRequest.matchedMentorId) : null,
+            compatibilityScore: menteeRequest.compatibilityScore || 0,
+            status: menteeRequest.status,
             title: 'Matching Interface',
             offlineMentors: offlineMentors || []
         });
@@ -1467,68 +1444,135 @@ app.post('/mentor_profile/complete', authenticateToken, upload.single('uploadRes
 });
 
 // Mentor matching route
-app.get('/mentor/matching', authenticateToken, async (req, res) => {
-    try {
-        // Check if user is authenticated
-        if (!req.user || !req.user.userId) {
-            console.log('User not authenticated');
-            return res.redirect('/login');
-        }
+// POST route runs algo.py and redirects
+// Find Mentee Route (No Authentication)
+app.post('/find-mentee', (req, res) => {
+    const mentorId = req.user.userId; // Get from session
 
-        // Check if user is a mentor
-        if (req.user.role !== 'mentor') {
-            console.log('User is not a mentor');
-            return res.redirect('/mentee_profile');
-        }
+    const pythonProcess = spawn('python3', ['algo.py', mentorId]);
+    let output = '';
 
-        // Get mentor's profile
-        const mentorProfile = await Mentor.findOne({ _id: req.user.userId });
-        
-        if (!mentorProfile) {
-            console.log('No mentor profile found for user:', req.user.userId);
-            return res.render('matching_interface', { 
-                matchedMentees: [],
-                user: req.user,
-                mentorProfile: null,
-                error: 'Please complete your mentor profile first'
+    pythonProcess.stdout.on('data', (data) => {
+        output += data.toString();
+    });
+
+    pythonProcess.stderr.on('data', (data) => {
+        console.error(`Python Error: ${data}`);
+    });
+
+    pythonProcess.on('close', async (code) => {
+        try {
+            // Handle all errors in the same way
+            let errorMessage = null;
+            
+            if (code !== 0) {
+                errorMessage = "algorithm_failed";
+            } else {
+                const result = JSON.parse(output);
+                
+                if (!result.success) {
+                    errorMessage = result.error || "algorithm_error";
+                } else if (!result.matches || result.matches.length === 0) {
+                    errorMessage = "no_matches_found";
+                }
+            }
+
+            if (errorMessage) {
+                return res.redirect(`/matching_interface?error=${encodeURIComponent(errorMessage)}`);
+            }
+
+            // Process successful matches
+            const result = JSON.parse(output);
+            const menteeIds = result.matches.map(m => m.mentee_id);
+            const mentees = await User.find({ '_id': { $in: menteeIds } });
+
+            const matchesWithDetails = result.matches.map(match => ({
+                ...match,
+                mentee: mentees.find(m => m._id.toString() === match.mentee_id)
+            }));
+
+            res.render('matching_interface', {
+                isMentor: true,
+                matchedMentees: matchesWithDetails,
+                errorMessage: null,
+                user: req.user
             });
+
+        } catch (error) {
+            console.error('Final error handler:', error);
+            res.redirect(`/matching_interface?error=${encodeURIComponent('processing_error')}`);
+        }
+    });
+});
+// Background process to fetch matches
+async function fetchMatchesInBackground(mentorId) {
+    try {
+        // Check if ALGO_SERVICE_URL is defined
+        if (!process.env.ALGO_SERVICE_URL) {
+            console.error("ALGO_SERVICE_URL environment variable is not defined");
+            return;
         }
 
-        // Find mentees based on mentor's field of interest
-        const mentees = await Mentee.find({
-            fieldOfInterest: mentorProfile.fieldOfInterest,
-            profileCompleted: true
-        }).select('name email fieldOfInterest education skills briefBio');
+        console.log(`Calling matching service at: ${process.env.ALGO_SERVICE_URL}/get_mentor_matching_interface/${mentorId}`);
+        
+        // Call algo.py service to get matched mentees
+        const response = await axios.get(`${process.env.ALGO_SERVICE_URL}/get_mentor_matching_interface/${mentorId}`);
+        
+        if (response.data.error) {
+            console.error("Error from matching service:", response.data.error);
+            return;
+        }
 
-        console.log('Found mentees:', mentees.length);
-        
-        // Format mentees for the template
-        const matchedMentees = mentees.map(mentee => ({
-            mentee: {
-                _id: mentee._id,
-                name: mentee.name,
-                email: mentee.email
-            },
-            fieldOfInterest: mentee.fieldOfInterest,
-            education: mentee.education,
-            skills: mentee.skills,
-            briefBio: mentee.briefBio
+        // Check if matches exist in the response
+        if (!response.data.matches || !Array.isArray(response.data.matches)) {
+            console.error("Invalid response format from matching service:", response.data);
+            return;
+        }
+
+        const matchedMentees = response.data.matches.map(match => ({
+            _id: match.mentee_id,
+            name: match.mentee_details.name,
+            email: match.mentee_details.email,
+            skills: match.mentee_details.skills || [],
+            education: match.mentee_details.education || "Not specified",
+            compatibility_score: match.compatibility_score || 0.5,
+            matching_subject: match.mentee_details.matching_subject || "General",
+            matching_percentage: match.mentee_details.matching_percentage || 0.5
         }));
-        
-        // Render the matching interface with all necessary data
-        res.render('matching_interface', {
-            matchedMentees: matchedMentees || [],
-            user: req.user,
-            mentorProfile: mentorProfile
-        });
+
+        // Store matches in session for retrieval
+        global.matchesCache = global.matchesCache || {};
+        global.matchesCache[mentorId] = {
+            matches: matchedMentees,
+            timestamp: Date.now()
+        };
+
     } catch (error) {
-        console.error('Error in mentor matching route:', error);
-        res.render('matching_interface', {
-            matchedMentees: [],
-            user: req.user,
-            mentorProfile: null,
-            error: 'Error loading matching interface. Please try again later.'
-        });
+        console.error("Error fetching matches in background:", error);
+    }
+}
+
+// API endpoint to get matches
+app.get('/api/matches', async (req, res) => {
+    try {
+        if (!req.session.user || req.session.user.role !== "mentor") {
+            return res.status(403).json({ error: "Unauthorized" });
+        }
+
+        const mentorId = req.session.user._id;
+        const cachedMatches = global.matchesCache?.[mentorId];
+
+        if (cachedMatches && Date.now() - cachedMatches.timestamp < 5 * 60 * 1000) { // 5 minutes cache
+            return res.json({ matches: cachedMatches.matches });
+        }
+
+        // If no cached matches or cache expired, trigger a new fetch
+        fetchMatchesInBackground(mentorId);
+        res.json({ matches: [], message: "Fetching matches..." });
+
+    } catch (error) {
+        console.error("Error in matches API:", error);
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 
@@ -1613,8 +1657,20 @@ app.post('/update-student-profile', authenticateToken, async (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
+    console.error('Error details:', err);
+    console.error('Error stack:', err.stack);
+    
+    // Check if headers have already been sent
+    if (res.headersSent) {
+        return next(err);
+    }
+    
+    // Render error page with details
+    res.status(500).render('error', { 
+        message: "An error occurred while processing your request",
+        error: process.env.NODE_ENV === 'development' ? err.message : null,
+        stack: process.env.NODE_ENV === 'development' ? err.stack : null
+    });
 });
 
 // Handle uncaught exceptions

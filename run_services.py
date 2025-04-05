@@ -4,9 +4,19 @@ import sys
 import signal
 import os
 import logging
-from datetime import datetime
-import psutil
 import socket
+from datetime import datetime
+
+# Ensure psutil and requests are installed; if not, instruct the user to install them.
+try:
+    import psutil
+except ImportError:
+    sys.exit("Please install psutil using: pip install psutil")
+
+try:
+    import requests
+except ImportError:
+    sys.exit("Please install requests using: pip install requests")
 
 # Configure logging
 logging.basicConfig(
@@ -21,12 +31,13 @@ logging.basicConfig(
 class ServiceManager:
     def __init__(self):
         self.processes = []
-        # Update ports to match the actual service ports
+        # Define service order explicitly to ensure correct startup sequence
+        self.service_order = ['mentor_processor', 'api', 'workflow', 'algo']
         self.ports = {
-            'mentor_processor': 5003,  # Start mentor processor first
-            'api': 5001,              # Then API service
-            'workflow': 5002,         # Then workflow service
-            'algo': 5000              # Finally algorithm service
+            'mentor_processor': 5003,
+            'api': 5001,
+            'workflow': 5002,
+            'algo': 5000
         }
         self.services = {
             'mentor_processor': 'mentor_processor.py',
@@ -51,32 +62,31 @@ class ServiceManager:
             return False
 
     def check_service_health(self, service_name, port):
-        """Check if a service is healthy by making a health check request."""
-        try:
-            import requests
-            max_retries = 5
-            retry_delay = 2
+        """
+        Check if a service is healthy by making a health check request.
+        Retries several times before giving up.
+        """
+        max_retries = 5
+        retry_delay = 2
+        for attempt in range(max_retries):
+            try:
+                response = requests.get(f'http://localhost:{port}/health', timeout=5)
+                if response.status_code == 200:
+                    health_data = response.json()
+                    if health_data.get('status') == 'healthy':
+                        logging.info(f"Service {service_name} health check passed on attempt {attempt + 1}")
+                        return True
+                    else:
+                        logging.warning(f"Service {service_name} unhealthy on attempt {attempt + 1}")
+                else:
+                    logging.warning(f"Service {service_name} returned status {response.status_code} on attempt {attempt + 1}")
+            except requests.RequestException as e:
+                logging.warning(f"Health check failed for {service_name} on attempt {attempt + 1}: {e}")
             
-            for attempt in range(max_retries):
-                try:
-                    response = requests.get(f'http://localhost:{port}/health', timeout=5)
-                    if response.status_code == 200:
-                        health_data = response.json()
-                        if health_data.get('status') == 'healthy':
-                            logging.info(f"Service {service_name} health check passed on attempt {attempt + 1}")
-                            return True
-                    logging.warning(f"Service {service_name} returned unhealthy status on attempt {attempt + 1}")
-                except requests.RequestException as e:
-                    logging.warning(f"Health check failed for {service_name} on attempt {attempt + 1}: {str(e)}")
-                
-                if attempt < max_retries - 1:
-                    logging.info(f"Waiting {retry_delay} seconds before next retry...")
-                    time.sleep(retry_delay)
-            
-            return False
-        except Exception as e:
-            logging.error(f"Error in health check for {service_name}: {str(e)}")
-            return False
+            if attempt < max_retries - 1:
+                logging.info(f"Waiting {retry_delay} seconds before next health check attempt for {service_name}...")
+                time.sleep(retry_delay)
+        return False
 
     def start_services(self):
         try:
@@ -84,91 +94,110 @@ class ServiceManager:
             if not os.path.exists('logs'):
                 os.makedirs('logs')
 
-            # Kill any existing Python services
-            subprocess.run(['pkill', '-f', 'python3 .*\\.py'])
-            time.sleep(2)  # Wait for processes to clean up
-            
+            # Kill any existing service scripts (limit to the known service file names)
+            for service_script in self.services.values():
+                subprocess.run(['pkill', '-f', service_script], stderr=subprocess.DEVNULL)
+            time.sleep(2)  # Allow time for processes to terminate
+
             # Start services in dependency order
             started_services = set()
-            
-            while len(started_services) < len(self.services):
-                for service_name, port in self.ports.items():
-                    if service_name in started_services:
-                        continue
-                        
-                    # Check if all dependencies are started
-                    deps = self.dependencies[service_name]
-                    if not all(dep in started_services for dep in deps):
-                        logging.info(f"Waiting for dependencies {[dep for dep in deps if dep not in started_services]} before starting {service_name}")
-                        continue
 
+            for service_name in self.service_order:
+                port = self.ports[service_name]
+                if service_name in started_services:
+                    continue
+
+                # Check if all dependencies are started
+                deps = self.dependencies[service_name]
+                if not all(dep in started_services for dep in deps):
+                    logging.info(f"Waiting for dependencies {[dep for dep in deps if dep not in started_services]} before starting {service_name}")
+                    continue
+
+                # Verify that the port is free
+                if not self.is_port_available(port):
+                    logging.warning(f"Port {port} is in use, attempting to free it...")
+                    # Find and kill processes using the port with psutil
+                    killed = False
+                    for conn in psutil.net_connections(kind='inet'):
+                        if conn.status == 'LISTEN' and conn.laddr.port == port and conn.laddr.ip == '127.0.0.1':
+                            try:
+                                proc = psutil.Process(conn.pid)
+                                proc.terminate()
+                                try:
+                                    proc.wait(timeout=5)
+                                except psutil.TimeoutExpired:
+                                    logging.warning(f"Process {proc.pid} did not terminate gracefully, killing it.")
+                                    proc.kill()
+                                    proc.wait()
+                                killed = True
+                                logging.info(f"Terminated process {proc.pid} using port {port}.")
+                            except (psutil.NoSuchProcess, psutil.AccessDenied) as e:
+                                logging.warning(f"Could not terminate process on port {port}: {e}")
+                    time.sleep(2)
                     if not self.is_port_available(port):
-                        logging.warning(f"Port {port} is in use, attempting to free it...")
-                        subprocess.run(['fuser', '-k', f'{port}/tcp'], stderr=subprocess.DEVNULL)
-                        time.sleep(2)
-                        if not self.is_port_available(port):
-                            logging.error(f"Failed to free port {port}")
-                            return False
-
-                    script_path = os.path.join(os.path.dirname(__file__), self.services[service_name])
-                    if not os.path.exists(script_path):
-                        logging.error(f"Service script not found: {script_path}")
+                        logging.error(f"Failed to free port {port} for {service_name}")
                         return False
 
-                    # Start the service with output redirection to log file
-                    log_file = open(f'logs/{service_name}.log', 'w')
-                    env = os.environ.copy()
-                    env['PYTHONUNBUFFERED'] = '1'
-                    
-                    try:
-                        process = subprocess.Popen(
-                            ['python3', script_path],
-                            stdout=log_file,
-                            stderr=subprocess.STDOUT,
-                            env=env
-                        )
-                        self.processes.append((service_name, process, log_file))
-                        logging.info(f"Started {service_name} with PID {process.pid}")
-                        
-                        # Wait for service to start and become healthy
-                        time.sleep(3)  # Give more time for initial startup
-                        if self.check_service_health(service_name, port):
-                            logging.info(f"Service {service_name} is healthy on port {port}")
-                            started_services.add(service_name)
+                # Use the current working directory instead of __file__
+                script_path = os.path.join(os.getcwd(), self.services[service_name])
+                if not os.path.exists(script_path):
+                    logging.error(f"Service script not found: {script_path}")
+                    return False
+
+                # Start the service with output redirection to a log file
+                log_file_path = os.path.join('logs', f'{service_name}.log')
+                log_file = open(log_file_path, 'w')
+                env = os.environ.copy()
+                env['PYTHONUNBUFFERED'] = '1'
+
+                try:
+                    process = subprocess.Popen(
+                        [sys.executable, script_path],
+                        stdout=log_file,
+                        stderr=subprocess.STDOUT,
+                        env=env
+                    )
+                    self.processes.append((service_name, process, log_file))
+                    logging.info(f"Started {service_name} with PID {process.pid}")
+                    # Wait for service to start up and become healthy
+                    time.sleep(3)
+                    if self.check_service_health(service_name, port):
+                        logging.info(f"Service {service_name} is healthy on port {port}")
+                        started_services.add(service_name)
+                    else:
+                        if process.poll() is not None:
+                            logging.error(f"Service {service_name} process exited with code {process.poll()}")
+                            log_file.flush()
+                            with open(log_file_path, 'r') as f:
+                                log_content = f.read()
+                                logging.error(f"Service {service_name} log content:\n{log_content}")
                         else:
-                            if process.poll() is not None:
-                                logging.error(f"Service {service_name} process exited with code {process.poll()}")
-                                log_file.flush()
-                                with open(f'logs/{service_name}.log', 'r') as f:
-                                    log_content = f.read()
-                                    logging.error(f"Service {service_name} log content:\n{log_content}")
-                            else:
-                                logging.error(f"Service {service_name} failed health check on port {port}")
-                            return False
-                    except Exception as e:
-                        logging.error(f"Error starting {service_name}: {str(e)}")
+                            logging.error(f"Service {service_name} failed health check on port {port}")
                         return False
+                except Exception as e:
+                    logging.error(f"Error starting {service_name}: {e}")
+                    return False
 
             return True
         except Exception as e:
-            logging.error(f"Error starting services: {str(e)}")
+            logging.error(f"Error in start_services: {e}")
             return False
 
     def stop_services(self):
         logging.info("Shutting down services...")
-        # Stop services in reverse order of dependencies
+        # Stop services in reverse order of dependency start
         for service_name, process, log_file in reversed(self.processes):
             try:
-                logging.info(f"Stopping {service_name}...")
+                logging.info(f"Stopping {service_name} with PID {process.pid}...")
                 process.terminate()
                 process.wait(timeout=5)
                 log_file.close()
                 logging.info(f"Successfully stopped {service_name}")
             except subprocess.TimeoutExpired:
-                logging.warning(f"Force stopping {service_name}...")
+                logging.warning(f"Force stopping {service_name} with PID {process.pid}...")
                 process.kill()
             except Exception as e:
-                logging.error(f"Error stopping {service_name}: {str(e)}")
+                logging.error(f"Error stopping {service_name}: {e}")
 
 def main():
     service_manager = ServiceManager()
@@ -182,15 +211,13 @@ def main():
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
 
-    # Start all services
     if service_manager.start_services():
-        logging.info("\nAll services are running successfully!")
-        logging.info("Service ports:")
+        logging.info("All services are running successfully!")
         for service, port in service_manager.ports.items():
             logging.info(f"- {service}: http://localhost:{port}")
-        logging.info("\nPress Ctrl+C to stop all services.")
-        logging.info("Logs are being written to the 'logs' directory.")
-        
+        logging.info("Press Ctrl+C to stop all services.")
+        logging.info("Logs are available in the 'logs' directory.")
+
         try:
             while True:
                 time.sleep(1)
@@ -201,4 +228,4 @@ def main():
         sys.exit(1)
 
 if __name__ == '__main__':
-    main() 
+    main()

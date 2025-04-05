@@ -3,9 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Find Mentees | Father's Advice</title>
+    <title><%= title %> | Father's Advice</title>
     <link rel="stylesheet" href="/css/mentor.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet" />
+    <style>
+        .loading-spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 3px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 3px solid #3498db;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading-text {
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .refresh-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+
+        .refresh-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .refresh-btn:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
 <body>
     <!-- Page Title -->
@@ -45,6 +91,12 @@
             </div>
         <% } %>
 
+        <% if (warning) { %>
+            <div class="alert alert-warning">
+                <%= warning %>
+            </div>
+        <% } %>
+
         <!-- Matching Criteria Section -->
         <div class="matching-criteria">
             <h2>Your Matching Criteria</h2>
@@ -55,7 +107,7 @@
                 </div>
                 <div class="criteria-item">
                     <h3>Preferred Time Slots</h3>
-                    <p><%= mentorProfile.preferredTimeSlots.join(', ') %></p>
+                    <p><%= mentorProfile.preferredTimeSlots.join(',') %></p>
                 </div>
                 <div class="criteria-item">
                     <h3>Experience</h3>
@@ -72,57 +124,96 @@
             </div>
         </div>
 
+        <!-- Refresh Button -->
+        <div class="text-center">
+            <button id="refreshMatches" class="refresh-btn" onclick="fetchMatches()">
+                <i class="fas fa-sync-alt"></i> Refresh Matches
+            </button>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loadingContainer" class="loading-container" style="display: none;">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Finding matches...</p>
+        </div>
+
         <!-- Matched Mentees Section -->
-        <div class="matched-mentees">
+        <div id="matchedMentees" class="matched-mentees">
             <h2>Matched Mentees</h2>
-            <% if (matchedMentees.length > 0) { %>
-                <div class="mentees-grid">
-                    <% matchedMentees.forEach(function(mentee) { %>
-                        <div class="mentee-card">
-                            <div class="mentee-info">
-                                <h3><%= mentee.menteeId.name %></h3>
-                                <p><i class="fas fa-envelope"></i> <%= mentee.menteeId.email %></p>
-                                <p><i class="fas fa-phone"></i> <%= mentee.menteeId.phone %></p>
-                                <p><i class="fas fa-graduation-cap"></i> <%= mentee.education %></p>
-                                <p><i class="fas fa-briefcase"></i> <%= mentee.yearOfExperience %> years experience</p>
-                            </div>
-                            <div class="mentee-skills">
-                                <h4>Skills</h4>
-                                <div class="skills-list">
-                                    <% mentee.skills.forEach(function(skill) { %>
-                                        <span class="skill-tag"><%= skill %></span>
-                                    <% }); %>
-                                </div>
-                            </div>
-                            <div class="mentee-actions">
-                                <button class="btn-connect" onclick="connectWithMentee('<%= mentee.menteeId._id %>')">
-                                    <i class="fas fa-handshake"></i> Connect
-                                </button>
-                            </div>
-                        </div>
-                    <% }); %>
-                </div>
-            <% } else { %>
-                <div class="no-matches">
-                    <p>No matched mentees found at the moment. Check back later!</p>
-                </div>
-            <% } %>
+            <div id="menteesGrid" class="mentees-grid">
+                <!-- Mentees will be loaded here dynamically -->
+            </div>
         </div>
     </div>
 
     <script>
-        // Clear success/error messages after 5 seconds
-        setTimeout(() => {
-            const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(alert => {
-                alert.style.display = 'none';
-            });
-        }, 5000);
+        let isFetching = false;
 
-        // Function to handle mentee connection
+        async function fetchMatches() {
+            if (isFetching) return;
+            
+            const refreshBtn = document.getElementById('refreshMatches');
+            const loadingContainer = document.getElementById('loadingContainer');
+            const menteesGrid = document.getElementById('menteesGrid');
+            
+            try {
+                isFetching = true;
+                refreshBtn.disabled = true;
+                loadingContainer.style.display = 'block';
+                menteesGrid.innerHTML = '';
+
+                const response = await fetch('/api/matches');
+                const data = await response.json();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                if (data.matches && data.matches.length > 0) {
+                    menteesGrid.innerHTML = data.matches.map(mentee => `
+                        <div class="mentee-card">
+                            <h3>${mentee.name}</h3>
+                            <p class="email">${mentee.email}</p>
+                            <p class="education">${mentee.education}</p>
+                            <div class="compatibility">
+                                <span class="score">${(mentee.compatibility_score * 100).toFixed(1)}%</span>
+                                <span class="label">Compatibility</span>
+                            </div>
+                            <div class="matching-subject">
+                                <span class="subject">${mentee.matching_subject}</span>
+                                <span class="percentage">${(mentee.matching_percentage * 100).toFixed(1)}%</span>
+                            </div>
+                            <div class="skills">
+                                ${mentee.skills && mentee.skills.length > 0 ? `
+                                    <h4>Skills:</h4>
+                                    <ul>
+                                        ${mentee.skills.map(skill => `<li>${skill}</li>`).join('')}
+                                    </ul>
+                                ` : ''}
+                            </div>
+                            <button class="connect-btn" onclick="connectWithMentee('${mentee._id}')">Connect</button>
+                        </div>
+                    `).join('');
+                } else {
+                    menteesGrid.innerHTML = '<div class="no-matches">No matched mentees found at the moment. Please check back later.</div>';
+                }
+            } catch (error) {
+                console.error('Error fetching matches:', error);
+                menteesGrid.innerHTML = '<div class="alert alert-error">Error loading matches. Please try again.</div>';
+            } finally {
+                isFetching = false;
+                refreshBtn.disabled = false;
+                loadingContainer.style.display = 'none';
+            }
+        }
+
+        // Fetch matches when page loads
+        document.addEventListener('DOMContentLoaded', fetchMatches);
+
+        // Function to connect with a mentee
         function connectWithMentee(menteeId) {
-            // Add connection logic here
-            alert('Connection request sent to mentee!');
+            // Implement connection logic here
+            alert('Connection feature coming soon!');
         }
     </script>
 
@@ -230,6 +321,30 @@
             color: #666;
         }
 
+        .alert {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+
         @media (max-width: 768px) {
             .criteria-grid {
                 grid-template-columns: 1fr;
@@ -238,6 +353,26 @@
             .mentees-grid {
                 grid-template-columns: 1fr;
             }
+        }
+
+        .matching-subject {
+            margin: 10px 0;
+            padding: 5px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .matching-subject .subject {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .matching-subject .percentage {
+            color: #4CAF50;
+            font-weight: bold;
         }
     </style>
 </body>

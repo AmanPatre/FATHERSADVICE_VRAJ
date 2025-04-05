@@ -289,7 +289,49 @@ body {
     background-color: var(--secondary-color);
     transform: translateY(-2px);
 }
+/* Add to your mentor.css */
+.alert-error {
+    padding: 15px;
+    margin: 20px 0;
+    border: 1px solid #ebccd1;
+    border-radius: 4px;
+    color: #a94442;
+    background-color: #f2dede;
+}
 
+.alert-error button {
+    float: right;
+    padding: 5px 10px;
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.error-container {
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 600px;
+    text-align: center;
+    background: #ffe6e6;
+    border: 2px solid #ff4444;
+    border-radius: 8px;
+}
+
+.retry-button {
+    margin-top: 1rem;
+    padding: 0.8rem 1.5rem;
+    background: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.retry-button:hover {
+    background: #cc0000;
+}
 /* Animations */
 @keyframes fadeIn {
     from {

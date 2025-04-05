@@ -5,37 +5,75 @@ from pymongo import MongoClient
 import numpy as np
 from scipy.optimize import linear_sum_assignment
 import sys
+import traceback
+import logging
+from bson.objectid import ObjectId
+import os
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS
 
+# Set up logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
 # --------------------
 # MongoDB Configuration
 # --------------------
-# Replace with environment variable or configuration file
-DB_NAME = "project"
-client = MongoClient("mongodb://localhost:27017/")
-db = client[DB_NAME]  # Use the same database name as other services
+# Use environment variables for sensitive data
+DB_NAME = os.environ.get("DB_NAME", "project")
+DB_URI = os.environ.get("MONGO_URI", "mongodb+srv://gamingworld448:VD6Us86aukIKOcST@cluster0.hxoebiy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+db = None
+client = None
 
-mentors_collection = db['mentors']       # Collection holding mentor documents
-mentees_collection = db['mentees']         # Collection holding mentee documents
-matches_collection = db['matches_results'] # Collection where matching results are stored
-sessions_collection = db['sessions']
-mentors_result_collection = db['mentors_result']
+try:
+    client = MongoClient(DB_URI, serverSelectionTimeoutMS=5000)
+    # Test the connection
+    client.server_info()
+    db = client[DB_NAME]
+    print("Successfully connected to MongoDB")
+except Exception as e:
+    print(f"Error connecting to MongoDB: {e}")
+    # Set up a fallback local MongoDB connection
+    try:
+        client = MongoClient("mongodb://localhost:27017/", serverSelectionTimeoutMS=5000)
+        client.server_info()
+        db = client[DB_NAME]
+        print("Successfully connected to local MongoDB")
+    except Exception as local_e:
+        print(f"Error connecting to local MongoDB: {local_e}")
+        # Continue with None values for collections
+        db = None
+
+# Initialize collections
+if db is not None:
+    mentors_collection = db['mentors']
+    mentees_collection = db['mentees']
+    matches_collection = db['matches_results']
+    sessions_collection = db['sessions']
+    mentors_result_collection = db['mentors_result']
+else:
+    # Ensure we have empty collections defined if DB connection fails
+    mentors_collection = None
+    mentees_collection = None
+    matches_collection = None
+    sessions_collection = None
+    mentors_result_collection = None
 
 # --------------------
 # Matching Criteria Weights & Normalization
 # --------------------
-# Weights for the five matching criteria (they should sum to 1)
-W1 = 0.3   # Skill Match (Jaccard similarity on "skills")
-W2 = 0.25  # Experience Match (mentor must have equal or greater experience)
-W3 = 0.2   # Availability Match (ratio of overlapping hours)
-W4 = 0.15  # Location Match (binary: 1 if same region, else 0)
-W5 = 0.1   # Workload Balancing (penalize mentors with high workload)
+# Weights for the matching criteria (they should sum to 1)
+weights = {
+    'skill': 0.6,    # Subject/Skill Match (highest weight)
+    'time': 0.2,     # Time Availability Match
+    'location': 0.1, # Location Match
+    'workload': 0.1  # Workload Balancing
+}
 
 # Maximum values for normalization
-MAX_EXPERIENCE_DIFF = 10   # Maximum expected difference in years
-MAX_WORKLOAD = 5           # Maximum acceptable workload (number of active mentees)
+MAX_WORKLOAD = 5  # Maximum acceptable workload (number of active mentees)
+MAX_EXPERIENCE_DIFF = 5  # Maximum acceptable difference in years of experience
 print("algo.py is running...")
 
 # --------------------
@@ -51,6 +89,9 @@ def jaccard_similarity(set1, set2):
 
 def compute_S1(mentee_skills, mentor_skills):
     """Skill match (S1) using Jaccard similarity."""
+    # Handle the case where skills might be None
+    mentee_skills = mentee_skills or []
+    mentor_skills = mentor_skills or []
     return jaccard_similarity(set(mentee_skills), set(mentor_skills))
 
 def compute_S2(mentee_exp, mentor_exp):
@@ -59,116 +100,201 @@ def compute_S2(mentee_exp, mentor_exp):
     If mentee's experience is greater than mentor's, return 0.
     Otherwise, return a scaled score.
     """
+    # Handle the case where experience might be None or non-numeric
+    try:
+        mentee_exp = float(mentee_exp or 0)
+        mentor_exp = float(mentor_exp or 0)
+    except (ValueError, TypeError):
+        mentee_exp = 0
+        mentor_exp = 0
+
     if mentee_exp > mentor_exp:
         return 0.0
     diff = mentor_exp - mentee_exp
     return max(0, 1 - diff / MAX_EXPERIENCE_DIFF)
 
-def compute_S3(mentee_pref_hours, mentor_available_hours):
-    """
-    Availability match (S3): Ratio of overlapping hours to mentee's preferred hours.
-    """
-    if mentee_pref_hours <= 0:
-        return 0.0
-    overlap = min(mentor_available_hours, mentee_pref_hours)
-    return min(overlap / mentee_pref_hours, 1.0)
-
-def compute_S4(mentee_location, mentor_location):
-    """
-    Location match (S4): Returns 1 if mentor and mentee share the same region; else 0.
-    """
-    return 1.0 if mentee_location == mentor_location else 0.0
-
-def compute_S5(mentor_workload):
-    """
-    Workload balancing (S5): Penalize mentors with higher workloads.
-    """
-    return max(0, 1 - mentor_workload / MAX_WORKLOAD)
-
-def compute_subject_match(mentee_subjects, mentor_subjects):
-    """Compute subject compatibility based on subject breakdown percentages."""
-    if not mentee_subjects or not mentor_subjects:
+def compute_S3(mentee_slots, mentor_slots):
+    """Time availability match (S3) using overlapping time slots."""
+    # Handle the case where slots might be None
+    mentee_slots = mentee_slots or []
+    mentor_slots = mentor_slots or []
+    
+    if not mentee_slots or not mentor_slots:
         return 0.0
     
-    # Convert to dictionaries for easier lookup
-    mentee_subjects = {s['subject'].lower(): s['percentage'] for s in mentee_subjects.get('results', [])}
-    mentor_subjects = {s['subject'].lower(): s['percentage'] for s in mentor_subjects.get('results', [])}
+    # Convert slots to sets for easier comparison
+    mentee_set = set(mentee_slots)
+    mentor_set = set(mentor_slots)
     
-    total_score = 0.0
-    total_weight = 0.0
+    # Calculate overlap
+    overlap = len(mentee_set.intersection(mentor_set))
+    total = len(mentee_set.union(mentor_set))
     
-    # Calculate weighted match score
-    for subject, mentee_percentage in mentee_subjects.items():
-        mentor_percentage = mentor_subjects.get(subject, 0)
-        # Calculate match score based on percentage overlap
-        match_score = min(mentee_percentage, mentor_percentage)
-        # Weight the match by mentee's interest percentage
-        total_score += match_score * mentee_percentage
-        total_weight += mentee_percentage
-    
-    # Normalize the score
-    return total_score / total_weight if total_weight > 0 else 0.0
+    return overlap / total if total > 0 else 0.0
 
-def compute_compatibility(mentee, mentor):
-    """
-    Compute the overall compatibility score for a mentor-mentee pair.
-    Now includes subject breakdown matching.
-    """
-    # Get subject breakdowns
-    mentee_subjects = mentee.get('subject_breakdown', {})
-    mentor_subjects = mentor.get('subject_breakdown', {})
+def compute_S4(mentee_timezone, mentor_timezone):
+    """Location match (S4) based on timezone."""
+    if not mentee_timezone or not mentor_timezone:
+        return 0.0
     
-    # Calculate subject match score
-    subject_score = compute_subject_match(mentee_subjects, mentor_subjects)
+    # Convert timezones to lowercase for comparison
+    mentee_tz = str(mentee_timezone).lower()
+    mentor_tz = str(mentor_timezone).lower()
     
-    # Calculate other compatibility scores
-    skill_score = compute_S1(mentee.get('skills', []), mentor.get('skills', []))
-    experience_score = compute_S2(mentee.get('experience', 0), mentor.get('experience', 0))
-    availability_score = compute_S3(mentee.get('preferred_hours', 0), mentor.get('available_hours', 0))
-    location_score = compute_S4(mentee.get('location', ''), mentor.get('location', ''))
-    workload_score = compute_S5(mentor.get('workload', 0))
+    # Exact match
+    if mentee_tz == mentor_tz:
+        return 1.0
     
-    # Updated weights to include subject matching
-    weights = {
-        'subject': 0.35,  # Increased weight for subject matching
-        'skill': 0.25,
-        'experience': 0.15,
-        'availability': 0.10,
-        'location': 0.10,
-        'workload': 0.05
+    # Check if timezones are in the same region (e.g., both in US/Eastern)
+    mentee_region = mentee_tz.split('/')[0] if '/' in mentee_tz else mentee_tz
+    mentor_region = mentor_tz.split('/')[0] if '/' in mentor_tz else mentor_tz
+    
+    if mentee_region == mentor_region:
+        return 0.8
+    
+    # Check if timezones are in adjacent regions
+    adjacent_regions = {
+        'us': ['canada', 'mexico'],
+        'europe': ['africa', 'asia'],
+        'asia': ['europe', 'australia'],
+        'australia': ['asia', 'pacific']
     }
     
-    # Calculate weighted sum
-    final_score = (
-        weights['subject'] * subject_score +
-        weights['skill'] * skill_score +
-        weights['experience'] * experience_score +
-        weights['availability'] * availability_score +
-        weights['location'] * location_score +
-        weights['workload'] * workload_score
-    )
+    for region, neighbors in adjacent_regions.items():
+        if (mentee_region == region and mentor_region in neighbors) or \
+           (mentor_region == region and mentee_region in neighbors):
+            return 0.5
     
-    return final_score
+    return 0.0
+
+def compute_S5(mentor_workload):
+    """Workload balancing (S5): Penalize mentors with high workload."""
+    if mentor_workload is None:
+        return 1.0  # Default to maximum score if workload is not specified
+    
+    # Convert to float in case it's a string
+    try:
+        workload = float(mentor_workload)
+    except (ValueError, TypeError):
+        return 1.0
+    
+    # Calculate score based on workload
+    if workload >= MAX_WORKLOAD:
+        return 0.0  # Maximum penalty for overloaded mentors
+    elif workload == 0:
+        return 1.0  # Maximum score for mentors with no workload
+    
+    # Linear scale between 0 and MAX_WORKLOAD
+    return 1.0 - (workload / MAX_WORKLOAD)
+
+def compute_subject_match(mentee_subjects, mentor_subjects):
+    """
+    Compute subject match score between mentee and mentor.
+    This function is used to store top tier matches for offline mentor matching.
+    """
+    if not mentee_subjects or not mentor_subjects:
+        return 0.0, None, 0.0
+    
+    max_score = 0.0
+    matching_subject = None
+    matching_percentage = 0.0
+    
+    for mentor_subj in mentor_subjects:
+        # Check if mentor_subj is a dictionary with required keys
+        if not isinstance(mentor_subj, dict) or "subject" not in mentor_subj or "percentage" not in mentor_subj:
+            continue
+            
+        for mentee_subj in mentee_subjects:
+            # Check if mentee_subj is a dictionary with required keys
+            if not isinstance(mentee_subj, dict) or "subject" not in mentee_subj or "percentage" not in mentee_subj:
+                continue
+                
+            if mentor_subj["subject"].lower() == mentee_subj["subject"].lower():
+                # Calculate combined percentage
+                try:
+                    combined_percentage = (float(mentor_subj["percentage"]) + float(mentee_subj["percentage"])) / 2
+                    if combined_percentage > max_score:
+                        max_score = combined_percentage
+                        matching_subject = mentor_subj["subject"]
+                        matching_percentage = combined_percentage
+                except (ValueError, TypeError):
+                    # Handle case where percentage is not a valid number
+                    continue
+    
+    return max_score, matching_subject, matching_percentage
+
+def compute_compatibility(mentee, mentor):
+    """Compute overall compatibility score between a mentee and mentor."""
+    try:
+        if not mentee or not mentor:
+            return 0.0, "General", 0.0
+            
+        # Get subject breakdowns
+        mentor_subjects = mentor.get("subject_breakdown", [])
+        mentee_subjects = mentee.get("subject_breakdown", [])
+        
+        # Calculate subject match score using compute_subject_match
+        subject_score, matching_subject, matching_percentage = compute_subject_match(mentee_subjects, mentor_subjects)
+        
+        # If no subject match, fallback to skill-based matching
+        if subject_score == 0.0:
+            subject_score = compute_S1(mentee.get("skills", []), mentor.get("skills", []))
+
+        # Calculate time availability score
+        time_score = compute_S3(
+            mentee.get("preferredTimeSlots", []),
+            mentor.get("preferredTimeSlots", [])
+        )
+
+        # Calculate location match score
+        location_score = compute_S4(
+            mentee.get("timezone", ""),
+            mentor.get("timezone", "")
+        )
+
+        # Calculate workload score
+        workload_score = compute_S5(mentor.get("activeMentees", 0))
+
+        # Calculate final score using weights
+        final_score = (
+            weights['skill'] * subject_score +
+            weights['time'] * time_score +
+            weights['location'] * location_score +
+            weights['workload'] * workload_score
+        )
+    
+        return final_score, matching_subject or "General", matching_percentage
+    except Exception as e:
+        logger.error(f"Error in compute_compatibility: {e}\n{traceback.format_exc()}")
+        return 0.0, "General", 0.0  # Return default values in case of error
 
 def get_online_mentors():
     """Get all online mentors."""
+    if mentors_collection is None:
+        return []
     return list(mentors_collection.find({"is_online": True}))
 
 def get_offline_mentors():
     """Get all offline mentors."""
+    if mentors_collection is None:
+        return []
     return list(mentors_collection.find({"is_online": False}))
 
 def match_mentor_mentee(mentee, mentors):
     """Match a single mentee with the best available mentor."""
     best_match = None
     best_score = -1
+    best_subject = None
+    best_percentage = 0.0
     
     for mentor in mentors:
-        score = compute_compatibility(mentee, mentor)
+        score, matching_subject, matching_percentage = compute_compatibility(mentee, mentor)
         if score > best_score:
             best_score = score
+            best_subject = matching_subject
+            best_percentage = matching_percentage
             best_match = {
-                "mentor_id": mentor["_id"],
+                "mentor_id": str(mentor["_id"]),  # Convert ObjectId to string
                 "compatibility_score": score,
                 "mentor_details": {
                     "name": mentor.get("name", ""),
@@ -176,7 +302,9 @@ def match_mentor_mentee(mentee, mentors):
                     "experience": mentor.get("experience", 0),
                     "location": mentor.get("location", ""),
                     "available_hours": mentor.get("available_hours", 0),
-                    "is_online": mentor.get("is_online", False)
+                    "is_online": mentor.get("is_online", False),
+                    "matching_subject": matching_subject,
+                    "matching_percentage": matching_percentage
                 }
             }
     
@@ -188,109 +316,222 @@ def match_mentor_mentee(mentee, mentors):
 @app.route('/match_advanced', methods=['POST'])
 def match_advanced():
     try:
-        data = request.get_json() or {}
+        if not request.is_json:
+            return jsonify({"error": "Request must be JSON"}), 400
+            
+        data = request.get_json()
+        mentor_id = data.get('mentor_id')
         mentee_id = data.get('mentee_id')
         mentor_ids = data.get('mentor_ids', [])
 
-        if not mentee_id:
-            return jsonify({"error": "mentee_id is required"}), 400
+        # Check if MongoDB is available
+        if db is None or mentors_collection is None or mentees_collection is None:
+            return jsonify({"error": "Database connection not available"}), 503
 
-        # Get the mentee with subject breakdown
-        mentee = mentees_collection.find_one({"_id": mentee_id})
+        # Check if this is a mentor or mentee matching request
+        if mentor_id and not mentee_id:
+            # Mentor matching flow - find mentees for a mentor
+            return match_mentor_to_mentees(mentor_id)
+        elif mentee_id and not mentor_id:
+            # Mentee matching flow - find mentors for a mentee
+            return match_mentee_to_mentors(mentee_id, mentor_ids)
+        else:
+            return jsonify({"error": "Either mentor_id or mentee_id is required, but not both"}), 400
+
+    except Exception as e:
+        logger.error(f"Error in match_advanced: {str(e)}\n{traceback.format_exc()}")
+        return jsonify({"error": str(e)}), 500
+
+def match_mentor_to_mentees(mentor_id):
+    """Match a mentor with potential mentees."""
+    try:
+        # Check if MongoDB collections are available
+        if mentors_collection is None or mentees_collection is None:
+            logger.error("MongoDB collections not available")
+            return jsonify({"error": "Database connection error"}), 500
+
+        try:
+            mentor_obj_id = ObjectId(mentor_id)
+        except Exception as e:
+            logger.error(f"Invalid mentor ID format: {e}")
+            return jsonify({"error": "Invalid mentor ID format"}), 400
+
+        # Get the mentor profile
+        mentor = mentors_collection.find_one({"_id": mentor_obj_id})
+        if mentor is None:
+            logger.error(f"Mentor {mentor_id} not found")
+            return jsonify({"error": "Mentor not found"}), 404
+
+        # Get mentor's subject breakdown
+        mentor_subjects = mentor.get("subject_breakdown", [])
+        if not mentor_subjects:
+            logger.warning(f"Mentor {mentor_id} has no subject breakdown")
+            mentor_subjects = [{"subject": "General", "percentage": 1.0}]
+
+        # Get all mentees with subject breakdowns
+        mentees = list(mentees_collection.find({
+            "profileCompleted": True,
+            "status": "active"  # Only get active mentees
+        }))
+
+        if len(mentees) == 0:
+            logger.info("No active mentees found")
+            return jsonify({
+                "status": "success",
+                "matches": []
+            })
+
+        # Find best matching mentees
+        matched_mentees = []
+        
+        for mentee in mentees:
+            try:
+                # Calculate compatibility score
+                score, matching_subject, matching_percentage = compute_compatibility(mentee, mentor)
+                
+                if score > 0.3:  # Only include mentees with reasonable compatibility
+                    matched_mentees.append({
+                        "mentee_id": str(mentee["_id"]),  # Convert ObjectId to string
+                        "compatibility_score": score,
+                        "mentee_details": {
+                            "name": mentee.get("name", ""),
+                            "email": mentee.get("email", ""),
+                            "skills": mentee.get("skills", []),
+                            "education": mentee.get("education", ""),
+                            "brief_bio": mentee.get("brief_bio", ""),
+                            "is_online": mentee.get("is_online", False),
+                            "subject_breakdown": mentee.get("subject_breakdown", []),
+                            "matching_subject": matching_subject,
+                            "matching_percentage": matching_percentage
+                        }
+                    })
+                    logger.debug(f"Added mentee {mentee['_id']} with score {score}")
+            except Exception as e:
+                logger.error(f"Error processing mentee {mentee.get('_id')}: {e}")
+                continue
+        
+        # Sort by compatibility score (highest first)
+        matched_mentees.sort(key=lambda x: x["compatibility_score"], reverse=True)
+        
+        response = {
+            "status": "success",
+            "matches": matched_mentees
+        }
+        logger.debug(f"Returning {len(matched_mentees)} matches")
+        return jsonify(response)
+    except Exception as e:
+        logger.error(f"Error in match_mentor_to_mentees: {e}\n{traceback.format_exc()}")
+        return jsonify({"error": str(e)}), 500
+
+def match_mentee_to_mentors(mentee_id, mentor_ids=None):
+    """Match a mentee with potential mentors."""
+    try:
+        # Check if MongoDB collections are available
+        if mentors_collection is None or mentees_collection is None:
+            logger.error("MongoDB collections not available")
+            return jsonify({"error": "Database connection error"}), 500
+
+        try:
+            mentee_obj_id = ObjectId(mentee_id)
+        except Exception as e:
+            logger.error(f"Invalid mentee ID format: {e}")
+            return jsonify({"error": "Invalid mentee ID format"}), 400
+
+        # Get mentee data
+        mentee = mentees_collection.find_one({"_id": mentee_obj_id})
         if not mentee:
             return jsonify({"error": "Mentee not found"}), 404
 
-        # Get the pre-matched mentors with subject breakdowns
-        if not mentor_ids:
-            mentors_result = mentors_result_collection.find_one({"mentee_id": mentee_id})
-            if not mentors_result:
-                return jsonify({"error": "No pre-matched mentors found"}), 404
-            mentor_ids = [m["mentor_id"] for m in mentors_result.get("matched_mentors", [])]
-
-        # Get online mentors with their subject breakdowns
-        mentors = list(mentors_collection.find({
-            "_id": {"$in": mentor_ids},
-            "is_online": True
-        }))
-
-        # Get all matched mentors for offline section
-        mentors_result = mentors_result_collection.find_one({"mentee_id": mentee_id})
-        if not mentors_result:
-            return jsonify({"error": "No matched mentors found"}), 404
-
-        matched_mentors = mentors_result.get("matched_mentors", [])
-        offline_mentors = [m for m in matched_mentors if not m["mentor_details"]["is_online"]]
+        # Get available mentors
+        if mentor_ids and isinstance(mentor_ids, list):
+            try:
+                # Convert strings to ObjectIds
+                object_ids = [ObjectId(mid) for mid in mentor_ids]
+                # Use pre-matched mentors if provided
+                mentors = list(mentors_collection.find({
+                    "_id": {"$in": object_ids},
+                    "is_online": True
+                }))
+            except Exception as e:
+                logger.error(f"Error with mentor IDs: {e}")
+                # Fallback to all online mentors
+                mentors = list(mentors_collection.find({"is_online": True}))
+        else:
+            # Get all online mentors
+            mentors = list(mentors_collection.find({"is_online": True}))
 
         if not mentors:
+            # Get offline mentors as fallback
+            offline_mentors = list(mentors_collection.find({"is_online": False}))
+            
+            if not offline_mentors:
+                return jsonify({
+                    "status": "offline",
+                    "message": "No mentors available"
+                }), 200
+            
+            # Find best matching offline mentor
+            best_match = match_mentor_mentee(mentee, offline_mentors)
+            if best_match:
+                return jsonify({
+                    "status": "offline",
+                    "match": best_match,
+                    "message": "No online mentors available. Showing best offline match."
+                })
+            
             return jsonify({
-                "status": "offline",
-                "matched_section": None,
-                "offline_section": {
-                    "mentors": offline_mentors,
-                    "total_offline": len(offline_mentors)
-                },
-                "message": "No online mentors available. Showing all matched mentors."
+                "status": "no_match",
+                "message": "No suitable mentors found"
             })
 
-        # Build cost matrix using enhanced compatibility scores
-        num_mentors = len(mentors)
-        cost_matrix = np.zeros((1, num_mentors))
+        # Find best matching online mentor
+        best_match = match_mentor_mentee(mentee, mentors)
+        if best_match:
+            return jsonify({
+                "status": "success",
+                "match": best_match
+            })
 
-        for j, mentor in enumerate(mentors):
-            compatibility = compute_compatibility(mentee, mentor)
-            cost_matrix[0, j] = 1 - compatibility
-
-        # Use Hungarian algorithm to find the best match
-        row_ind, col_ind = linear_sum_assignment(cost_matrix)
-        best_mentor_idx = col_ind[0]
-        best_mentor = mentors[best_mentor_idx]
-        compatibility_score = 1 - cost_matrix[0, best_mentor_idx]
-
-        # Prepare match result with subject breakdown
-        match_result = {
-            "status": "success",
-            "match": {
-                "mentor_id": best_mentor["_id"],
-                "compatibility_score": compatibility_score,
-                "mentor_details": {
-                    "name": best_mentor.get("name", ""),
-                    "skills": best_mentor.get("skills", []),
-                    "experience": best_mentor.get("experience", 0),
-                    "location": best_mentor.get("location", ""),
-                    "available_hours": best_mentor.get("available_hours", 0),
-                    "is_online": best_mentor.get("is_online", False)
-                }
-            },
-            "offline_section": {
-                "mentors": offline_mentors,
-                "total_offline": len(offline_mentors)
-            }
-        }
-
-        return jsonify(match_result)
-
+        return jsonify({
+            "status": "no_match",
+            "message": "No suitable mentors found"
+        })
     except Exception as e:
-        print(f"Error in match_advanced: {str(e)}")
+        logger.error(f"Error in match_mentee_to_mentors: {e}\n{traceback.format_exc()}")
         return jsonify({"error": str(e)}), 500
 
 @app.route("/update_online_status", methods=["POST"])
 def update_online_status():
     try:
+        if not request.is_json:
+            return jsonify({"error": "Request must be JSON"}), 400
+            
         data = request.get_json()
         mentor_id = data.get("mentor_id")
         is_online = data.get("is_online", False)
 
+        # Check if MongoDB collections are available
+        if mentors_collection is None:
+            logger.error("MongoDB collections not available")
+            return jsonify({"error": "Database connection error"}), 500
+
         if not mentor_id:
             return jsonify({"error": "mentor_id is required"}), 400
 
+        try:
+            mentor_obj_id = ObjectId(mentor_id)
+        except Exception as e:
+            logger.error(f"Invalid mentor ID format: {e}")
+            return jsonify({"error": "Invalid mentor ID format"}), 400
+
         # Update mentor's online status
         result = mentors_collection.update_one(
-            {"_id": mentor_id},
+            {"_id": mentor_obj_id},
             {"$set": {"is_online": is_online, "last_active": datetime.now()}}
         )
 
         if result.modified_count == 0:
-            return jsonify({"error": "Mentor not found"}), 404
+            return jsonify({"error": "Mentor not found or no changes needed"}), 404
 
         return jsonify({
             "status": "success",
@@ -298,21 +539,35 @@ def update_online_status():
         })
 
     except Exception as e:
-        print(f"Error in update_online_status: {str(e)}")
+        logger.error(f"Error in update_online_status: {str(e)}\n{traceback.format_exc()}")
         return jsonify({"error": str(e)}), 500
 
 @app.route("/submit_doubt", methods=["POST"])
 def submit_doubt():
     try:
+        if not request.is_json:
+            return jsonify({"error": "Request must be JSON"}), 400
+            
         data = request.get_json()
         mentee_id = data.get("mentee_id")
         doubt_text = data.get("doubt")
 
+        # Check if MongoDB collections are available
+        if mentors_collection is None or mentees_collection is None:
+            logger.error("MongoDB collections not available")
+            return jsonify({"error": "Database connection error"}), 500
+
         if not mentee_id or not doubt_text:
             return jsonify({"error": "mentee_id and doubt are required"}), 400
 
+        try:
+            mentee_obj_id = ObjectId(mentee_id)
+        except Exception as e:
+            logger.error(f"Invalid mentee ID format: {e}")
+            return jsonify({"error": "Invalid mentee ID format"}), 400
+
         # Get mentee data
-        mentee = mentees_collection.find_one({"_id": mentee_id})
+        mentee = mentees_collection.find_one({"_id": mentee_obj_id})
         if not mentee:
             return jsonify({"error": "Mentee not found"}), 404
 
@@ -327,6 +582,18 @@ def submit_doubt():
         # Find best matching mentor
         best_match = match_mentor_mentee(mentee, mentors)
         if best_match:
+            # Optional: Store the doubt in a collection for later reference
+            if db is not None:
+                try:
+                    db['doubts'].insert_one({
+                        "mentee_id": mentee_id,
+                        "mentor_id": best_match["mentor_id"],
+                        "doubt_text": doubt_text,
+                        "created_at": datetime.now()
+                    })
+                except Exception as e:
+                    logger.warning(f"Failed to store doubt: {e}")
+                    
             return jsonify({
                 "status": "success",
                 "match": best_match
@@ -338,61 +605,93 @@ def submit_doubt():
         })
 
     except Exception as e:
-        print(f"Error in submit_doubt: {str(e)}")
+        logger.error(f"Error in submit_doubt: {str(e)}\n{traceback.format_exc()}")
         return jsonify({"error": str(e)}), 500
 
 @app.route('/health')
 def health_check():
     try:
-        # Check MongoDB connection
-        client.server_info()
-        
-        # Check if all required collections exist and are accessible
-        collections = {
-            'mentees': mentees_collection,
-            'mentors': mentors_collection,
-            'matches': matches_collection,
-            'sessions': sessions_collection
-        }
-        
-        collection_status = {}
-        for name, collection in collections.items():
-            try:
-                # Try to perform a simple operation on each collection
-                collection.find_one()
-                collection_status[name] = "available"
-            except Exception as e:
-                collection_status[name] = f"error: {str(e)}"
-                return jsonify({
-                    "status": "unhealthy",
-                    "service": "algo",
-                    "error": f"Collection {name} is not accessible",
-                    "details": str(e),
-                    "timestamp": datetime.now().isoformat()
-                }), 500
-            
-        return jsonify({
-            "status": "healthy",
-            "service": "algo",
-            "timestamp": datetime.now().isoformat(),
-            "dependencies": {
-                "mongodb": "connected",
-                "collections": collection_status
-            }
-        }), 200
+        # Test MongoDB connection by running a simple command
+        if db is None:
+            mongodb_status = "disconnected"
+        else:
+            db.command('ping')
+            mongodb_status = "connected"
     except Exception as e:
-        return jsonify({
-            "status": "unhealthy",
-            "service": "algo",
-            "error": "MongoDB connection failed",
-            "details": str(e),
-            "timestamp": datetime.now().isoformat()
-        }), 500
+        mongodb_status = f"disconnected ({str(e)})"
+
+    return jsonify({
+        "status": "healthy",
+        "service": "algo",
+        "timestamp": datetime.now().isoformat(),
+        "dependencies": {
+            "mongodb": mongodb_status,
+            "collections": {
+                "mentors": "available" if mentors_collection is not None else "unavailable",
+                "mentees": "available" if mentees_collection is not None else "unavailable",
+                "matches": "available" if matches_collection is not None else "unavailable",
+                "sessions": "available" if sessions_collection is not None else "unavailable"
+            }
+        }
+    })
+
+@app.route('/test', methods=['GET'])
+def test_endpoint():
+    return jsonify({"status": "ok", "message": "Algorithm service is running"})
+
+@app.route('/get_mentor_matching_interface/<user_id>', methods=['GET'])
+def get_mentor_matching_interface_endpoint(user_id):
+    """Get matching interface for a mentor or mentee."""
+    try:
+        # Check if MongoDB collections are available
+        if mentors_collection is None or mentees_collection is None:
+            logger.error("MongoDB collections not available")
+            return jsonify({"error": "Database connection error"}), 500
+            
+        # Convert string ID to ObjectId
+        try:
+            user_id_obj = ObjectId(user_id)
+        except Exception as e:
+            logger.error(f"Invalid ObjectId format: {e}")
+            return jsonify({"error": "Invalid user ID format"}), 400
+        
+        # Check if user exists and is a mentor or mentee
+        mentor = mentors_collection.find_one({"_id": user_id_obj})
+        logger.debug(f"Found mentor: {mentor is not None}")
+        mentee = mentees_collection.find_one({"_id": user_id_obj})
+        logger.debug(f"Found mentee: {mentee is not None}")
+        
+        if mentor is not None:
+            # User is a mentor, find matching mentees
+            logger.debug("Processing mentor matching")
+            return match_mentor_to_mentees(user_id)
+        elif mentee is not None:
+            # User is a mentee, find matching mentors
+            logger.debug("Processing mentee matching")
+            return match_mentee_to_mentors(user_id)
+        else:
+            logger.debug("User not found")
+            return jsonify({"error": "User not found"}), 404
+    except Exception as e:
+        logger.error(f"Error in get_mentor_matching_interface endpoint: {e}\n{traceback.format_exc()}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/debug/routes')
+def list_routes():
+    routes = []
+    for rule in app.url_map.iter_rules():
+        routes.append({
+            'endpoint': rule.endpoint,
+            'methods': list(rule.methods),
+            'path': str(rule)
+        })
+    return jsonify(routes)
 
 if __name__ == '__main__':
     try:
-        print("Starting algorithm service on port 5000...")
-        app.run(host='0.0.0.0', port=5000)
+        port = int(os.environ.get("PORT", 5000))
+        logger.info(f"Starting algorithm service on port {port}...")
+        app.run(host='0.0.0.0', port=port, debug=False)
     except Exception as e:
-        print(f"Error starting algorithm service: {e}")
+        logger.error(f"Error starting algorithm service: {e}")
         sys.exit(1)

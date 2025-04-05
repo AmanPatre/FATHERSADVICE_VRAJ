@@ -26,6 +26,7 @@ try:
     db = mongo_client[DB_NAME]
     mentors_collection = db["mentors"]
     mentor_profiles_collection = db["mentor_profiles"]
+    mentees_collection = db["mentees"]
     print("Connected to MongoDB")
 except Exception as e:
     print(f"MongoDB Connection Error: {e}")
@@ -542,9 +543,15 @@ def get_mentor_matching_interface(mentor_id):
         # Get mentees with matching subjects
         matched_mentees = []
         for subject_data in subject_breakdown.get("results", []):
-            subject = subject_data["subject"]
-            mentees = db.mentees_collection.find({
-                "subject": subject,
+            subject = subject_data["subject"].lower()  # Convert to lowercase for case-insensitive matching
+            subject_percentage = subject_data["percentage"]  # Get the percentage for this subject
+            
+            mentees = mentees_collection.find({
+                "subject_breakdown.results": {
+                    "$elemMatch": {
+                        "subject": {"$regex": f"^{subject}$", "$options": "i"}  # Case-insensitive match
+                    }
+                },
                 "status": "active"
             })
             
@@ -553,14 +560,32 @@ def get_mentor_matching_interface(mentor_id):
                 compatibility = calculate_mentor_mentee_compatibility(mentor, mentee)
                 
                 if compatibility > 0.5:  # Only include mentees with good compatibility
+                    # Get mentee's subject breakdown
+                    mentee_subject_breakdown = mentee.get("subject_breakdown", {})
+                    
+                    # Find the matching subject in mentee's breakdown
+                    mentee_subject_percentage = 0
+                    for mentee_subject in mentee_subject_breakdown.get("results", []):
+                        if mentee_subject["subject"].lower() == subject:
+                            mentee_subject_percentage = mentee_subject["percentage"]
+                            break
+                    
                     matched_mentees.append({
                         "mentee_id": str(mentee["_id"]),
-                        "name": mentee.get("name", ""),
-                        "subject": mentee.get("subject", ""),
                         "compatibility_score": compatibility,
-                        "preferred_time": mentee.get("preferred_time", ""),
-                        "location": mentee.get("location", ""),
-                        "doubt_description": mentee.get("doubt_description", "")
+                        "mentee_details": {
+                            "name": mentee.get("name", ""),
+                            "email": mentee.get("email", ""),
+                            "skills": mentee.get("skills", []),
+                            "education": mentee.get("education", ""),
+                            "brief_bio": mentee.get("brief_bio", ""),
+                            "subject_breakdown": mentee_subject_breakdown,
+                            "matching_subject": {
+                                "name": subject,
+                                "mentor_percentage": subject_percentage,
+                                "mentee_percentage": mentee_subject_percentage
+                            }
+                        }
                     })
         
         # Sort mentees by compatibility score
@@ -568,11 +593,7 @@ def get_mentor_matching_interface(mentor_id):
         
         return {
             "status": "success",
-            "matching_interface": {
-                "mentor_id": mentor_id,
-                "total_matches": len(matched_mentees),
-                "matched_mentees": matched_mentees
-            }
+            "matches": matched_mentees
         }
         
     except Exception as e:
