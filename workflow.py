@@ -7,8 +7,19 @@ from pymongo import MongoClient
 import os
 import time
 import sys
+import json
+from bson import ObjectId
+
+class MongoJSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, ObjectId):
+            return str(obj)
+        if isinstance(obj, datetime):
+            return obj.isoformat()
+        return super().default(obj)
 
 app = Flask(__name__)
+app.json_encoder = MongoJSONEncoder  # Use our custom encoder
 CORS(app)
 
 # MongoDB Connection with retry logic

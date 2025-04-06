@@ -5,8 +5,70 @@ Starting API service on port 5001...
 WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
  * Running on all addresses (0.0.0.0)
  * Running on http://127.0.0.1:5001
- * Running on http://172.25.239.154:5001
+ * Running on http://192.168.97.185:5001
 Press CTRL+C to quit
-127.0.0.1 - - [05/Apr/2025 21:31:36] "GET /health HTTP/1.1" 200 -
-127.0.0.1 - - [05/Apr/2025 21:32:31] "GET /health HTTP/1.1" 200 -
-127.0.0.1 - - [05/Apr/2025 21:49:23] "POST /submit_doubt HTTP/1.1" 200 -
+127.0.0.1 - - [06/Apr/2025 08:15:44] "GET /health HTTP/1.1" 200 -
+Error in AI breakdown: Expecting value: line 1 column 1 (char 0)
+Traceback (most recent call last):
+  File "E:\FATHERS_ADVICE_VRAJ\FATHERSADVICE_VRAJ\api.py", line 74, in get_subject_breakdown
+    breakdown = json.loads(cleaned_text)
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python3.11.5\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python3.11.5\Lib\json\decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python3.11.5\Lib\json\decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+127.0.0.1 - - [06/Apr/2025 08:16:45] "POST /submit_doubt HTTP/1.1" 200 -
+127.0.0.1 - - [06/Apr/2025 08:20:57] "POST /submit_doubt HTTP/1.1" 200 -
+Error in AI breakdown: Expecting value: line 1 column 1 (char 0)
+Traceback (most recent call last):
+  File "E:\FATHERS_ADVICE_VRAJ\FATHERSADVICE_VRAJ\api.py", line 74, in get_subject_breakdown
+  File "C:\python3.11.5\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python3.11.5\Lib\json\decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python3.11.5\Lib\json\decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+127.0.0.1 - - [06/Apr/2025 08:30:37] "POST /submit_doubt HTTP/1.1" 200 -
+Error in AI breakdown: Expecting value: line 1 column 1 (char 0)
+Traceback (most recent call last):
+  File "E:\FATHERS_ADVICE_VRAJ\FATHERSADVICE_VRAJ\api.py", line 74, in get_subject_breakdown
+    breakdown = json.loads(cleaned_text)
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python3.11.5\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python3.11.5\Lib\json\decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python3.11.5\Lib\json\decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+127.0.0.1 - - [06/Apr/2025 08:42:03] "POST /submit_doubt HTTP/1.1" 200 -
+Error in AI breakdown: Expecting value: line 1 column 1 (char 0)
+Traceback (most recent call last):
+  File "E:\FATHERS_ADVICE_VRAJ\FATHERSADVICE_VRAJ\api.py", line 74, in get_subject_breakdown
+  File "C:\python3.11.5\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python3.11.5\Lib\json\decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python3.11.5\Lib\json\decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+127.0.0.1 - - [06/Apr/2025 08:55:15] "POST /submit_doubt HTTP/1.1" 200 -
+127.0.0.1 - - [06/Apr/2025 10:18:20] "POST /submit_doubt HTTP/1.1" 200 -
+127.0.0.1 - - [06/Apr/2025 10:31:01] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [06/Apr/2025 10:45:26] "POST /submit_doubt HTTP/1.1" 200 -

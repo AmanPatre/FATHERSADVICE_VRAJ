@@ -1,6 +1,6 @@
 # Mentor-Mentee Matching System
 
-A comprehensive system for matching mentees with mentors based on subject expertise, skills, and availability.
+A system for matching mentors with mentees based on skills, experience, and preferences.
 
 ## Features
 
@@ -14,23 +14,37 @@ A comprehensive system for matching mentees with mentors based on subject expert
 ## Prerequisites
 
 - Python 3.8 or higher
-- MongoDB 4.4 or higher
-- Google Cloud Platform account (for Gemini AI)
+- Node.js 14 or higher
+- npm (Node Package Manager)
+- MongoDB
 
 ## Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
-cd mentor-mentee-matching
+cd <repository-name>
 ```
 
 2. Install Python dependencies:
+
 ```bash
+# On Windows:
 pip install -r requirements.txt
+
+# On Unix-like systems:
+pip3 install -r requirements.txt
 ```
 
-3. Set up MongoDB:
+3. Install Node.js dependencies:
+
+```bash
+npm install
+```
+
+4. Set up MongoDB:
+
 ```bash
 # Start MongoDB service
 sudo systemctl start mongod
@@ -39,77 +53,77 @@ sudo systemctl start mongod
 mongo --eval "db.runCommand({connectionStatus:1})"
 ```
 
-4. Set up environment variables:
+5. Set up environment variables:
 Create a `.env` file in the project root with the following variables:
+
 ```
 GOOGLE_API_KEY=your_gemini_api_key
 MONGODB_URI=mongodb://localhost:27017/
 ```
 
-## Running the System
+## Running the Application
 
-1. Initialize the database:
+### On Windows:
+
+1. Run the start script:
+
 ```bash
-python3 init_db.py
+start.bat
 ```
 
-2. Start all services:
+### On Unix-like systems:
+
+1. Run the start script:
+
 ```bash
-python3 run_services.py
+./start.sh
 ```
 
-The following services will be started:
-- API Service: http://localhost:5000
-- Algorithm Service: http://localhost:5001
+The script will:
+
+- Start all Python services
+- Start the Node.js server
+- Verify that all services are running
+- Display the URLs for accessing each service
+
+## Services
+
+The application consists of the following services:
+
+- Mentor Processor: http://localhost:5003
+- API Service: http://localhost:5001
 - Workflow Service: http://localhost:5002
-- Matching Interface: http://localhost:5002/matching_interface
+- Algorithm Service: http://localhost:5000
+- Node.js server: http://localhost:3000
 
-## Testing the System
+## Testing
 
-Run the complete workflow test:
+To run the test workflow:
+
 ```bash
+# On Windows:
+python test_workflow.py
+
+# On Unix-like systems:
 python3 test_workflow.py
 ```
 
-## API Endpoints
+## Logs
 
-### API Service (Port 5000)
-- `POST /api/mentees` - Create a new mentee
-- `GET /api/mentees/<mentee_id>` - Get mentee details
-- `POST /api/analyze-doubt` - Analyze a doubt using Gemini AI
+Logs are stored in the `logs` directory:
 
-### Algorithm Service (Port 5001)
-- `POST /api/match` - Find matching mentors
-- `GET /api/mentors` - Get all mentors
-- `GET /api/mentors/<mentor_id>` - Get mentor details
-
-### Workflow Service (Port 5002)
-- `POST /api/submit-doubt` - Submit a new doubt
-- `GET /api/match-status/<match_id>` - Get match status
-- `GET /matching_interface` - Access the matching interface
-
-## Logging
-
-All service logs are stored in the `logs` directory:
-- `api.log` - API service logs
-- `algo.log` - Algorithm service logs
-- `workflow.log` - Workflow service logs
-- `service_manager.log` - Service manager logs
-- `test_workflow.log` - Test workflow logs
+- `python_services.log`: Python services output
+- `mentor_processor.log`: Mentor processor output
+- `node_server.log`: Node.js server output
 
 ## Troubleshooting
 
-1. If MongoDB connection fails:
-   - Ensure MongoDB is running: `sudo systemctl status mongod`
-   - Check MongoDB logs: `tail -f /var/log/mongodb/mongod.log`
+If you encounter any issues:
 
-2. If services fail to start:
-   - Check port availability: `lsof -i :<port>`
-   - Review service logs in the `logs` directory
-
-3. If matching fails:
-   - Verify mentor data in MongoDB
-   - Check algorithm service logs for matching criteria issues
+1. Check the logs in the `logs` directory
+2. Ensure all required services are running
+3. Verify that MongoDB is running
+4. Check that all required ports are available
 
 ## Contributing
 

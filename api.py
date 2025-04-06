@@ -1,6 +1,6 @@
 import json
 import google.generativeai as genai
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template, redirect
 from flask_cors import CORS
 from pymongo import MongoClient
 import traceback
@@ -9,8 +9,24 @@ import uuid
 import requests
 from datetime import datetime
 import sys
+from dotenv import load_dotenv
+import os
+from bson import ObjectId
+import jwt
+
+# Load environment variables
+load_dotenv()
+
+class MongoJSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, ObjectId):
+            return str(obj)
+        if isinstance(obj, datetime):
+            return obj.isoformat()
+        return super().default(obj)
 
 app = Flask(__name__)
+app.json_encoder = MongoJSONEncoder  # Use our custom encoder
 CORS(app)
 
 # --- Gemini API Configuration ---
@@ -18,8 +34,8 @@ API_KEY = "AIzaSyBAu9bzZwVQaIy8r847BN1_SITIGKXwu1c"  # Replace with actual key
 genai.configure(api_key=API_KEY)
 
 # --- MongoDB Connection ---
-MONGO_URI = "mongodb://localhost:27017/"
-DB_NAME = "project"
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
+DB_NAME = os.getenv("DB_NAME", "project")
 
 try:
     mongo_client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
@@ -30,6 +46,7 @@ try:
     matches_collection = db["matches_results"]
     mentors_result_collection = db["mentors_result"]
     sessions_collection = db["sessions"]
+    mentee_requests_collection = db["mentee_requests"]
     print("Connected to MongoDB")
 except Exception as e:
     print(f"MongoDB Connection Error: {e}")
@@ -99,26 +116,33 @@ def submit_doubt():
         data = request.get_json()
         mentee_id = data.get("mentee_id")
         doubt_text = data.get("doubt")
+        is_guest = data.get("is_guest", False)
+        request_id = data.get("request_id")
 
         if not mentee_id or not doubt_text:
             return jsonify({"error": "Both 'mentee_id' and 'doubt' are required."}), 400
 
-        # Store doubt in DB
-        mentees_collection.update_one(
-            {"_id": mentee_id}, 
-            {"$set": {"doubt": doubt_text, "last_active": datetime.now()}}, 
-            upsert=True
-        )
+        # For guest users, we don't need to update the mentees collection
+        # since the ID is not a valid MongoDB ObjectId
+        if not is_guest:
+            # Store doubt in DB for registered users
+            mentees_collection.update_one(
+                {"_id": mentee_id}, 
+                {"$set": {"doubt": doubt_text, "last_active": datetime.now()}}, 
+                upsert=True
+            )
 
         # Get AI-generated subject breakdown
         breakdown = get_subject_breakdown(doubt_text)
 
-        # Store breakdown in DB
-        mentees_collection.update_one(
-            {"_id": mentee_id},
-            {"$set": {"subject_breakdown": breakdown}},
-            upsert=True
-        )
+        # For guest users, we don't update the mentees collection
+        if not is_guest:
+            # Store breakdown in DB for registered users
+            mentees_collection.update_one(
+                {"_id": mentee_id},
+                {"$set": {"subject_breakdown": breakdown}},
+                upsert=True
+            )
 
         # Get all mentors and match based on subjects
         mentors = list(mentors_collection.find({}))
@@ -144,8 +168,10 @@ def submit_doubt():
                 })
 
         # Store matched mentors in mentors_result collection
+        # For guest users, we use the request_id as the document ID
+        doc_id = request_id if is_guest else mentee_id
         mentors_result_collection.update_one(
-            {"mentee_id": mentee_id},
+            {"_id": doc_id},
             {
                 "$set": {
                     "mentee_id": mentee_id,
@@ -163,7 +189,7 @@ def submit_doubt():
             # Call the matching algorithm for online mentors
             try:
                 match_response = requests.post(
-                    "http://localhost:5000/match_advanced",
+                    "http://localhost:5004/match_advanced",
                     json={
                         "mentee_id": mentee_id,
                         "mentor_ids": [m["mentor_id"] for m in online_mentors]
@@ -209,54 +235,126 @@ def submit_doubt():
 @app.route("/matching_interface", methods=["GET"])
 def get_matching_interface():
     try:
-        mentee_id = request.args.get("mentee_id")
-        if not mentee_id:
-            return jsonify({"error": "mentee_id is required"}), 400
+        # Get user info from token
+        token = request.cookies.get('token')
+        if not token:
+            return render_template("matching_interface.ejs", 
+                isMentor=False,
+                userRole="guest",
+                errorMessage=None,
+                user={
+                    '_id': 'guest',
+                    'userId': 'guest',
+                    'role': 'guest',
+                    'email': 'guest@example.com'
+                },
+                isProcessing=False,
+                matchedMentees=[]
+            )
 
-        # Get active session for matched section
-        session = sessions_collection.find_one({
-            "mentee_id": mentee_id,
-            "status": "active"
-        })
-        
-        # Get matched mentors from mentors_result for offline section
-        mentors_result = mentors_result_collection.find_one({"mentee_id": mentee_id})
-        if not mentors_result:
-            return jsonify({"error": "No matched mentors found"}), 404
+        # Decode token to get user info
+        try:
+            payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+            user_id = payload.get('userId')
+            user_role = payload.get('role')
+        except:
+            return redirect("/login")
 
-        matched_mentors = mentors_result.get("matched_mentors", [])
-        offline_mentors = [m for m in matched_mentors if not m["mentor_details"]["is_online"]]
+        if user_role == 'mentor':
+            # For mentors, fetch their matched mentees
+            try:
+                # Call the algorithm service to get matches
+                response = requests.get(f"http://localhost:5004/get_mentor_matching_interface/{user_id}")
+                if response.ok:
+                    data = response.json()
+                    matched_mentees = data.get('matches', [])
+                    
+                    # Get offline mentees
+                    offline_mentees = list(mentees_collection.find(
+                        {"is_online": False},
+                        {"name": 1, "email": 1, "education": 1, "skills": 1, "brief_bio": 1, "_id": 1}
+                    ).limit(5))
+                    
+                    # Format offline mentees
+                    formatted_offline_mentees = []
+                    for mentee in offline_mentees:
+                        formatted_offline_mentees.append({
+                            "mentee_id": str(mentee["_id"]),
+                            "mentee_details": {
+                                "name": mentee.get("name", "Unknown"),
+                                "email": mentee.get("email", ""),
+                                "education": mentee.get("education", ""),
+                                "skills": mentee.get("skills", []),
+                                "brief_bio": mentee.get("brief_bio", "")
+                            }
+                        })
+                else:
+                    matched_mentees = []
+                    formatted_offline_mentees = []
+            except Exception as e:
+                print(f"Error fetching mentor matches: {e}")
+                matched_mentees = []
+                formatted_offline_mentees = []
 
-        response_data = {
-            "mentee_id": mentee_id,
-            "matched_section": None,
-            "offline_section": {
-                "mentors": offline_mentors,
-                "total_offline": len(offline_mentors)
-            }
-        }
+            return render_template("matching_interface.ejs",
+                isMentor=True,
+                userRole="mentor",
+                user={'_id': user_id, 'role': 'mentor'},
+                matchedMentees=matched_mentees,
+                offlineMentees=formatted_offline_mentees,
+                errorMessage=None
+            )
+        else:
+            # For mentees, get their request status
+            mentee_request = mentee_requests_collection.find_one(
+                {"mentee_id": user_id},
+                sort=[("created_at", -1)]
+            )
 
-        # If there's an active session, add matched section data
-        if session:
-            mentor = mentors_collection.find_one({"_id": session["mentor_id"]})
-            if mentor:
-                response_data["matched_section"] = {
-                    "session_id": session["_id"],
-                    "mentor": {
-                        "id": mentor["_id"],
-                        "name": mentor.get("name", ""),
+            # Get offline mentors
+            offline_mentors = []
+            if mentee_request and not mentee_request.get('matched_mentor_id'):
+                offline_mentors = list(mentors_collection.find(
+                    {"is_online": False},
+                    {"name": 1, "expertise": 1, "skills": 1, "bio": 1, "_id": 1}
+                ).limit(5))
+                
+                # Format offline mentors
+                formatted_offline_mentors = []
+                for mentor in offline_mentors:
+                    formatted_offline_mentors.append({
+                        "_id": str(mentor["_id"]),
+                        "name": mentor.get("name", "Unknown"),
+                        "expertise": mentor.get("expertise", []),
                         "skills": mentor.get("skills", []),
-                        "experience": mentor.get("experience", 0),
-                        "location": mentor.get("location", ""),
-                        "available_hours": mentor.get("available_hours", 0)
-                    }
-                }
+                        "bio": mentor.get("bio", "")
+                    })
 
-        return jsonify(response_data)
+            return render_template("matching_interface.ejs",
+                isMentor=False,
+                userRole="mentee",
+                menteeRequest=mentee_request,
+                offlineMentors=formatted_offline_mentors,
+                user={'_id': user_id, 'role': 'mentee'},
+                isProcessing=mentee_request and mentee_request.get('status') in ['processing', 'pending'],
+                matchedMentees=[]
+            )
 
     except Exception as e:
-        print(f"Error: {e}\n{traceback.format_exc()}")
-        return jsonify({"error": str(e)}), 500
+        print(f"Error in matching interface route: {e}\n{traceback.format_exc()}")
+        return render_template("matching_interface.ejs",
+            isMentor=False,
+            userRole="guest",
+            errorMessage="An error occurred. Please try again.",
+            user={
+                '_id': 'guest',
+                'userId': 'guest',
+                'role': 'guest',
+                'email': 'guest@example.com'
+            },
+            isProcessing=False,
+            matchedMentees=[]
+        )
 
 @app.route('/health')
 def health_check():
@@ -270,7 +368,8 @@ def health_check():
             'mentors': mentors_collection,
             'matches': matches_collection,
             'mentors_result': mentors_result_collection,
-            'sessions': sessions_collection
+            'sessions': sessions_collection,
+            'mentee_requests': mentee_requests_collection
         }
         
         collection_status = {}

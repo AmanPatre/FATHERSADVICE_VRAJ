@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Student Dashboard</title>
   <link rel="stylesheet" href="/css/student_details.css" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      rel="stylesheet"
+    />
 </head>
 
 <body>
@@ -21,18 +23,19 @@
     <div class="dashboard-container">
       <div class="welcome-section">
         <div class="profile-image">
-          <img src="/images/student.jpg" alt="Profile Picture" id="profile-picture" />
+            <img
+              src="/images/student.jpg"
+              alt="Profile Picture"
+              id="profile-picture"
+            />
         </div>
         <div class="welcome-info">
           <h2>
-            Welcome back, <span id="student-name">
-              <%= student.name %>
-            </span>!
+              Welcome back,
+              <span id="student-name"> <%= student.name %> </span>!
           </h2>
           <p class="student-id">
-            Student ID: <span id="student-id">
-              <%= student._id %>
-            </span>
+              Student ID: <span id="student-id"> <%= student._id %> </span>
           </p>
         </div>
       </div>
@@ -44,7 +47,7 @@
       </div>
 
       <div class="find-mentor-section">
-        <a href="/mentee-request" class="find-mentor-btn">
+          <a href="/mentee_request" class="find-mentor-btn">
           <i class="fas fa-search"></i> Find a Mentor
         </a>
       </div>
@@ -54,19 +57,39 @@
         <div class="details-grid">
           <div class="detail-item">
             <label>Full Name</label>
-            <input type="text" id="name" value="<%= student.name %>" readonly />
+              <input
+                type="text"
+                id="name"
+                value="<%= student.name %>"
+                readonly
+              />
           </div>
           <div class="detail-item">
             <label>Email</label>
-            <input type="email" id="email" value="<%= student.email %>" readonly />
+              <input
+                type="email"
+                id="email"
+                value="<%= student.email %>"
+                readonly
+              />
           </div>
           <div class="detail-item">
             <label>Phone Number</label>
-            <input type="tel" id="phone" value="<%= student.phone || 'Not provided' %>" readonly />
+              <input
+                type="tel"
+                id="phone"
+                value="<%= student.phone || 'Not provided' %>"
+                readonly
+              />
           </div>
           <div class="detail-item">
             <label>Address</label>
-            <input type="text" id="address" value="<%= student.address || 'Not provided' %>" readonly />
+              <input
+                type="text"
+                id="address"
+                value="<%= student.address || 'Not provided' %>"
+                readonly
+              />
           </div>
         </div>
 
@@ -74,15 +97,30 @@
         <div class="details-grid">
           <div class="detail-item">
             <label>Current Education</label>
-            <input type="text" id="education" value="<%= student.education %>" readonly />
+              <input
+                type="text"
+                id="education"
+                value="<%= student.education %>"
+                readonly
+              />
           </div>
           <div class="detail-item">
             <label>Institution</label>
-            <input type="text" id="institution" value="<%= student.institution %>" readonly />
+              <input
+                type="text"
+                id="institution"
+                value="<%= student.institution %>"
+                readonly
+              />
           </div>
           <div class="detail-item">
             <label>Field of Interest</label>
-            <input type="text" id="fieldOfInterest" value="<%= student.fieldOfInterest %>" readonly />
+              <input
+                type="text"
+                id="fieldOfInterest"
+                value="<%= student.fieldOfInterest %>"
+                readonly
+              />
           </div>
         </div>
 
@@ -90,7 +128,11 @@
           <button class="edit-btn" onclick="toggleEdit()">
             Edit Profile
           </button>
-          <button class="save-btn" style="display: none" onclick="saveChanges()">
+            <button
+              class="save-btn"
+              style="display: none"
+              onclick="saveChanges()"
+            >
             Save Changes
           </button>
         </div>
@@ -136,7 +178,7 @@
       const formData = {
         name: document.getElementById("name").value,
         phone: document.getElementById("phone").value,
-        address: document.getElementById("address").value
+          address: document.getElementById("address").value,
       };
 
       try {
@@ -145,7 +187,7 @@
           headers: {
             "Content-Type": "application/json",
           },
-          credentials: 'include',
+            credentials: "include",
           body: JSON.stringify(formData),
         });
 
@@ -166,5 +208,4 @@
     }
   </script>
 </body>
-
 </html>

@@ -6,6 +6,7 @@ import os
 import logging
 import socket
 from datetime import datetime
+import platform
 
 # Ensure psutil and requests are installed; if not, instruct the user to install them.
 try:
@@ -37,7 +38,7 @@ class ServiceManager:
             'mentor_processor': 5003,
             'api': 5001,
             'workflow': 5002,
-            'algo': 5000
+            'algo': 5004
         }
         self.services = {
             'mentor_processor': 'mentor_processor.py',
@@ -52,6 +53,8 @@ class ServiceManager:
             'workflow': ['mentor_processor', 'api'],
             'algo': ['mentor_processor', 'api', 'workflow']
         }
+        # Set Python command based on platform
+        self.python_cmd = 'python' if platform.system() == 'Windows' else 'python3'
 
     def is_port_available(self, port):
         try:
@@ -88,15 +91,30 @@ class ServiceManager:
                 time.sleep(retry_delay)
         return False
 
+    def kill_existing_processes(self, service_script):
+        """Platform-independent way to kill existing processes"""
+        killed = False
+        for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
+            try:
+                cmdline = proc.info['cmdline']
+                if cmdline and service_script in ' '.join(cmdline):
+                    proc.terminate()
+                    proc.wait(timeout=5)  # Wait for process to terminate
+                    killed = True
+                    logging.info(f"Terminated existing process {proc.info['pid']} for {service_script}")
+            except (psutil.NoSuchProcess, psutil.TimeoutExpired):
+                continue
+        return killed
+
     def start_services(self):
         try:
             # Create logs directory if it doesn't exist
             if not os.path.exists('logs'):
                 os.makedirs('logs')
 
-            # Kill any existing service scripts (limit to the known service file names)
+            # Kill any existing service scripts
             for service_script in self.services.values():
-                subprocess.run(['pkill', '-f', service_script], stderr=subprocess.DEVNULL)
+                self.kill_existing_processes(service_script)
             time.sleep(2)  # Allow time for processes to terminate
 
             # Start services in dependency order
@@ -149,13 +167,17 @@ class ServiceManager:
                 log_file = open(log_file_path, 'w')
                 env = os.environ.copy()
                 env['PYTHONUNBUFFERED'] = '1'
+                env['PORT'] = str(port)  # Set the PORT environment variable
 
                 try:
+                    # Use the platform-specific Python command
                     process = subprocess.Popen(
-                        [sys.executable, script_path],
+                        [self.python_cmd, script_path],
                         stdout=log_file,
                         stderr=subprocess.STDOUT,
-                        env=env
+                        env=env,
+                        # Add shell=True for Windows to handle Python command properly
+                        shell=platform.system() == 'Windows'
                     )
                     self.processes.append((service_name, process, log_file))
                     logging.info(f"Started {service_name} with PID {process.pid}")

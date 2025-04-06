@@ -1299,3 +1299,561 @@ SyntaxError: expected 'except' or 'finally' block
 2025-04-05 21:31:44,402 - INFO - - algo: http://localhost:5000
 2025-04-05 21:31:44,403 - INFO - Press Ctrl+C to stop all services.
 2025-04-05 21:31:44,403 - INFO - Logs are available in the 'logs' directory.
+2025-04-05 22:49:03,144 - ERROR - Error in start_services: [WinError 2] The system cannot find the file specified
+2025-04-05 22:49:03,145 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-05 22:52:25,174 - INFO - Started mentor_processor with PID 23804
+2025-04-05 22:52:31,291 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-05 22:52:31,292 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-05 22:52:31,307 - INFO - Started api with PID 30444
+2025-04-05 22:52:36,388 - INFO - Service api health check passed on attempt 1
+2025-04-05 22:52:36,389 - INFO - Service api is healthy on port 5001
+2025-04-05 22:52:36,402 - INFO - Started workflow with PID 23784
+2025-04-05 22:52:41,473 - INFO - Service workflow health check passed on attempt 1
+2025-04-05 22:52:41,474 - INFO - Service workflow is healthy on port 5002
+2025-04-05 22:52:41,494 - INFO - Started algo with PID 24528
+2025-04-05 22:52:48,589 - WARNING - Health check failed for algo on attempt 1: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000020619BE32D0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-05 22:52:48,589 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-05 22:52:52,929 - INFO - Service algo health check passed on attempt 2
+2025-04-05 22:52:52,930 - INFO - Service algo is healthy on port 5000
+2025-04-05 22:52:52,930 - INFO - All services are running successfully!
+2025-04-05 22:52:52,931 - INFO - - mentor_processor: http://localhost:5003
+2025-04-05 22:52:52,931 - INFO - - api: http://localhost:5001
+2025-04-05 22:52:52,932 - INFO - - workflow: http://localhost:5002
+2025-04-05 22:52:52,932 - INFO - - algo: http://localhost:5000
+2025-04-05 22:52:52,932 - INFO - Press Ctrl+C to stop all services.
+2025-04-05 22:52:52,933 - INFO - Logs are available in the 'logs' directory.
+2025-04-05 22:58:25,248 - INFO - Received shutdown signal
+2025-04-05 22:58:25,260 - INFO - Shutting down services...
+2025-04-05 22:58:25,262 - INFO - Stopping algo with PID 24528...
+2025-04-05 22:58:25,328 - INFO - Successfully stopped algo
+2025-04-05 22:58:25,329 - INFO - Stopping workflow with PID 23784...
+2025-04-05 22:58:25,343 - INFO - Successfully stopped workflow
+2025-04-05 22:58:25,344 - INFO - Stopping api with PID 30444...
+2025-04-05 22:58:25,364 - INFO - Successfully stopped api
+2025-04-05 22:58:25,366 - INFO - Stopping mentor_processor with PID 23804...
+2025-04-05 22:58:25,392 - INFO - Received shutdown signal
+2025-04-05 22:58:25,392 - INFO - Shutting down services...
+2025-04-05 22:58:25,393 - INFO - Stopping algo with PID 24528...
+2025-04-05 22:58:25,394 - INFO - Successfully stopped algo
+2025-04-05 22:58:25,395 - INFO - Stopping workflow with PID 23784...
+2025-04-05 22:58:25,395 - INFO - Successfully stopped workflow
+2025-04-05 22:58:25,396 - INFO - Stopping api with PID 30444...
+2025-04-05 22:58:25,396 - INFO - Successfully stopped api
+2025-04-05 22:58:25,397 - INFO - Stopping mentor_processor with PID 23804...
+2025-04-05 22:58:25,400 - INFO - Successfully stopped mentor_processor
+2025-04-05 23:08:45,435 - INFO - Started mentor_processor with PID 32724
+2025-04-05 23:08:50,510 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-05 23:08:50,511 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-05 23:08:50,530 - INFO - Started api with PID 23020
+2025-04-05 23:08:55,616 - INFO - Service api health check passed on attempt 1
+2025-04-05 23:08:55,617 - INFO - Service api is healthy on port 5001
+2025-04-05 23:08:55,637 - INFO - Started workflow with PID 28104
+2025-04-05 23:09:00,703 - INFO - Service workflow health check passed on attempt 1
+2025-04-05 23:09:00,707 - INFO - Service workflow is healthy on port 5002
+2025-04-05 23:09:00,731 - INFO - Started algo with PID 20836
+2025-04-05 23:09:06,374 - INFO - Service algo health check passed on attempt 1
+2025-04-05 23:09:06,375 - INFO - Service algo is healthy on port 5000
+2025-04-05 23:09:06,375 - INFO - All services are running successfully!
+2025-04-05 23:09:06,375 - INFO - - mentor_processor: http://localhost:5003
+2025-04-05 23:09:06,377 - INFO - - api: http://localhost:5001
+2025-04-05 23:09:06,377 - INFO - - workflow: http://localhost:5002
+2025-04-05 23:09:06,377 - INFO - - algo: http://localhost:5000
+2025-04-05 23:09:06,377 - INFO - Press Ctrl+C to stop all services.
+2025-04-05 23:09:06,378 - INFO - Logs are available in the 'logs' directory.
+2025-04-05 23:25:18,818 - INFO - Received shutdown signal
+2025-04-05 23:25:18,833 - INFO - Shutting down services...
+2025-04-05 23:25:18,834 - INFO - Stopping algo with PID 20836...
+2025-04-05 23:25:18,930 - INFO - Successfully stopped algo
+2025-04-05 23:25:18,930 - INFO - Stopping workflow with PID 28104...
+2025-04-05 23:25:18,950 - INFO - Successfully stopped workflow
+2025-04-05 23:25:18,951 - INFO - Stopping api with PID 23020...
+2025-04-05 23:25:18,972 - INFO - Successfully stopped api
+2025-04-05 23:25:18,974 - INFO - Stopping mentor_processor with PID 32724...
+2025-04-05 23:25:19,001 - INFO - Successfully stopped mentor_processor
+2025-04-05 23:25:41,278 - INFO - Started mentor_processor with PID 7004
+2025-04-05 23:25:47,394 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-05 23:25:47,395 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-05 23:25:47,415 - INFO - Started api with PID 18972
+2025-04-05 23:25:52,507 - INFO - Service api health check passed on attempt 1
+2025-04-05 23:25:52,508 - INFO - Service api is healthy on port 5001
+2025-04-05 23:25:52,534 - INFO - Started workflow with PID 22948
+2025-04-05 23:25:57,571 - INFO - Service workflow health check passed on attempt 1
+2025-04-05 23:25:57,573 - INFO - Service workflow is healthy on port 5002
+2025-04-05 23:25:57,597 - INFO - Started algo with PID 28072
+2025-04-05 23:26:04,022 - INFO - Service algo health check passed on attempt 1
+2025-04-05 23:26:04,023 - INFO - Service algo is healthy on port 5000
+2025-04-05 23:26:04,023 - INFO - All services are running successfully!
+2025-04-05 23:26:04,024 - INFO - - mentor_processor: http://localhost:5003
+2025-04-05 23:26:04,024 - INFO - - api: http://localhost:5001
+2025-04-05 23:26:04,024 - INFO - - workflow: http://localhost:5002
+2025-04-05 23:26:04,025 - INFO - - algo: http://localhost:5000
+2025-04-05 23:26:04,025 - INFO - Press Ctrl+C to stop all services.
+2025-04-05 23:26:04,026 - INFO - Logs are available in the 'logs' directory.
+2025-04-06 00:31:09,103 - INFO - Terminated existing process 18160 for api.py
+2025-04-06 00:31:14,421 - INFO - Terminated existing process 9460 for algo.py
+2025-04-06 00:31:14,938 - INFO - Terminated existing process 17496 for algo.py
+2025-04-06 00:31:17,434 - INFO - Started mentor_processor with PID 592
+2025-04-06 00:31:22,501 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-06 00:31:22,502 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-06 00:31:22,516 - INFO - Started api with PID 12420
+2025-04-06 00:31:27,591 - INFO - Service api health check passed on attempt 1
+2025-04-06 00:31:27,591 - INFO - Service api is healthy on port 5001
+2025-04-06 00:31:27,606 - INFO - Started workflow with PID 18100
+2025-04-06 00:31:32,689 - INFO - Service workflow health check passed on attempt 1
+2025-04-06 00:31:32,689 - INFO - Service workflow is healthy on port 5002
+2025-04-06 00:31:32,703 - INFO - Started algo with PID 3596
+2025-04-06 00:31:39,812 - WARNING - Health check failed for algo on attempt 1: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000021380F20C10>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 00:31:39,813 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 00:31:45,893 - WARNING - Health check failed for algo on attempt 2: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000021380F86790>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 00:31:45,894 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 00:31:51,993 - WARNING - Health check failed for algo on attempt 3: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000021380F9C290>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 00:31:51,994 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 00:31:58,090 - WARNING - Health check failed for algo on attempt 4: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000021380F9DF90>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 00:31:58,090 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 00:32:04,168 - WARNING - Health check failed for algo on attempt 5: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000021380F9FC50>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 00:32:04,168 - ERROR - Service algo failed health check on port 5000
+2025-04-06 00:32:04,169 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-06 01:01:28,182 - INFO - Terminated existing process 592 for mentor_processor.py
+2025-04-06 01:01:30,531 - INFO - Terminated existing process 6260 for mentor_processor.py
+2025-04-06 01:01:34,096 - INFO - Terminated existing process 12420 for api.py
+2025-04-06 01:01:34,602 - INFO - Terminated existing process 22612 for api.py
+2025-04-06 01:01:37,039 - INFO - Terminated existing process 11024 for workflow.py
+2025-04-06 01:01:38,534 - INFO - Terminated existing process 3596 for algo.py
+2025-04-06 01:01:39,038 - INFO - Terminated existing process 5412 for algo.py
+2025-04-06 01:01:39,765 - INFO - Terminated existing process 11860 for algo.py
+2025-04-06 01:01:42,456 - INFO - Started mentor_processor with PID 26312
+2025-04-06 01:01:47,537 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-06 01:01:47,538 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-06 01:01:47,551 - INFO - Started api with PID 13668
+2025-04-06 01:01:52,608 - INFO - Service api health check passed on attempt 1
+2025-04-06 01:01:52,609 - INFO - Service api is healthy on port 5001
+2025-04-06 01:01:52,621 - INFO - Started workflow with PID 8204
+2025-04-06 01:01:57,672 - INFO - Service workflow health check passed on attempt 1
+2025-04-06 01:01:57,673 - INFO - Service workflow is healthy on port 5002
+2025-04-06 01:01:57,689 - INFO - Started algo with PID 32684
+2025-04-06 01:02:04,794 - WARNING - Health check failed for algo on attempt 1: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001EC9D9EC890>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 01:02:04,795 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 01:02:10,890 - WARNING - Health check failed for algo on attempt 2: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001EC9DA14E90>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 01:02:10,891 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 01:02:16,990 - WARNING - Health check failed for algo on attempt 3: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001EC9DA16950>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 01:02:16,990 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 01:02:23,069 - WARNING - Health check failed for algo on attempt 4: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001EC9DA28690>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 01:02:23,070 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 01:02:29,184 - WARNING - Health check failed for algo on attempt 5: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001EC9DA161D0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 01:02:29,185 - ERROR - Service algo failed health check on port 5000
+2025-04-06 01:02:29,185 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-06 02:07:23,198 - INFO - Started mentor_processor with PID 27984
+2025-04-06 02:07:28,271 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-06 02:07:28,275 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-06 02:07:28,296 - INFO - Started api with PID 29776
+2025-04-06 02:07:33,381 - INFO - Service api health check passed on attempt 1
+2025-04-06 02:07:33,383 - INFO - Service api is healthy on port 5001
+2025-04-06 02:07:33,399 - INFO - Started workflow with PID 17740
+2025-04-06 02:07:38,463 - INFO - Service workflow health check passed on attempt 1
+2025-04-06 02:07:38,463 - INFO - Service workflow is healthy on port 5002
+2025-04-06 02:07:38,477 - INFO - Started algo with PID 32052
+2025-04-06 02:07:45,568 - WARNING - Health check failed for algo on attempt 1: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000019541177B50>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 02:07:45,569 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 02:07:51,661 - WARNING - Health check failed for algo on attempt 2: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000019541168910>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 02:07:51,661 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 02:07:57,754 - WARNING - Health check failed for algo on attempt 3: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000195411802D0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 02:07:57,755 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 02:08:03,836 - WARNING - Health check failed for algo on attempt 4: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000019541181FD0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 02:08:03,837 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 02:08:09,937 - WARNING - Health check failed for algo on attempt 5: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000019541183C90>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 02:08:09,937 - ERROR - Service algo failed health check on port 5000
+2025-04-06 02:08:09,939 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-06 02:09:40,989 - INFO - Terminated existing process 19800 for mentor_processor.py
+2025-04-06 02:09:42,355 - INFO - Terminated existing process 5096 for api.py
+2025-04-06 02:09:45,779 - INFO - Terminated existing process 17740 for workflow.py
+2025-04-06 02:09:45,805 - INFO - Terminated existing process 17920 for workflow.py
+2025-04-06 02:09:48,137 - INFO - Terminated existing process 16912 for algo.py
+2025-04-06 02:09:48,198 - INFO - Terminated existing process 18608 for algo.py
+2025-04-06 02:09:50,500 - INFO - Started mentor_processor with PID 10852
+2025-04-06 02:09:55,571 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-06 02:09:55,572 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-06 02:09:55,584 - INFO - Started api with PID 10188
+2025-04-06 02:10:00,657 - INFO - Service api health check passed on attempt 1
+2025-04-06 02:10:00,658 - INFO - Service api is healthy on port 5001
+2025-04-06 02:10:00,673 - INFO - Started workflow with PID 32788
+2025-04-06 02:10:05,736 - INFO - Service workflow health check passed on attempt 1
+2025-04-06 02:10:05,737 - INFO - Service workflow is healthy on port 5002
+2025-04-06 02:10:05,751 - INFO - Started algo with PID 21644
+2025-04-06 02:10:12,852 - WARNING - Health check failed for algo on attempt 1: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000020941E92850>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 02:10:12,853 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 02:10:18,920 - WARNING - Health check failed for algo on attempt 2: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000020941EA0B90>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 02:10:18,922 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 02:10:25,001 - WARNING - Health check failed for algo on attempt 3: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000020941EA2810>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 02:10:25,001 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 02:10:31,093 - WARNING - Health check failed for algo on attempt 4: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000020941E928D0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 02:10:31,093 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 02:10:37,218 - WARNING - Health check failed for algo on attempt 5: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000020941E0C7D0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 02:10:37,218 - ERROR - Service algo failed health check on port 5000
+2025-04-06 02:10:37,219 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-06 02:13:22,518 - INFO - Terminated existing process 5788 for mentor_processor.py
+2025-04-06 02:13:24,661 - INFO - Terminated existing process 2556 for api.py
+2025-04-06 02:13:29,131 - INFO - Terminated existing process 28920 for workflow.py
+2025-04-06 02:13:31,413 - INFO - Terminated existing process 21092 for algo.py
+2025-04-06 02:13:31,426 - INFO - Terminated existing process 21644 for algo.py
+2025-04-06 02:13:31,626 - INFO - Terminated existing process 31968 for algo.py
+2025-04-06 02:13:33,701 - INFO - Started mentor_processor with PID 21084
+2025-04-06 02:13:38,783 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-06 02:13:38,783 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-06 02:13:38,797 - INFO - Started api with PID 17604
+2025-04-06 02:13:43,846 - INFO - Service api health check passed on attempt 1
+2025-04-06 02:13:43,847 - INFO - Service api is healthy on port 5001
+2025-04-06 02:13:43,861 - INFO - Started workflow with PID 3732
+2025-04-06 02:13:48,902 - INFO - Service workflow health check passed on attempt 1
+2025-04-06 02:13:48,903 - INFO - Service workflow is healthy on port 5002
+2025-04-06 02:13:48,917 - INFO - Started algo with PID 31020
+2025-04-06 02:13:55,878 - INFO - Service algo health check passed on attempt 1
+2025-04-06 02:13:55,878 - INFO - Service algo is healthy on port 5000
+2025-04-06 02:13:55,879 - INFO - All services are running successfully!
+2025-04-06 02:13:55,879 - INFO - - mentor_processor: http://localhost:5003
+2025-04-06 02:13:55,879 - INFO - - api: http://localhost:5001
+2025-04-06 02:13:55,879 - INFO - - workflow: http://localhost:5002
+2025-04-06 02:13:55,880 - INFO - - algo: http://localhost:5000
+2025-04-06 02:13:55,880 - INFO - Press Ctrl+C to stop all services.
+2025-04-06 02:13:55,880 - INFO - Logs are available in the 'logs' directory.
+2025-04-06 03:52:02,350 - INFO - Terminated existing process 8300 for mentor_processor.py
+2025-04-06 03:52:06,057 - INFO - Terminated existing process 22044 for api.py
+2025-04-06 03:52:11,308 - INFO - Terminated existing process 28960 for algo.py
+2025-04-06 03:52:13,465 - INFO - Started mentor_processor with PID 31464
+2025-04-06 03:52:20,569 - WARNING - Health check failed for mentor_processor on attempt 1: HTTPConnectionPool(host='localhost', port=5003): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000120BAAFA750>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 03:52:20,570 - INFO - Waiting 2 seconds before next health check attempt for mentor_processor...
+2025-04-06 03:52:26,640 - WARNING - Health check failed for mentor_processor on attempt 2: HTTPConnectionPool(host='localhost', port=5003): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000120BD4FF7D0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 03:52:26,640 - INFO - Waiting 2 seconds before next health check attempt for mentor_processor...
+2025-04-06 03:52:32,741 - WARNING - Health check failed for mentor_processor on attempt 3: HTTPConnectionPool(host='localhost', port=5003): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000120BD520C10>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 03:52:32,741 - INFO - Waiting 2 seconds before next health check attempt for mentor_processor...
+2025-04-06 03:52:38,840 - WARNING - Health check failed for mentor_processor on attempt 4: HTTPConnectionPool(host='localhost', port=5003): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000120BD564FD0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 03:52:38,840 - INFO - Waiting 2 seconds before next health check attempt for mentor_processor...
+2025-04-06 03:52:44,951 - WARNING - Health check failed for mentor_processor on attempt 5: HTTPConnectionPool(host='localhost', port=5003): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000120BD566950>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 03:52:44,951 - ERROR - Service mentor_processor failed health check on port 5003
+2025-04-06 03:52:44,953 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-06 03:52:52,569 - INFO - Terminated existing process 17912 for mentor_processor.py
+2025-04-06 03:53:02,325 - INFO - Started mentor_processor with PID 3640
+2025-04-06 03:53:09,432 - WARNING - Health check failed for mentor_processor on attempt 1: HTTPConnectionPool(host='localhost', port=5003): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000140EA7A6350>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 03:53:09,432 - INFO - Waiting 2 seconds before next health check attempt for mentor_processor...
+2025-04-06 03:53:15,531 - WARNING - Health check failed for mentor_processor on attempt 2: HTTPConnectionPool(host='localhost', port=5003): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000140EA7B4510>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 03:53:15,531 - INFO - Waiting 2 seconds before next health check attempt for mentor_processor...
+2025-04-06 03:53:21,631 - WARNING - Health check failed for mentor_processor on attempt 3: HTTPConnectionPool(host='localhost', port=5003): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000140EA79C090>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 03:53:21,633 - INFO - Waiting 2 seconds before next health check attempt for mentor_processor...
+2025-04-06 03:53:27,704 - WARNING - Health check failed for mentor_processor on attempt 4: HTTPConnectionPool(host='localhost', port=5003): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000140EA78C7D0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 03:53:27,705 - INFO - Waiting 2 seconds before next health check attempt for mentor_processor...
+2025-04-06 03:53:33,796 - WARNING - Health check failed for mentor_processor on attempt 5: HTTPConnectionPool(host='localhost', port=5003): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000140EA7B5750>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 03:53:33,797 - ERROR - Service mentor_processor failed health check on port 5003
+2025-04-06 03:53:33,797 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-06 03:54:51,830 - INFO - Terminated existing process 3640 for mentor_processor.py
+2025-04-06 03:54:54,129 - INFO - Terminated existing process 27256 for mentor_processor.py
+2025-04-06 03:55:03,533 - INFO - Started mentor_processor with PID 31528
+2025-04-06 03:55:10,651 - WARNING - Health check failed for mentor_processor on attempt 1: HTTPConnectionPool(host='localhost', port=5003): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001CAC40DA750>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 03:55:10,652 - INFO - Waiting 2 seconds before next health check attempt for mentor_processor...
+2025-04-06 03:55:16,748 - WARNING - Health check failed for mentor_processor on attempt 2: HTTPConnectionPool(host='localhost', port=5003): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001CAC72EEA10>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 03:55:16,748 - INFO - Waiting 2 seconds before next health check attempt for mentor_processor...
+2025-04-06 03:55:22,841 - WARNING - Health check failed for mentor_processor on attempt 3: HTTPConnectionPool(host='localhost', port=5003): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001CAC73010D0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 03:55:22,842 - INFO - Waiting 2 seconds before next health check attempt for mentor_processor...
+2025-04-06 03:55:28,921 - WARNING - Health check failed for mentor_processor on attempt 4: HTTPConnectionPool(host='localhost', port=5003): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001CAC7302F10>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 03:55:28,922 - INFO - Waiting 2 seconds before next health check attempt for mentor_processor...
+2025-04-06 03:55:57,377 - INFO - Started mentor_processor with PID 31464
+2025-04-06 03:56:04,515 - WARNING - Health check failed for mentor_processor on attempt 1: HTTPConnectionPool(host='localhost', port=5003): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001CAFE0D7410>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 03:56:04,516 - INFO - Waiting 2 seconds before next health check attempt for mentor_processor...
+2025-04-06 03:56:10,596 - WARNING - Health check failed for mentor_processor on attempt 2: HTTPConnectionPool(host='localhost', port=5003): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001CAFE0A5690>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 03:56:10,596 - INFO - Waiting 2 seconds before next health check attempt for mentor_processor...
+2025-04-06 03:56:16,707 - WARNING - Health check failed for mentor_processor on attempt 3: HTTPConnectionPool(host='localhost', port=5003): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001CAFE0CD9D0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 03:56:16,709 - INFO - Waiting 2 seconds before next health check attempt for mentor_processor...
+2025-04-06 03:56:22,818 - WARNING - Health check failed for mentor_processor on attempt 4: HTTPConnectionPool(host='localhost', port=5003): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001CAFE0BBF90>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 03:56:22,818 - INFO - Waiting 2 seconds before next health check attempt for mentor_processor...
+2025-04-06 03:56:28,928 - WARNING - Health check failed for mentor_processor on attempt 5: HTTPConnectionPool(host='localhost', port=5003): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001CAFE0E6310>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 03:56:28,929 - ERROR - Service mentor_processor failed health check on port 5003
+2025-04-06 03:56:28,929 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-06 04:38:34,068 - INFO - Terminated existing process 32164 for mentor_processor.py
+2025-04-06 04:38:36,798 - INFO - Terminated existing process 26904 for api.py
+2025-04-06 04:38:42,367 - INFO - Terminated existing process 32348 for algo.py
+2025-04-06 04:38:44,463 - INFO - Started mentor_processor with PID 6016
+2025-04-06 04:38:50,589 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-06 04:38:50,591 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-06 04:38:50,608 - INFO - Started api with PID 9792
+2025-04-06 04:38:57,045 - INFO - Service api health check passed on attempt 1
+2025-04-06 04:38:57,046 - INFO - Service api is healthy on port 5001
+2025-04-06 04:38:57,068 - INFO - Started workflow with PID 21572
+2025-04-06 04:39:02,187 - INFO - Service workflow health check passed on attempt 1
+2025-04-06 04:39:02,188 - INFO - Service workflow is healthy on port 5002
+2025-04-06 04:39:02,207 - INFO - Started algo with PID 23660
+2025-04-06 04:39:07,386 - INFO - Service algo health check passed on attempt 1
+2025-04-06 04:39:07,387 - INFO - Service algo is healthy on port 5000
+2025-04-06 04:39:07,389 - INFO - All services are running successfully!
+2025-04-06 04:39:07,389 - INFO - - mentor_processor: http://localhost:5003
+2025-04-06 04:39:07,390 - INFO - - api: http://localhost:5001
+2025-04-06 04:39:07,390 - INFO - - workflow: http://localhost:5002
+2025-04-06 04:39:07,391 - INFO - - algo: http://localhost:5000
+2025-04-06 04:39:07,391 - INFO - Press Ctrl+C to stop all services.
+2025-04-06 04:39:07,392 - INFO - Logs are available in the 'logs' directory.
+2025-04-06 06:08:45,565 - INFO - Terminated existing process 11624 for mentor_processor.py
+2025-04-06 06:08:46,496 - INFO - Terminated existing process 27480 for mentor_processor.py
+2025-04-06 06:08:48,454 - INFO - Terminated existing process 7372 for api.py
+2025-04-06 06:08:48,709 - INFO - Terminated existing process 10232 for api.py
+2025-04-06 06:08:54,559 - INFO - Terminated existing process 21824 for algo.py
+2025-04-06 06:08:54,650 - INFO - Terminated existing process 23640 for algo.py
+2025-04-06 06:08:54,701 - INFO - Terminated existing process 23748 for algo.py
+2025-04-06 06:08:56,970 - INFO - Started mentor_processor with PID 2452
+2025-04-06 06:09:02,573 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-06 06:09:02,574 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-06 06:09:02,586 - INFO - Started api with PID 15020
+2025-04-06 06:09:08,583 - INFO - Service api health check passed on attempt 1
+2025-04-06 06:09:08,584 - INFO - Service api is healthy on port 5001
+2025-04-06 06:09:08,596 - INFO - Started workflow with PID 4876
+2025-04-06 06:09:13,707 - INFO - Service workflow health check passed on attempt 1
+2025-04-06 06:09:13,708 - INFO - Service workflow is healthy on port 5002
+2025-04-06 06:09:13,732 - INFO - Started algo with PID 24044
+2025-04-06 06:09:20,803 - WARNING - Health check failed for algo on attempt 1: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001A5BDA99990>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 06:09:20,805 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 06:09:26,904 - WARNING - Health check failed for algo on attempt 2: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001A5BDA9B050>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 06:09:26,905 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 06:09:33,011 - WARNING - Health check failed for algo on attempt 3: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001A5BDAACB50>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 06:09:33,012 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 06:09:39,054 - WARNING - Health check failed for algo on attempt 4: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001A5BDAAE850>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 06:09:39,055 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 06:09:45,172 - WARNING - Health check failed for algo on attempt 5: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001A5BDA9B9D0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 06:09:45,173 - ERROR - Service algo process exited with code 1
+2025-04-06 06:09:45,206 - ERROR - Service algo log content:
+  File "E:\FATHERS_ADVICE_VRAJ\FATHERSADVICE_VRAJ\algo.py", line 640
+    return jsonify({
+    ^^^^^^
+SyntaxError: expected 'except' or 'finally' block
+
+2025-04-06 06:09:45,206 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-06 06:24:06,935 - INFO - Started mentor_processor with PID 30672
+2025-04-06 06:24:14,023 - WARNING - Health check failed for mentor_processor on attempt 1: HTTPConnectionPool(host='localhost', port=5003): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000024B939CD190>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 06:24:14,023 - INFO - Waiting 2 seconds before next health check attempt for mentor_processor...
+2025-04-06 06:24:18,077 - INFO - Service mentor_processor health check passed on attempt 2
+2025-04-06 06:24:18,078 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-06 06:24:18,092 - INFO - Started api with PID 30292
+2025-04-06 06:24:23,800 - INFO - Service api health check passed on attempt 1
+2025-04-06 06:24:23,801 - INFO - Service api is healthy on port 5001
+2025-04-06 06:24:23,813 - INFO - Started workflow with PID 1436
+2025-04-06 06:24:28,895 - INFO - Service workflow health check passed on attempt 1
+2025-04-06 06:24:28,895 - INFO - Service workflow is healthy on port 5002
+2025-04-06 06:24:28,909 - INFO - Started algo with PID 19724
+2025-04-06 06:24:36,011 - WARNING - Health check failed for algo on attempt 1: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000024B93A14690>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 06:24:36,012 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 06:24:42,098 - WARNING - Health check failed for algo on attempt 2: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000024B9324DD50>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 06:24:42,099 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 06:24:48,192 - WARNING - Health check failed for algo on attempt 3: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000024B939EE210>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 06:24:48,193 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 06:24:54,290 - WARNING - Health check failed for algo on attempt 4: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000024B93A0B110>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 06:24:54,292 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 06:25:00,354 - WARNING - Health check failed for algo on attempt 5: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000024B93A14C50>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 06:25:00,356 - ERROR - Service algo process exited with code 1
+2025-04-06 06:25:00,379 - ERROR - Service algo log content:
+  File "E:\FATHERS_ADVICE_VRAJ\FATHERSADVICE_VRAJ\algo.py", line 640
+    return jsonify({
+    ^^^^^^
+SyntaxError: expected 'except' or 'finally' block
+
+2025-04-06 06:25:00,380 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-06 06:25:28,980 - INFO - Terminated existing process 30672 for mentor_processor.py
+2025-04-06 06:25:31,400 - INFO - Terminated existing process 30292 for api.py
+2025-04-06 06:25:31,665 - INFO - Terminated existing process 1436 for workflow.py
+2025-04-06 06:25:38,365 - INFO - Started mentor_processor with PID 22792
+2025-04-06 06:25:44,981 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-06 06:25:44,983 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-06 06:25:45,006 - INFO - Started api with PID 5096
+2025-04-06 06:25:52,148 - INFO - Service api health check passed on attempt 1
+2025-04-06 06:25:52,149 - INFO - Service api is healthy on port 5001
+2025-04-06 06:25:52,170 - INFO - Started workflow with PID 30056
+2025-04-06 06:25:57,237 - INFO - Service workflow health check passed on attempt 1
+2025-04-06 06:25:57,242 - INFO - Service workflow is healthy on port 5002
+2025-04-06 06:25:57,259 - INFO - Started algo with PID 18660
+2025-04-06 06:26:04,299 - WARNING - Health check failed for algo on attempt 1: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000188545FEFD0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 06:26:04,300 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 06:26:10,369 - WARNING - Health check failed for algo on attempt 2: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000018854608FD0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 06:26:10,370 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 06:26:16,463 - WARNING - Health check failed for algo on attempt 3: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000188545FED50>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 06:26:16,464 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 06:26:22,545 - WARNING - Health check failed for algo on attempt 4: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000188545F2310>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 06:26:22,547 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 06:26:28,640 - WARNING - Health check failed for algo on attempt 5: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000188545C49D0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 06:26:28,642 - ERROR - Service algo process exited with code 1
+2025-04-06 06:26:28,648 - ERROR - Service algo log content:
+  File "E:\FATHERS_ADVICE_VRAJ\FATHERSADVICE_VRAJ\algo.py", line 640
+    return jsonify({
+    ^^^^^^
+SyntaxError: expected 'except' or 'finally' block
+
+2025-04-06 06:26:28,648 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-06 06:27:47,901 - INFO - Terminated existing process 22792 for mentor_processor.py
+2025-04-06 06:27:49,437 - INFO - Terminated existing process 5096 for api.py
+2025-04-06 06:27:52,940 - INFO - Terminated existing process 30056 for workflow.py
+2025-04-06 06:27:57,524 - INFO - Started mentor_processor with PID 30636
+2025-04-06 06:28:03,088 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-06 06:28:03,089 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-06 06:28:03,110 - INFO - Started api with PID 11352
+2025-04-06 06:28:08,918 - INFO - Service api health check passed on attempt 1
+2025-04-06 06:28:08,919 - INFO - Service api is healthy on port 5001
+2025-04-06 06:28:08,939 - INFO - Started workflow with PID 15436
+2025-04-06 06:28:14,011 - INFO - Service workflow health check passed on attempt 1
+2025-04-06 06:28:14,012 - INFO - Service workflow is healthy on port 5002
+2025-04-06 06:28:14,032 - INFO - Started algo with PID 22168
+2025-04-06 06:28:21,131 - WARNING - Health check failed for algo on attempt 1: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000244B366AD10>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 06:28:21,132 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 06:28:25,628 - INFO - Service algo health check passed on attempt 2
+2025-04-06 06:28:25,629 - INFO - Service algo is healthy on port 5000
+2025-04-06 06:28:25,631 - INFO - All services are running successfully!
+2025-04-06 06:28:25,632 - INFO - - mentor_processor: http://localhost:5003
+2025-04-06 06:28:25,632 - INFO - - api: http://localhost:5001
+2025-04-06 06:28:25,633 - INFO - - workflow: http://localhost:5002
+2025-04-06 06:28:25,633 - INFO - - algo: http://localhost:5000
+2025-04-06 06:28:25,634 - INFO - Press Ctrl+C to stop all services.
+2025-04-06 06:28:25,634 - INFO - Logs are available in the 'logs' directory.
+2025-04-06 07:19:19,958 - INFO - Terminated existing process 2328 for mentor_processor.py
+2025-04-06 07:19:22,405 - INFO - Terminated existing process 12752 for mentor_processor.py
+2025-04-06 07:19:25,185 - INFO - Terminated existing process 10476 for api.py
+2025-04-06 07:19:25,275 - INFO - Terminated existing process 11352 for api.py
+2025-04-06 07:19:25,500 - INFO - Terminated existing process 15416 for api.py
+2025-04-06 07:19:25,937 - INFO - Terminated existing process 27716 for api.py
+2025-04-06 07:19:30,428 - INFO - Terminated existing process 14332 for algo.py
+2025-04-06 07:19:32,957 - INFO - Started mentor_processor with PID 25992
+2025-04-06 07:19:39,597 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-06 07:19:39,598 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-06 07:19:39,611 - INFO - Started api with PID 26440
+2025-04-06 07:19:45,341 - INFO - Service api health check passed on attempt 1
+2025-04-06 07:19:45,343 - INFO - Service api is healthy on port 5001
+2025-04-06 07:19:45,358 - INFO - Started workflow with PID 23740
+2025-04-06 07:19:50,443 - INFO - Service workflow health check passed on attempt 1
+2025-04-06 07:19:50,445 - INFO - Service workflow is healthy on port 5002
+2025-04-06 07:19:50,457 - INFO - Started algo with PID 10644
+2025-04-06 07:19:57,549 - WARNING - Health check failed for algo on attempt 1: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000225C97BBF90>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 07:19:57,550 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 07:20:03,646 - WARNING - Health check failed for algo on attempt 2: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000225C97C9590>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 07:20:03,647 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 07:20:09,748 - WARNING - Health check failed for algo on attempt 3: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000225C97CB1D0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 07:20:09,749 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 07:20:15,849 - WARNING - Health check failed for algo on attempt 4: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000225C97BAE50>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 07:20:15,850 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 07:20:21,969 - WARNING - Health check failed for algo on attempt 5: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000225C97CB710>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 07:20:21,970 - ERROR - Service algo failed health check on port 5000
+2025-04-06 07:20:21,971 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-06 07:30:52,111 - INFO - Started mentor_processor with PID 30644
+2025-04-06 07:30:57,191 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-06 07:30:57,193 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-06 07:30:57,210 - INFO - Started api with PID 11216
+2025-04-06 07:31:03,511 - INFO - Service api health check passed on attempt 1
+2025-04-06 07:31:03,512 - INFO - Service api is healthy on port 5001
+2025-04-06 07:31:03,527 - INFO - Started workflow with PID 29164
+2025-04-06 07:31:08,599 - INFO - Service workflow health check passed on attempt 1
+2025-04-06 07:31:08,600 - INFO - Service workflow is healthy on port 5002
+2025-04-06 07:31:08,614 - INFO - Started algo with PID 33524
+2025-04-06 07:31:15,690 - WARNING - Health check failed for algo on attempt 1: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001B0C50AA650>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 07:31:15,690 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 07:31:21,764 - WARNING - Health check failed for algo on attempt 2: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001B0C50ABB10>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 07:31:21,765 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 07:31:27,860 - WARNING - Health check failed for algo on attempt 3: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001B0C50BD610>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 07:31:27,861 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 07:31:33,935 - WARNING - Health check failed for algo on attempt 4: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001B0C50BF310>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 07:31:33,936 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 07:31:40,032 - WARNING - Health check failed for algo on attempt 5: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001B0C50BE950>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 07:31:40,033 - ERROR - Service algo failed health check on port 5000
+2025-04-06 07:31:40,034 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-06 08:09:07,315 - INFO - Terminated existing process 17968 for api.py
+2025-04-06 08:09:12,806 - INFO - Terminated existing process 11792 for algo.py
+2025-04-06 08:09:12,858 - INFO - Terminated existing process 11864 for algo.py
+2025-04-06 08:09:13,093 - INFO - Terminated existing process 15020 for algo.py
+2025-04-06 08:09:13,178 - INFO - Terminated existing process 15660 for algo.py
+2025-04-06 08:09:13,405 - INFO - Terminated existing process 16028 for algo.py
+2025-04-06 08:09:13,766 - INFO - Terminated existing process 19636 for algo.py
+2025-04-06 08:09:13,827 - INFO - Terminated existing process 21392 for algo.py
+2025-04-06 08:09:13,945 - INFO - Terminated existing process 24012 for algo.py
+2025-04-06 08:09:16,255 - INFO - Started mentor_processor with PID 24676
+2025-04-06 08:09:21,321 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-06 08:09:21,322 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-06 08:09:21,336 - INFO - Started api with PID 11252
+2025-04-06 08:09:27,310 - INFO - Service api health check passed on attempt 1
+2025-04-06 08:09:27,310 - INFO - Service api is healthy on port 5001
+2025-04-06 08:09:27,330 - INFO - Started workflow with PID 14600
+2025-04-06 08:09:32,427 - INFO - Service workflow health check passed on attempt 1
+2025-04-06 08:09:32,427 - INFO - Service workflow is healthy on port 5002
+2025-04-06 08:09:32,444 - INFO - Started algo with PID 16716
+2025-04-06 08:09:39,506 - WARNING - Health check failed for algo on attempt 1: HTTPConnectionPool(host='localhost', port=5004): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000198EAADDDD0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 08:09:39,506 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 08:09:45,627 - WARNING - Health check failed for algo on attempt 2: HTTPConnectionPool(host='localhost', port=5004): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000198EAAB4F10>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 08:09:45,628 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 08:09:51,744 - WARNING - Health check failed for algo on attempt 3: HTTPConnectionPool(host='localhost', port=5004): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000198EAA9BF90>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 08:09:51,745 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 08:09:57,808 - WARNING - Health check failed for algo on attempt 4: HTTPConnectionPool(host='localhost', port=5004): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000198EAADEFD0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 08:09:57,808 - INFO - Waiting 2 seconds before next health check attempt for algo...
+2025-04-06 08:10:03,891 - WARNING - Health check failed for algo on attempt 5: HTTPConnectionPool(host='localhost', port=5004): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000198EAAF4CD0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 08:10:03,892 - ERROR - Service algo failed health check on port 5004
+2025-04-06 08:10:03,893 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-06 08:11:44,117 - INFO - Terminated existing process 24676 for mentor_processor.py
+2025-04-06 08:11:44,246 - INFO - Terminated existing process 28692 for mentor_processor.py
+2025-04-06 08:11:46,833 - INFO - Terminated existing process 11252 for api.py
+2025-04-06 08:11:46,875 - INFO - Terminated existing process 11516 for api.py
+2025-04-06 08:11:49,563 - INFO - Terminated existing process 10140 for workflow.py
+2025-04-06 08:11:52,672 - INFO - Terminated existing process 8820 for algo.py
+2025-04-06 08:11:53,190 - INFO - Terminated existing process 16756 for algo.py
+2025-04-06 08:11:55,590 - INFO - Started mentor_processor with PID 24360
+2025-04-06 08:12:00,671 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-06 08:12:00,671 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-06 08:12:00,688 - INFO - Started api with PID 23692
+2025-04-06 08:12:06,286 - INFO - Service api health check passed on attempt 1
+2025-04-06 08:12:06,292 - INFO - Service api is healthy on port 5001
+2025-04-06 08:12:06,307 - INFO - Started workflow with PID 27428
+2025-04-06 08:12:11,385 - INFO - Service workflow health check passed on attempt 1
+2025-04-06 08:12:11,386 - INFO - Service workflow is healthy on port 5002
+2025-04-06 08:12:11,400 - INFO - Started algo with PID 12640
+2025-04-06 08:12:18,026 - INFO - Service algo health check passed on attempt 1
+2025-04-06 08:12:18,027 - INFO - Service algo is healthy on port 5004
+2025-04-06 08:12:18,027 - INFO - All services are running successfully!
+2025-04-06 08:12:18,027 - INFO - - mentor_processor: http://localhost:5003
+2025-04-06 08:12:18,028 - INFO - - api: http://localhost:5001
+2025-04-06 08:12:18,028 - INFO - - workflow: http://localhost:5002
+2025-04-06 08:12:18,028 - INFO - - algo: http://localhost:5004
+2025-04-06 08:12:18,029 - INFO - Press Ctrl+C to stop all services.
+2025-04-06 08:12:18,029 - INFO - Logs are available in the 'logs' directory.
+2025-04-06 08:14:24,463 - INFO - Terminated existing process 2508 for mentor_processor.py
+2025-04-06 08:14:30,821 - INFO - Terminated existing process 23304 for api.py
+2025-04-06 08:14:33,621 - INFO - Terminated existing process 19628 for workflow.py
+2025-04-06 08:14:34,850 - INFO - Terminated existing process 3724 for algo.py
+2025-04-06 08:14:39,182 - INFO - Started mentor_processor with PID 24636
+2025-04-06 08:14:44,765 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-06 08:14:44,766 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-06 08:14:44,781 - INFO - Started api with PID 27964
+2025-04-06 08:14:51,214 - INFO - Service api health check passed on attempt 1
+2025-04-06 08:14:51,214 - INFO - Service api is healthy on port 5001
+2025-04-06 08:14:51,233 - INFO - Started workflow with PID 24676
+2025-04-06 08:14:56,278 - INFO - Service workflow health check passed on attempt 1
+2025-04-06 08:14:56,279 - INFO - Service workflow is healthy on port 5002
+2025-04-06 08:14:56,300 - INFO - Started algo with PID 18672
+2025-04-06 08:15:07,189 - INFO - Service algo health check passed on attempt 1
+2025-04-06 08:15:07,211 - INFO - Service algo is healthy on port 5004
+2025-04-06 08:15:07,212 - INFO - All services are running successfully!
+2025-04-06 08:15:07,213 - INFO - - mentor_processor: http://localhost:5003
+2025-04-06 08:15:07,214 - INFO - - api: http://localhost:5001
+2025-04-06 08:15:07,216 - INFO - - workflow: http://localhost:5002
+2025-04-06 08:15:07,216 - INFO - - algo: http://localhost:5004
+2025-04-06 08:15:07,217 - INFO - Press Ctrl+C to stop all services.
+2025-04-06 08:15:07,217 - INFO - Logs are available in the 'logs' directory.
+2025-04-06 08:15:22,268 - INFO - Terminated existing process 19508 for mentor_processor.py
+2025-04-06 08:15:24,930 - INFO - Terminated existing process 10952 for api.py
+2025-04-06 08:15:27,790 - INFO - Terminated existing process 10616 for workflow.py
+2025-04-06 08:15:30,718 - INFO - Terminated existing process 12344 for algo.py
+2025-04-06 08:15:31,192 - INFO - Terminated existing process 22236 for algo.py
+2025-04-06 08:15:33,494 - INFO - Started mentor_processor with PID 33212
+2025-04-06 08:15:39,063 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-06 08:15:39,064 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-06 08:15:39,081 - INFO - Started api with PID 16756
+2025-04-06 08:15:44,883 - INFO - Service api health check passed on attempt 1
+2025-04-06 08:15:44,884 - INFO - Service api is healthy on port 5001
+2025-04-06 08:15:44,899 - INFO - Started workflow with PID 10828
+2025-04-06 08:15:49,967 - INFO - Service workflow health check passed on attempt 1
+2025-04-06 08:15:49,967 - INFO - Service workflow is healthy on port 5002
+2025-04-06 08:15:49,983 - INFO - Started algo with PID 30324
+2025-04-06 08:15:56,401 - INFO - Service algo health check passed on attempt 1
+2025-04-06 08:15:56,401 - INFO - Service algo is healthy on port 5004
+2025-04-06 08:15:56,401 - INFO - All services are running successfully!
+2025-04-06 08:15:56,402 - INFO - - mentor_processor: http://localhost:5003
+2025-04-06 08:15:56,402 - INFO - - api: http://localhost:5001
+2025-04-06 08:15:56,402 - INFO - - workflow: http://localhost:5002
+2025-04-06 08:15:56,402 - INFO - - algo: http://localhost:5004
+2025-04-06 08:15:56,403 - INFO - Press Ctrl+C to stop all services.
+2025-04-06 08:15:56,403 - INFO - Logs are available in the 'logs' directory.
