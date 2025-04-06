@@ -1,268 +1,515 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mentor Dashboard | Father's Advice</title>
-    <link rel="stylesheet" href="/css/mentor.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet" />
-</head>
-<body>
+    <link rel="stylesheet" href="/css/mentor.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary-color: #ff6b00;
+        --secondary-color: #e65100;
+        --success-color: #2ecc71;
+        --error-color: #e74c3c;
+        --text-color: #333;
+        --light-gray: #f5f6fa;
+        --border-color: #dcdde1;
+        --background-color: #f8f9fa;
+        --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s ease;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: var(--background-color);
+        color: var(--text-color);
+        background-image: url("/images/background.jpg");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+
+      .sidebar {
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: var(--card-shadow);
+        padding: 1.5rem;
+        height: fit-content;
+      }
+
+      .main-content {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      .card {
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: var(--card-shadow);
+        padding: 1.5rem;
+        transition: var(--transition);
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 0.5rem;
+      }
+
+      .card-header h3 {
+        color: var(--primary-color);
+        margin: 0;
+        font-size: 1.3rem;
+      }
+
+      .card-header i {
+        color: var(--primary-color);
+        font-size: 1.2rem;
+      }
+
+      .profile-image {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 4px solid var(--primary-color);
+        margin: 0 auto 1rem;
+      }
+
+      .profile-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .profile-info {
+        text-align: center;
+      }
+
+      .profile-info h2 {
+        color: var(--primary-color);
+        margin: 0 0 0.5rem 0;
+        font-size: 1.5rem;
+      }
+
+      .profile-info p {
+        margin: 0.25rem 0;
+        font-size: 1rem;
+        color: #666;
+      }
+
+      .profile-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 1.5rem;
+      }
+
+      .action-btn {
+        padding: 0.8rem 1.2rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        transition: var(--transition);
+        text-decoration: none;
+        border: none;
+        width: 100%;
+      }
+
+      .primary-btn {
+        background-color: var(--primary-color);
+        color: white;
+        box-shadow: 0 4px 6px rgba(255, 107, 0, 0.2);
+      }
+
+      .primary-btn:hover {
+        background-color: var(--secondary-color);
+        transform: translateY(-2px);
+      }
+
+      .secondary-btn {
+        background-color: #fff5e6;
+        color: var(--primary-color);
+        border: 1px solid rgba(255, 107, 0, 0.2);
+      }
+
+      .secondary-btn:hover {
+        background-color: #ffe0b2;
+        transform: translateY(-2px);
+      }
+
+      .tertiary-btn {
+        background-color: #f5f5f5;
+        color: #666;
+        border: 1px solid #ddd;
+      }
+
+      .tertiary-btn:hover {
+        background-color: #e0e0e0;
+        transform: translateY(-2px);
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+      }
+
+      .stat-item {
+        background-color: var(--light-gray);
+        padding: 1rem;
+        border-radius: 8px;
+        text-align: center;
+      }
+
+      .stat-item h4 {
+        color: var(--primary-color);
+        margin: 0 0 0.5rem 0;
+        font-size: 0.9rem;
+      }
+
+      .stat-item p {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+
+      .skills-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .skill-tag {
+        background-color: var(--light-gray);
+        color: var(--text-color);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        transition: var(--transition);
+      }
+
+      .skill-tag:hover {
+        background-color: var(--primary-color);
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+      }
+
+      .metric-item {
+        background-color: var(--light-gray);
+        padding: 1rem;
+        border-radius: 8px;
+        text-align: center;
+      }
+
+      .metric-item h4 {
+        color: var(--primary-color);
+        margin: 0 0 0.5rem 0;
+        font-size: 0.9rem;
+      }
+
+      .metric-item p {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 0;
+        color: var(--text-color);
+      }
+
+      .alert {
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        animation: fadeIn 0.3s ease-in-out;
+      }
+
+      .alert-success {
+        background-color: var(--success-color);
+        color: white;
+      }
+
+      .alert-error {
+        background-color: var(--error-color);
+        color: white;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 992px) {
+        .dashboard-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .stats-grid,
+        .metrics-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 576px) {
+        .stats-grid,
+        .metrics-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
     <!-- Navbar -->
     <header>
-        <div class="navbar">
-            <!-- Logo on the left side -->
-            <div class="logo-container">
-                <a href="/mentor_dashboard">
-                    <img src="/images/Logo Only.png" alt="Father's Advice Logo" class="logo">
-                </a>
-            </div>
-            <!-- Navigation links on the right side -->
-            <div class="nav-links">
-                <a href="/mentor_dashboard" class="nav-link">Dashboard</a>
-                <a href="/mentor_after_profile" class="nav-link">Profile</a>
-                <a href="/mentor/matching" class="nav-link">Find Mentees</a>
-                <a href="/mentor_after_profile/change-password" class="nav-link">Change Password</a>
-                <a href="/logout" class="nav-link">Logout</a>
-            </div>
+      <div class="navbar">
+        <!-- Logo on the left side -->
+        <div class="logo-container">
+          <a href="/mentor_dashboard">
+            <img
+              src="/images/Logo Only.png"
+              alt="Father's Advice Logo"
+              class="logo"
+            />
+          </a>
         </div>
+        <!-- Navigation links on the right side -->
+        <div class="nav-links">
+          <a href="/mentor_dashboard" class="nav-link">Dashboard</a>
+          <a href="/mentor_after_profile" class="nav-link">Profile</a>
+          <a href="/matching_interface?user_id=<%= user._id %>" class="nav-link"
+            >Find Mentees</a
+          >
+          <a href="/mentor_after_profile/change-password" class="nav-link"
+            >Change Password</a
+          >
+          <a href="/logout" class="nav-link">Logout</a>
+        </div>
+      </div>
     </header>
 
     <div class="container">
-        <% if (errorMessage) { %>
-            <div class="alert alert-error">
-                <%= errorMessage %>
-            </div>
-        <% } %>
+      <% if (errorMessage) { %>
+      <div class="alert alert-error"><%= errorMessage %></div>
+      <% } %> <% if (successMessage) { %>
+      <div class="alert alert-success"><%= successMessage %></div>
+      <% } %>
 
-        <% if (successMessage) { %>
-            <div class="alert alert-success">
-                <%= successMessage %>
-            </div>
-        <% } %>
+      <div class="dashboard-grid">
+        <!-- Sidebar with profile info and actions -->
+        <div class="sidebar">
+          <div class="profile-image">
+            <img src="/images/profile-pic.jpg" alt="Profile Picture" />
+          </div>
+          <div class="profile-info">
+            <h2><%= user.name %></h2>
+            <p><i class="fas fa-user-tie"></i> <%= user.role %></p>
+            <p><i class="fas fa-envelope"></i> <%= user.email %></p>
+            <% if (user.phone) { %>
+            <p><i class="fas fa-phone"></i> <%= user.phone %></p>
+            <% } %>
+          </div>
 
-        <!-- Profile Header Section -->
-        <div class="profile-header">
-            <div class="profile-image">
-                <img src="/images/profile-pic.jpg" alt="Profile Picture">
-            </div>
-            <div class="profile-info">
-                <h2>Welcome, <%= user.name %></h2>
-                <p><strong>Role:</strong> <%= user.role %></p>
-                <p><strong>Email:</strong> <%= user.email %></p>
-                <% if (user.phone) { %>
-                    <p><strong>Phone:</strong> <%= user.phone %></p>
-                <% } %>
-                <% if (user.address) { %>
-                    <p><strong>Address:</strong> <%= user.address %></p>
-                <% } %>
-            </div>
-        </div>
-
-        <!-- Profile Actions -->
-        <div class="profile-actions">
-            <form action="/find-mentee" method="POST">
-                <button type="submit">Find Mentee</button>
-              </form>
-            <a href="/mentor/matching" class="find-mentor-btn">
-                <i class="fas fa-search"></i> Find Mentees              
-            <a href="/mentor_after_profile" class="btn-edit-profile">
-                <i class="fas fa-edit"></i> Edit Profile
+          <div class="profile-actions">
+            <a
+              href="/matching_interface?user_id=<%= user._id %>"
+              class="action-btn primary-btn"
+            >
+              <i class="fas fa-search"></i> Find Mentees
             </a>
-            <button class="btn-change-password" onclick="window.location.href='/mentor_after_profile/change-password'">
-                <i class="fas fa-key"></i> Change Password
-            </button>
+            <a href="/mentor_after_profile" class="action-btn secondary-btn">
+              <i class="fas fa-edit"></i> Edit Profile
+            </a>
+            <a
+              href="/mentor_after_profile/change-password"
+              class="action-btn tertiary-btn"
+            >
+              <i class="fas fa-key"></i> Change Password
+            </a>
+          </div>
         </div>
 
-        <!-- Profile Stats Section -->
-        <div class="profile-stats">
-            <div class="stat-item">
-                <h3>Field of Interest</h3>
+        <!-- Main content area -->
+        <div class="main-content">
+          <!-- Profile Stats Section -->
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fas fa-chart-bar"></i> Profile Overview</h3>
+            </div>
+            <div class="stats-grid">
+              <div class="stat-item">
+                <h4>Field of Interest</h4>
                 <p><%= profile.fieldOfInterest %></p>
-            </div>
-            <div class="stat-item">
-                <h3>Years of Experience</h3>
+              </div>
+              <div class="stat-item">
+                <h4>Years of Experience</h4>
                 <p><%= profile.yearOfExperience %> years</p>
-            </div>
-            <div class="stat-item">
-                <h3>Education</h3>
+              </div>
+              <div class="stat-item">
+                <h4>Education</h4>
                 <p><%= profile.education %></p>
-            </div>
-            <div class="stat-item">
-                <h3>Availability</h3>
+              </div>
+              <div class="stat-item">
+                <h4>Availability</h4>
                 <p><%= profile.availability %></p>
+              </div>
             </div>
-        </div>
+          </div>
 
-        <!-- Skills Section -->
-        <div class="skills-section">
-            <h3>Skills & Expertise</h3>
-            <div class="skills-list">
+          <!-- Skills Section -->
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fas fa-tools"></i> Skills & Expertise</h3>
+            </div>
+            <div class="skills-section">
+              <h4>Technical Skills</h4>
+              <div class="skills-list">
                 <% profile.skills.forEach(function(skill) { %>
-                    <span class="skill-tag"><%= skill %></span>
+                <span class="skill-tag"><%= skill %></span>
                 <% }); %>
-            </div>
-            <h4>Areas of Expertise</h4>
-            <div class="skills-list">
+              </div>
+
+              <h4>Areas of Expertise</h4>
+              <div class="skills-list">
                 <% profile.expertise.forEach(function(exp) { %>
-                    <span class="skill-tag"><%= exp %></span>
+                <span class="skill-tag"><%= exp %></span>
                 <% }); %>
-            </div>
-            <h4>Specializations</h4>
-            <div class="skills-list">
+              </div>
+
+              <h4>Specializations</h4>
+              <div class="skills-list">
                 <% profile.specializations.forEach(function(spec) { %>
-                    <span class="skill-tag"><%= spec %></span>
+                <span class="skill-tag"><%= spec %></span>
                 <% }); %>
+              </div>
             </div>
-        </div>
+          </div>
 
-        <!-- Availability Section -->
-        <div class="bio-section">
-            <h3>Availability Details</h3>
-            <p><strong>Preferred Time Slots:</strong> <%= profile.preferredTimeSlots.join(', ') %></p>
-            <p><strong>Maximum Sessions per Week:</strong> <%= profile.maxSessions %></p>
-            <p><strong>Session Duration:</strong> <%= profile.sessionDuration %> minutes</p>
-        </div>
-
-        <!-- Bio Section -->
-        <div class="bio-section">
-            <h3>Professional Bio</h3>
-            <p><%= profile.briefBio %></p>
-        </div>
-
-        <!-- Resume Section -->
-        <% if (profile.uploadResume) { %>
-            <div class="resume-section">
-                <h3>Resume</h3>
-                <a href="<%= profile.uploadResume %>" target="_blank" class="btn-view-resume">
-                    <i class="fas fa-file-alt"></i> View Resume
-                </a>
+          <!-- Availability Section -->
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fas fa-clock"></i> Availability Details</h3>
             </div>
-        <% } %>
-
-        <!-- Processed Data Section (if available) -->
-        <% if (processedData && processedData.dashboard_data) { %>
-            <div class="processed-data-section">
-                <h3>Matching Metrics</h3>
-                <div class="metrics-grid">
-                    <% Object.entries(processedData.dashboard_data.matching_metrics || {}).forEach(([key, value]) => { %>
-                        <div class="metric-item">
-                            <h4><%= key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) %></h4>
-                            <p><%= (value * 100).toFixed(1) %>%</p>
-                        </div>
-                    <% }); %>
-                </div>
+            <div class="availability-details">
+              <p>
+                <strong>Preferred Time Slots:</strong> <%=
+                profile.preferredTimeSlots.join(', ') %>
+              </p>
+              <p>
+                <strong>Maximum Sessions per Week:</strong> <%=
+                profile.maxSessions %>
+              </p>
+              <p>
+                <strong>Session Duration:</strong> <%= profile.sessionDuration
+                %> minutes
+              </p>
             </div>
-        <% } %>
+          </div>
+
+          <!-- Bio Section -->
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fas fa-user-circle"></i> Professional Bio</h3>
+            </div>
+            <div class="bio-content">
+              <p><%= profile.briefBio %></p>
+            </div>
+          </div>
+
+          <!-- Resume Section -->
+          <% if (profile.uploadResume) { %>
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fas fa-file-alt"></i> Resume</h3>
+            </div>
+            <div class="resume-content">
+              <a
+                href="<%= profile.uploadResume %>"
+                target="_blank"
+                class="action-btn secondary-btn"
+              >
+                <i class="fas fa-file-alt"></i> View Resume
+              </a>
+            </div>
+          </div>
+          <% } %>
+
+          <!-- Processed Data Section (if available) -->
+          <% if (processedData && processedData.dashboard_data) { %>
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fas fa-chart-pie"></i> Matching Metrics</h3>
+            </div>
+            <div class="metrics-grid">
+              <% Object.entries(processedData.dashboard_data.matching_metrics ||
+              {}).forEach(([key, value]) => { %>
+              <div class="metric-item">
+                <h4>
+                  <%= key.replace(/_/g, ' ').replace(/\b\w/g, l =>
+                  l.toUpperCase()) %>
+                </h4>
+                <p><%= (value * 100).toFixed(1) %>%</p>
+              </div>
+              <% }); %>
+            </div>
+          </div>
+          <% } %>
+        </div>
+      </div>
     </div>
 
-    <style>
-        .profile-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .find-mentor-btn, .btn-edit-profile, .btn-change-password {
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1.1rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            transition: all 0.3s ease;
-            min-width: 200px;
-            justify-content: center;
-        }
-
-        .find-mentor-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            text-decoration: none;
-            box-shadow: 0 4px 6px rgba(255, 107, 0, 0.2);
-        }
-
-        .find-mentor-btn:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(255, 107, 0, 0.3);
-        }
-
-        .btn-edit-profile {
-            background-color: #fff5e6;
-            color: var(--primary-color);
-            border: 1px solid rgba(255, 107, 0, 0.2);
-            text-decoration: none;
-        }
-
-        .btn-edit-profile:hover {
-            background-color: #ffe0b2;
-            transform: translateY(-2px);
-        }
-
-        .btn-change-password {
-            background-color: #f5f5f5;
-            color: #666;
-            border: 1px solid #ddd;
-        }
-
-        .btn-change-password:hover {
-            background-color: #e0e0e0;
-            transform: translateY(-2px);
-        }
-
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .metric-item {
-            background-color: #fff;
-            padding: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-        .metric-item h4 {
-            color: var(--primary-color);
-            margin: 0 0 0.5rem 0;
-        }
-
-        .metric-item p {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin: 0;
-            color: var(--text-color);
-        }
-
-        @media (max-width: 768px) {
-            .profile-actions {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .find-mentor-btn, .btn-edit-profile, .btn-change-password {
-                width: 100%;
-                max-width: 300px;
-            }
-        }
-    </style>
-
     <script>
-        // Clear success message after 5 seconds
-        setTimeout(() => {
-            const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(alert => {
-                alert.style.display = 'none';
-            });
-        }, 5000);
+      // Clear success message after 5 seconds
+      setTimeout(() => {
+        const alerts = document.querySelectorAll(".alert");
+        alerts.forEach((alert) => {
+          alert.style.display = "none";
+        });
+      }, 5000);
     </script>
-</body>
-</html> 
+  </body>
+</html>

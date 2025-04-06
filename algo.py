@@ -9,8 +9,21 @@ import traceback
 import logging
 from bson.objectid import ObjectId
 import os
+import json
+
+# Add this at the top of the file after imports
+PORT = int(os.environ.get("PORT", 5004))
+
+class MongoJSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, ObjectId):
+            return str(obj)
+        if isinstance(obj, datetime):
+            return obj.isoformat()
+        return super().default(obj)
 
 app = Flask(__name__)
+app.json_encoder = MongoJSONEncoder  # Use our custom encoder
 CORS(app)  # Enable CORS
 
 # Set up logging
@@ -34,31 +47,14 @@ try:
     print("Successfully connected to MongoDB")
 except Exception as e:
     print(f"Error connecting to MongoDB: {e}")
-    # Set up a fallback local MongoDB connection
-    try:
-        client = MongoClient("mongodb://localhost:27017/", serverSelectionTimeoutMS=5000)
-        client.server_info()
-        db = client[DB_NAME]
-        print("Successfully connected to local MongoDB")
-    except Exception as local_e:
-        print(f"Error connecting to local MongoDB: {local_e}")
-        # Continue with None values for collections
-        db = None
+    sys.exit(1)
 
 # Initialize collections
-if db is not None:
-    mentors_collection = db['mentors']
-    mentees_collection = db['mentees']
-    matches_collection = db['matches_results']
-    sessions_collection = db['sessions']
-    mentors_result_collection = db['mentors_result']
-else:
-    # Ensure we have empty collections defined if DB connection fails
-    mentors_collection = None
-    mentees_collection = None
-    matches_collection = None
-    sessions_collection = None
-    mentors_result_collection = None
+mentors_collection = db['mentors'] if db is not None else None
+mentees_collection = db['mentees'] if db is not None else None
+matches_collection = db['matches_results'] if db is not None else None
+sessions_collection = db['sessions'] if db is not None else None
+mentors_result_collection = db['mentors_result'] if db is not None else None
 
 # --------------------
 # Matching Criteria Weights & Normalization
@@ -542,71 +538,89 @@ def update_online_status():
         logger.error(f"Error in update_online_status: {str(e)}\n{traceback.format_exc()}")
         return jsonify({"error": str(e)}), 500
 
-@app.route("/submit_doubt", methods=["POST"])
+@app.route('/submit_doubt', methods=['POST'])
 def submit_doubt():
     try:
         if not request.is_json:
-            return jsonify({"error": "Request must be JSON"}), 400
-            
+            return jsonify({'error': 'Content-Type must be application/json'}), 400
+        
         data = request.get_json()
-        mentee_id = data.get("mentee_id")
-        doubt_text = data.get("doubt")
-
-        # Check if MongoDB collections are available
-        if mentors_collection is None or mentees_collection is None:
-            logger.error("MongoDB collections not available")
-            return jsonify({"error": "Database connection error"}), 500
-
-        if not mentee_id or not doubt_text:
-            return jsonify({"error": "mentee_id and doubt are required"}), 400
-
+        logging.info(f"Received doubt submission: {data}")
+        
+        if not data.get('mentee_id') or not data.get('doubt_text'):
+            return jsonify({'error': 'Missing required fields: mentee_id and doubt_text'}), 400
+        
         try:
-            mentee_obj_id = ObjectId(mentee_id)
-        except Exception as e:
-            logger.error(f"Invalid mentee ID format: {e}")
-            return jsonify({"error": "Invalid mentee ID format"}), 400
-
+            mentee_id = ObjectId(data['mentee_id'])
+        except (TypeError, InvalidId):
+            return jsonify({'error': 'Invalid mentee_id format'}), 400
+        
         # Get mentee data
-        mentee = mentees_collection.find_one({"_id": mentee_obj_id})
+        mentee = mentees_collection.find_one({'_id': mentee_id})
         if not mentee:
-            return jsonify({"error": "Mentee not found"}), 404
-
-        # Get available mentors
-        mentors = list(mentors_collection.find({"is_online": True}))
-        if not mentors:
-            return jsonify({
-                "status": "offline",
-                "message": "No online mentors available"
-            }), 200
-
-        # Find best matching mentor
-        best_match = match_mentor_mentee(mentee, mentors)
-        if best_match:
-            # Optional: Store the doubt in a collection for later reference
-            if db is not None:
-                try:
-                    db['doubts'].insert_one({
-                        "mentee_id": mentee_id,
-                        "mentor_id": best_match["mentor_id"],
-                        "doubt_text": doubt_text,
-                        "created_at": datetime.now()
+            return jsonify({'error': 'Mentee not found'}), 404
+        
+        # Get online mentors
+        online_mentors = list(mentors_collection.find({'status': 'online'}))
+        logging.info(f"Found {len(online_mentors)} online mentors")
+        
+        if not online_mentors:
+            # If no online mentors, try offline mentors
+            offline_mentors = list(mentors_collection.find({'status': 'offline'}))
+            logging.info(f"Found {len(offline_mentors)} offline mentors")
+            
+            if offline_mentors:
+                # Find best matching offline mentors
+                matches = []
+                for mentor in offline_mentors:
+                    score = compute_compatibility(mentee, mentor)
+                    if score > 0.5:  # Only include mentors with >50% compatibility
+                        matches.append({
+                            '_id': str(mentor['_id']),
+                            'name': mentor.get('name', 'Unknown'),
+                            'compatibility_score': score
+                        })
+                
+                if matches:
+                    # Sort by compatibility score
+                    matches.sort(key=lambda x: x['compatibility_score'], reverse=True)
+                    return jsonify({
+                        'status': 'offline_match',
+                        'offline_matches': matches[:3]  # Return top 3 matches
                     })
-                except Exception as e:
-                    logger.warning(f"Failed to store doubt: {e}")
-                    
+            
             return jsonify({
-                "status": "success",
-                "match": best_match
+                'status': 'no_match',
+                'message': 'No mentors available at the moment'
             })
-
+        
+        # Find best matching online mentors
+        matches = []
+        for mentor in online_mentors:
+            score = compute_compatibility(mentee, mentor)
+            if score > 0.5:  # Only include mentors with >50% compatibility
+                matches.append({
+                    '_id': str(mentor['_id']),
+                    'name': mentor.get('name', 'Unknown'),
+                    'compatibility_score': score
+                })
+        
+        if matches:
+            # Sort by compatibility score
+            matches.sort(key=lambda x: x['compatibility_score'], reverse=True)
+            return jsonify({
+                'status': 'matched',
+                'matched_mentors': matches[:3]  # Return top 3 matches
+            })
+        
         return jsonify({
-            "status": "no_match",
-            "message": "No suitable mentor found"
+            'status': 'no_match',
+            'message': 'No suitable mentors found'
         })
-
+        
     except Exception as e:
-        logger.error(f"Error in submit_doubt: {str(e)}\n{traceback.format_exc()}")
-        return jsonify({"error": str(e)}), 500
+        logging.error(f"Error in submit_doubt: {str(e)}")
+        return jsonify({'error': 'Internal server error'}), 500
 
 @app.route('/health')
 def health_check():
@@ -689,9 +703,15 @@ def list_routes():
 
 if __name__ == '__main__':
     try:
-        port = int(os.environ.get("PORT", 5000))
-        logger.info(f"Starting algorithm service on port {port}...")
-        app.run(host='0.0.0.0', port=port, debug=False)
+        print(f"Starting algorithm service on port {PORT}...")
+        print("Initializing Flask app...")
+        print(f"MongoDB URI: {DB_URI}")
+        print("Checking MongoDB connection...")
+        client.server_info()
+        print("MongoDB connection successful")
+        print("Starting Flask server...")
+        app.run(host='0.0.0.0', port=PORT, debug=True)
     except Exception as e:
-        logger.error(f"Error starting algorithm service: {e}")
+        print(f"Error starting algorithm service: {str(e)}")
+        traceback.print_exc()
         sys.exit(1)

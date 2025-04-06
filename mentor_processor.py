@@ -8,17 +8,31 @@ from datetime import datetime
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import numpy as np
+from dotenv import load_dotenv
+import os
+
+# Load environment variables
+load_dotenv()
+
+class MongoJSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, ObjectId):
+            return str(obj)
+        if isinstance(obj, datetime):
+            return obj.isoformat()
+        return super().default(obj)
 
 app = Flask(__name__)
+app.json_encoder = MongoJSONEncoder  # Use our custom encoder
 CORS(app)
 
 # --- Gemini API Configuration ---
-API_KEY = "AIzaSyBAu9bzZwVQaIy8r847BN1_SITIGKXwu1c"  # Replace with actual key
+API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyBAu9bzZwVQaIy8r847BN1_SITIGKXwu1c")
 genai.configure(api_key=API_KEY)
 
 # --- MongoDB Connection ---
-MONGO_URI = "mongodb://localhost:27017/"
-DB_NAME = "project"
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
+DB_NAME = os.getenv("DB_NAME", "project")
 
 try:
     mongo_client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
@@ -783,4 +797,5 @@ def test():
     })
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=False, port=5003) 
+    PORT = int(os.environ.get("MENTOR_PROCESSOR_PORT", 5003))
+    app.run(host='0.0.0.0', debug=False, port=PORT) 
