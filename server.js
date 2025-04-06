@@ -38,10 +38,10 @@ if (typeof __dirname === "undefined") {
 
 console.log("MongoDB URI:", process.env.MONGO_URI); // Debugging
 
-// Constants for database connection
+// retry connection to database 5 times
 const MAX_DB_RETRY_ATTEMPTS = 5;
 
-// Database connection function
+// sounaks own enchanced fucntion for database connection
 async function connectDatabase() {
   const connectOptions = {
     serverSelectionTimeoutMS: 5000,
