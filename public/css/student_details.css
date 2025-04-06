@@ -85,6 +85,13 @@ main {
   margin-bottom: 2rem;
 }
 
+.action-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
 .view-profile-btn {
   background-color: #e67e22;
   color: white;
@@ -97,10 +104,36 @@ main {
   align-items: center;
   gap: 0.5rem;
   transition: background-color 0.3s;
+  white-space: nowrap;
 }
 
 .view-profile-btn:hover {
   background-color: #2980b9;
+}
+
+.note-container {
+  background-color: #fff8e1;
+  border-left: 4px solid #e67e22;
+  border-radius: 4px;
+  padding: 0.8rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  max-width: fit-content;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.note-icon {
+  color: #e67e22;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.note-container p {
+  margin: 0;
+  color: #333;
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
 
 /* Profile Details Styles */
@@ -272,4 +305,10 @@ footer {
 
 .find-mentor-btn i {
   font-size: 1.4rem;
+}
+
+.note_section {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
 }

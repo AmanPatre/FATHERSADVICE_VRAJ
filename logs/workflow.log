@@ -5,7 +5,6 @@ Starting workflow service on port 5002...
 WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
  * Running on all addresses (0.0.0.0)
  * Running on http://127.0.0.1:5002
- * Running on http://192.168.97.185:5002
+ * Running on http://192.168.2.185:5002
 Press CTRL+C to quit
-127.0.0.1 - - [06/Apr/2025 08:15:49] "GET /health HTTP/1.1" 200 -
-127.0.0.1 - - [06/Apr/2025 10:31:08] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [06/Apr/2025 11:16:56] "GET /health HTTP/1.1" 200 -
