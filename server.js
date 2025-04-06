@@ -37,15 +37,60 @@ if (typeof __dirname === "undefined") {
 }
 
 console.log("MongoDB URI:", process.env.MONGO_URI); // Debugging
-// Connect to MongoDB
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log("Connected to MongoDB");
-  })
-  .catch((err) => {
-    console.error("Error connecting to MongoDB:", err);
+
+// Constants for database connection
+const MAX_DB_RETRY_ATTEMPTS = 5;
+
+// Database connection function
+async function connectDatabase() {
+  const connectOptions = {
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000,
+    family: 4 // Use IPv4, skip trying IPv6
+  };
+
+  mongoose.connection.on('connected', () => {
+    console.log('Mongoose connected to database');
   });
+
+  mongoose.connection.on('error', (err) => {
+    console.error('Mongoose connection error:', err);
+  });
+
+  mongoose.connection.on('disconnected', () => {
+    console.warn('Mongoose disconnected, attempting reconnect...');
+  });
+  
+  let retryCount = 0;
+  
+  async function connectWithRetry() {
+    if (retryCount >= MAX_DB_RETRY_ATTEMPTS) {
+      console.error(`Failed to connect to MongoDB after ${MAX_DB_RETRY_ATTEMPTS} attempts.`);
+      console.warn('Server will continue without database functionality.');
+      return false;
+    }
+    
+    try {
+      retryCount++;
+      await mongoose.connect(process.env.MONGO_URI, connectOptions);
+      console.log(`Connected to MongoDB (attempt ${retryCount})`);
+      retryCount = 0; // Reset counter on success
+      return true;
+    } catch (err) {
+      console.error(`Failed to connect to MongoDB (attempt ${retryCount}/${MAX_DB_RETRY_ATTEMPTS})`, err);
+      
+      if (retryCount < MAX_DB_RETRY_ATTEMPTS) {
+        const delay = Math.min(5000 * retryCount, 30000); // Exponential backoff with 30s max
+        console.log(`Retrying in ${delay/1000} seconds...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+        return connectWithRetry();
+      }
+      return false;
+    }
+  }
+
+  return connectWithRetry();
+}
 
 // Script to run the python files
 const runPythonScript = (scriptName) => {
@@ -159,24 +204,41 @@ async function waitForServices() {
 // Initialize the application
 async function initializeApp() {
   try {
-    // Connect to MongoDB
-    await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log("Connected to MongoDB");
+    // Connect to MongoDB using the new function
+    const dbConnected = await connectDatabase();
+    if (!dbConnected) {
+      console.error("Failed to connect to database. Some features may not work.");
+    }
 
     // Start Python services
     console.log("Starting Python services...");
-    await startPythonServices();
+    const pythonCommand = process.platform === "win32" ? "python" : "python3";
+    const services = [
+      { name: "mentor_processor.py", port: 5003 },
+      { name: "api.py", port: 5001 },
+      { name: "algo.py", port: 5000 },
+    ];
 
-    // Wait for services to be ready
-    console.log("Waiting for services to be ready...");
-    const servicesReady = await waitForServices();
-    if (!servicesReady) {
-      console.error(
-        "Some Python services failed to start. The application may not function correctly."
-      );
+    for (const service of services) {
+      console.log(`Starting ${service.name} on port ${service.port}...`);
+      const pythonProcess = spawn(pythonCommand, [service.name], {
+        stdio: ["pipe", "pipe", "pipe"],
+      });
+
+      pythonProcess.stdout.on("data", (data) => {
+        console.log(`${service.name} output:`, data.toString());
+      });
+
+      pythonProcess.stderr.on("data", (data) => {
+        console.error(`${service.name} error:`, data.toString());
+      });
+
+      pythonProcess.on("close", (code) => {
+        console.log(`${service.name} exited with code ${code}`);
+      });
+
+      // Wait for service to start
+      await new Promise((resolve) => setTimeout(resolve, 2000));
     }
 
     // Configure middleware
@@ -1194,135 +1256,70 @@ app.get("/matching_interface", async (req, res) => {
 
     // Get request ID from query params
     const requestId = req.query.request;
-    const userId = req.query.user_id;
-
-    // If we have a user ID, check if it's a mentor
-    if (userId) {
-      try {
-        const mentor = await Mentor.findById(userId);
-        if (mentor) {
-          console.log(`Mentor ${userId} accessing matching interface`);
-
-          // Call the algo.py service to get matching mentees
-          const response = await axios.get(
-            `${process.env.ALGO_SERVICE_URL}/get_mentor_matching_interface/${userId}`
-          );
-
-          if (response.data && response.data.status === "success") {
-            return res.render("matching_interface", {
-              isMentor: true,
-              userRole: "mentor",
-              mentor: mentor,
-              matches: response.data.matches || [],
-              user: {
-                _id: mentor._id,
-                userId: mentor._id,
-                role: "mentor",
-                email: mentor.email,
-                name: mentor.name,
-              },
-              isProcessing: false,
-            });
-          } else {
-            console.error("Error from algo service:", response.data);
-            return res.render("matching_interface", {
-              isMentor: true,
-              userRole: "mentor",
-              mentor: mentor,
-              matches: [],
-              errorMessage:
-                "Error finding matching mentees. Please try again later.",
-              user: {
-                _id: mentor._id,
-                userId: mentor._id,
-                role: "mentor",
-                email: mentor.email,
-                name: mentor.name,
-              },
-              isProcessing: false,
-            });
-          }
-        }
-      } catch (error) {
-        console.error("Error processing mentor matching:", error);
-      }
-    }
+    const userId = req.user?.userId || "guest";
 
     // If we have a request ID, find the mentee request
+    let menteeRequest = null;
     if (requestId) {
-      const menteeRequest = await MenteeRequest.findById(requestId);
+      menteeRequest = await MenteeRequest.findById(requestId);
+    } else {
+      // If no request ID, find the latest request for this user
+      menteeRequest = await MenteeRequest.findOne({ mentee: userId })
+        .sort({ createdAt: -1 });
+    }
 
-      if (menteeRequest) {
-        // Get offline mentors if no match found
-        let offlineMentors = [];
-        if (
-          !menteeRequest.matchedMentorId &&
-          menteeRequest.status === "pending"
-        ) {
-          offlineMentors = await Mentor.find({ isOnline: false })
-            .limit(5)
-            .select("name expertise");
-        }
+    // Get offline mentors if no match found
+    let offlineMentors = [];
+    if (menteeRequest && !menteeRequest.matchedMentorId && menteeRequest.status === "pending") {
+      offlineMentors = await Mentor.find({ isOnline: false })
+        .limit(5)
+        .select("name expertise experience rating");
+    }
 
-        // Handle different status cases
-        let errorMessage = null;
-        let statusMessage = null;
+    // Get matched mentor details if available
+    let matchedMentor = null;
+    if (menteeRequest?.matchedMentorId) {
+      matchedMentor = await Mentor.findById(menteeRequest.matchedMentorId)
+        .select("name expertise experience rating briefBio");
+    }
 
-        if (menteeRequest.status === "error") {
-          errorMessage =
-            "There was an error processing your request. Please try again.";
-        } else if (menteeRequest.status === "processing") {
-          statusMessage =
-            "Your question is being analyzed. This may take a few moments...";
-        } else if (
-          menteeRequest.status === "pending" &&
-          !menteeRequest.matchedMentorId
-        ) {
-          statusMessage =
-            "Searching for the best mentor match. This may take a few moments...";
-        }
+    // Handle different status cases
+    let errorMessage = null;
+    let statusMessage = null;
 
-        return res.render("matching_interface", {
-          isMentor: false,
-          userRole: "guest",
-          menteeRequest: menteeRequest,
-          offlineMentors: offlineMentors,
-          errorMessage: errorMessage,
-          statusMessage: statusMessage,
-          user: {
-            _id: "guest",
-            userId: "guest",
-            role: "guest",
-            email: "guest@example.com",
-          },
-          isProcessing: ["processing", "pending"].includes(
-            menteeRequest.status
-          ),
-        });
+    if (menteeRequest) {
+      if (menteeRequest.status === "error") {
+        errorMessage = "There was an error processing your request. Please try again.";
+      } else if (menteeRequest.status === "processing") {
+        statusMessage = "Your question is being analyzed. This may take a few moments...";
+      } else if (menteeRequest.status === "pending" && !menteeRequest.matchedMentorId) {
+        statusMessage = "Searching for the best mentor match. This may take a few moments...";
       }
     }
 
-    // If no request ID or request not found, show empty state
     return res.render("matching_interface", {
       isMentor: false,
-      userRole: "guest",
-      menteeRequest: null,
-      errorMessage: null,
-      user: {
+      userRole: "mentee",
+      menteeRequest: menteeRequest,
+      matchedMentor: matchedMentor,
+      offlineMentors: offlineMentors,
+      errorMessage: errorMessage,
+      statusMessage: statusMessage,
+      user: req.user || {
         _id: "guest",
         userId: "guest",
         role: "guest",
         email: "guest@example.com",
       },
-      isProcessing: false,
+      isProcessing: menteeRequest ? ["processing", "pending"].includes(menteeRequest.status) : false,
     });
   } catch (error) {
     console.error("Error in matching interface route:", error);
     res.render("matching_interface", {
       isMentor: false,
-      userRole: "guest",
+      userRole: "mentee",
       errorMessage: "An error occurred. Please try again.",
-      user: {
+      user: req.user || {
         _id: "guest",
         userId: "guest",
         role: "guest",
@@ -1399,7 +1396,8 @@ app.use((req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+// Start the application
+initializeApp().catch(error => {
+  console.error("Failed to start application:", error);
+  process.exit(1);
 });

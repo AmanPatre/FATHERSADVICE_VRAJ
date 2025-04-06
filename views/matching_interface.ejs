@@ -737,9 +737,102 @@
     </div>
     <% } %>
 
+    <% if (menteeRequest) { %>
+      <div class="container mt-4">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Your Question</h5>
+          </div>
+          <div class="card-body">
+            <p class="card-text"><%= menteeRequest.doubt %></p>
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="badge bg-<%= menteeRequest.status === 'completed' ? 'success' : 
+                                    menteeRequest.status === 'error' ? 'danger' : 
+                                    menteeRequest.status === 'processing' ? 'warning' : 'info' %>">
+                <%= menteeRequest.status.charAt(0).toUpperCase() + menteeRequest.status.slice(1) %>
+              </span>
+              <% if (menteeRequest.compatibilityScore) { %>
+                <span class="text-muted">
+                  Match Score: <%= menteeRequest.compatibilityScore.toFixed(1) %>%
+                </span>
+              <% } %>
+            </div>
+          </div>
+        </div>
+
+        <% if (matchedMentor) { %>
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="mb-0">Matched Mentor</h5>
+            </div>
+            <div class="card-body">
+              <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                  <h5 class="card-title"><%= matchedMentor.name %></h5>
+                  <p class="card-text"><%= matchedMentor.briefBio %></p>
+                  <div class="mb-2">
+                    <strong>Expertise:</strong> <%= matchedMentor.expertise %>
+                  </div>
+                  <div class="mb-2">
+                    <strong>Experience:</strong> <%= matchedMentor.experience %> years
+                  </div>
+                  <div>
+                    <strong>Rating:</strong> <%= matchedMentor.rating %>/5
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% } %>
+
+        <% if (offlineMentors && offlineMentors.length > 0) { %>
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="mb-0">Available Mentors</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <% offlineMentors.forEach(mentor => { %>
+                  <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                      <div class="card-body">
+                        <h5 class="card-title"><%= mentor.name %></h5>
+                        <p class="card-text">
+                          <strong>Expertise:</strong> <%= mentor.expertise %><br>
+                          <strong>Experience:</strong> <%= mentor.experience %> years<br>
+                          <strong>Rating:</strong> <%= mentor.rating %>/5
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                <% }); %>
+              </div>
+            </div>
+          </div>
+        <% } %>
+
+        <% if (statusMessage) { %>
+          <div class="alert alert-info">
+            <%= statusMessage %>
+          </div>
+        <% } %>
+
+        <% if (errorMessage) { %>
+          <div class="alert alert-danger">
+            <%= errorMessage %>
+          </div>
+        <% } %>
+      </div>
+    <% } else { %>
+      <div class="alert alert-info">
+        No active requests found. Please submit a question to find a mentor.
+      </div>
+    <% } %>
+
     <script>
       // Get the processing state from the server-side variable
-      const isProcessing = <%= typeof isProcessing !== 'undefined' && isProcessing ? 'true' : 'false' %>;
+      const isProcessing = <%- JSON.stringify(isProcessing || false) %>;
+      const menteeRequest = <%- JSON.stringify(menteeRequest || null) %>;
 
       function switchTab(tabName) {
         // Hide all tab contents
@@ -790,8 +883,39 @@
         }
       }
 
-      // Start checking if we're in processing state
+      // Display mentee request status if it exists
       document.addEventListener('DOMContentLoaded', function() {
+        if (menteeRequest) {
+          const statusContainer = document.createElement('div');
+          statusContainer.className = `status-message ${menteeRequest.status}`;
+          
+          let statusText = '';
+          switch(menteeRequest.status) {
+            case 'pending':
+              statusText = 'Your request is pending review';
+              break;
+            case 'processing':
+              statusText = 'Finding the best mentor for you...';
+              break;
+            case 'completed':
+              statusText = 'Your request has been completed';
+              break;
+            case 'error':
+              statusText = 'There was an error processing your request';
+              break;
+            default:
+              statusText = `Request status: ${menteeRequest.status}`;
+          }
+          
+          statusContainer.innerHTML = `
+            <p>${statusText}</p>
+            ${menteeRequest.doubt ? `<p>Your question: ${menteeRequest.doubt}</p>` : ''}
+            ${menteeRequest.compatibilityScore ? `<p>Match Score: ${menteeRequest.compatibilityScore}%</p>` : ''}
+          `;
+          
+          document.querySelector('.container').prepend(statusContainer);
+        }
+
         if (isProcessing) {
           checkMatchingStatus();
         }
@@ -915,6 +1039,26 @@
             loadingIndicator.style.display = 'none';
           }
         }
+      }
+
+      // Function to check request status periodically
+      function checkRequestStatus() {
+        if (isProcessing && menteeRequest) {
+          fetch(`/api/request-status/${menteeRequest._id}`)
+            .then(response => response.json())
+            .then(data => {
+              if (data.status !== 'processing' && data.status !== 'pending') {
+                // Reload the page when processing is complete
+                window.location.reload();
+              }
+            })
+            .catch(error => console.error('Error checking status:', error));
+        }
+      }
+
+      // Check status every 5 seconds if processing
+      if (isProcessing) {
+        setInterval(checkRequestStatus, 5000);
       }
     </script>
   </body>

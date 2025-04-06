@@ -1900,3 +1900,56 @@ ModuleNotFoundError: No module named 'jwt'
 2025-04-06 11:17:10,333 - INFO - - algo: http://localhost:5004
 2025-04-06 11:17:10,333 - INFO - Press Ctrl+C to stop all services.
 2025-04-06 11:17:10,335 - INFO - Logs are available in the 'logs' directory.
+2025-04-06 14:43:55,493 - INFO - Started mentor_processor with PID 8492
+2025-04-06 14:44:02,543 - WARNING - Health check failed for mentor_processor on attempt 1: HTTPConnectionPool(host='localhost', port=5003): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002CA33B592B0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 14:44:02,543 - INFO - Waiting 2 seconds before next health check attempt for mentor_processor...
+2025-04-06 14:44:06,579 - INFO - Service mentor_processor health check passed on attempt 2
+2025-04-06 14:44:06,579 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-06 14:44:06,598 - INFO - Started api with PID 14204
+2025-04-06 14:44:13,452 - INFO - Service api health check passed on attempt 1
+2025-04-06 14:44:13,452 - INFO - Service api is healthy on port 5001
+2025-04-06 14:44:13,470 - INFO - Started workflow with PID 16424
+2025-04-06 14:44:20,524 - WARNING - Health check failed for workflow on attempt 1: HTTPConnectionPool(host='localhost', port=5002): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002CA33B5A3F0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 14:44:20,524 - INFO - Waiting 2 seconds before next health check attempt for workflow...
+2025-04-06 14:44:26,625 - WARNING - Health check failed for workflow on attempt 2: HTTPConnectionPool(host='localhost', port=5002): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002CA33B5AA50>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 14:44:26,625 - INFO - Waiting 2 seconds before next health check attempt for workflow...
+2025-04-06 14:44:32,677 - WARNING - Health check failed for workflow on attempt 3: HTTPConnectionPool(host='localhost', port=5002): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002CA33B5B170>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 14:44:32,678 - INFO - Waiting 2 seconds before next health check attempt for workflow...
+2025-04-06 14:44:38,740 - WARNING - Health check failed for workflow on attempt 4: HTTPConnectionPool(host='localhost', port=5002): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002CA33B5A990>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 14:44:38,742 - INFO - Waiting 2 seconds before next health check attempt for workflow...
+2025-04-06 14:44:44,802 - WARNING - Health check failed for workflow on attempt 5: HTTPConnectionPool(host='localhost', port=5002): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002CA33B5A390>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 14:44:44,802 - ERROR - Service workflow process exited with code 1
+2025-04-06 14:44:44,803 - ERROR - Service workflow log content:
+Attempt 1 failed to connect to MongoDB: localhost:27017: [WinError 10061] No connection could be made because the target machine actively refused it (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 67f245e621bad89f4178d407, topology_type: Unknown, servers: [<ServerDescription ('localhost', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('localhost:27017: [WinError 10061] No connection could be made because the target machine actively refused it (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms)')>]>
+Attempt 2 failed to connect to MongoDB: localhost:27017: [WinError 10061] No connection could be made because the target machine actively refused it (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 67f245ed21bad89f4178d408, topology_type: Unknown, servers: [<ServerDescription ('localhost', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('localhost:27017: [WinError 10061] No connection could be made because the target machine actively refused it (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms)')>]>
+Attempt 3 failed to connect to MongoDB: localhost:27017: [WinError 10061] No connection could be made because the target machine actively refused it (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 67f245f421bad89f4178d409, topology_type: Unknown, servers: [<ServerDescription ('localhost', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('localhost:27017: [WinError 10061] No connection could be made because the target machine actively refused it (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms)')>]>
+Failed to connect to MongoDB after all retries
+
+2025-04-06 14:44:44,803 - ERROR - Failed to start all services. Check the logs for details.
+2025-04-06 14:50:51,022 - INFO - Terminated existing process 2740 for mentor_processor.py
+2025-04-06 14:50:53,605 - INFO - Terminated existing process 14204 for api.py
+2025-04-06 14:50:53,781 - INFO - Terminated existing process 23028 for api.py
+2025-04-06 14:50:58,785 - INFO - Started mentor_processor with PID 8700
+2025-04-06 14:51:04,867 - INFO - Service mentor_processor health check passed on attempt 1
+2025-04-06 14:51:04,868 - INFO - Service mentor_processor is healthy on port 5003
+2025-04-06 14:51:04,885 - INFO - Started api with PID 20840
+2025-04-06 14:51:11,232 - INFO - Service api health check passed on attempt 1
+2025-04-06 14:51:11,232 - INFO - Service api is healthy on port 5001
+2025-04-06 14:51:11,251 - INFO - Started workflow with PID 30896
+2025-04-06 14:51:18,325 - WARNING - Health check failed for workflow on attempt 1: HTTPConnectionPool(host='localhost', port=5002): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000211E0FBD580>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 14:51:18,325 - INFO - Waiting 2 seconds before next health check attempt for workflow...
+2025-04-06 14:51:24,427 - WARNING - Health check failed for workflow on attempt 2: HTTPConnectionPool(host='localhost', port=5002): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000211E0FBDE20>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 14:51:24,427 - INFO - Waiting 2 seconds before next health check attempt for workflow...
+2025-04-06 14:51:30,515 - WARNING - Health check failed for workflow on attempt 3: HTTPConnectionPool(host='localhost', port=5002): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000211E0FBE540>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 14:51:30,517 - INFO - Waiting 2 seconds before next health check attempt for workflow...
+2025-04-06 14:51:36,616 - WARNING - Health check failed for workflow on attempt 4: HTTPConnectionPool(host='localhost', port=5002): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000211E0FBDB20>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 14:51:36,618 - INFO - Waiting 2 seconds before next health check attempt for workflow...
+2025-04-06 14:51:42,693 - WARNING - Health check failed for workflow on attempt 5: HTTPConnectionPool(host='localhost', port=5002): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000211E0FBCD10>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-04-06 14:51:42,694 - ERROR - Service workflow process exited with code 1
+2025-04-06 14:51:42,695 - ERROR - Service workflow log content:
+Attempt 1 failed to connect to MongoDB: localhost:27017: [WinError 10061] No connection could be made because the target machine actively refused it (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 67f24787ca4bcab6818865ca, topology_type: Unknown, servers: [<ServerDescription ('localhost', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('localhost:27017: [WinError 10061] No connection could be made because the target machine actively refused it (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms)')>]>
+Attempt 2 failed to connect to MongoDB: localhost:27017: [WinError 10061] No connection could be made because the target machine actively refused it (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 67f2478eca4bcab6818865cb, topology_type: Unknown, servers: [<ServerDescription ('localhost', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('localhost:27017: [WinError 10061] No connection could be made because the target machine actively refused it (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms)')>]>
+Attempt 3 failed to connect to MongoDB: localhost:27017: [WinError 10061] No connection could be made because the target machine actively refused it (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 67f24796ca4bcab6818865cc, topology_type: Unknown, servers: [<ServerDescription ('localhost', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('localhost:27017: [WinError 10061] No connection could be made because the target machine actively refused it (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms)')>]>
+Failed to connect to MongoDB after all retries
+
+2025-04-06 14:51:42,695 - ERROR - Failed to start all services. Check the logs for details.
